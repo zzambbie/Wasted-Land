@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     public Checkpoint[] checkpoints; // 체크포인트들의 위치를 알기 위해 저장
     public int totalLaps = 3;           // 총 바퀴 수
 
+    public List<KartController> sortedKarts = new List<KartController>(); // 실시간으로 등수대로 정렬된 카트 리스트
+
     [HideInInspector] public int totalCheckpoints;
 
     public Transform trackPathRoot;
@@ -135,39 +137,57 @@ public class GameManager : MonoBehaviour
     // 등수 계산 함수
     void CalculateRanking()
     {
-        // 1. 모든 카트를 리스트로 만듦 (정렬하기 위해)
+        // 1. 리스트 복사
         List<KartController> rankingList = new List<KartController>(allKarts);
 
-        // 2. 정렬 (비교 로직: 랩 -> 체크포인트 -> 거리)
+        // 2. 정렬
         rankingList.Sort((KartController a, KartController b) => {
-            // A. 바퀴 수 비교 (높은 게 1등)
-            if (a.currentLap != b.currentLap)
-                return b.currentLap.CompareTo(a.currentLap);
+            if (a.currentLap != b.currentLap) return b.currentLap.CompareTo(a.currentLap);
+            if (a.currentNodeIndex != b.currentNodeIndex) return b.currentNodeIndex.CompareTo(a.currentNodeIndex);
 
-            // B. 트랙패스 노드 인덱스 비교
-            if (a.currentNodeIndex != b.currentNodeIndex)
-                return b.currentNodeIndex.CompareTo(a.currentNodeIndex);
-
-            // C. 같은 노드 근처라면? -> 그 노드까지의 거리 비교
-            float distA = Vector3.Distance(a.transform.position, a.trackNodes[a.currentNodeIndex].position);
-            float distB = Vector3.Distance(b.transform.position, b.trackNodes[b.currentNodeIndex].position);
-
-            return distA.CompareTo(distB); // 완전 똑같음 (거의 없음)
+            // 거리 비교 (null 체크 안전장치 추가)
+            if (a.trackNodes != null && b.trackNodes != null && a.trackNodes.Length > 0 && b.trackNodes.Length > 0)
+            {
+                float distA = Vector3.Distance(a.transform.position, a.trackNodes[a.currentNodeIndex].position);
+                float distB = Vector3.Distance(b.transform.position, b.trackNodes[b.currentNodeIndex].position);
+                return distA.CompareTo(distB);
+            }
+            return 0;
         });
 
-        // 3. 내 등수 찾기 및 UI 갱신
+        // 3. 정렬된 리스트를 전역 변수에 저장
+        sortedKarts = rankingList;
+
+        // 4. UI 갱신
         if (playerKart != null && rankImage != null && rankSprites.Length > 0)
         {
-            // 리스트에서 내 위치(Index) 찾기. (0번이 1등)
             int myRankIndex = rankingList.IndexOf(playerKart);
-
-            // 이미지 교체 (0번이면 1st 이미지, 1번이면 2nd 이미지...)
-            // 스프라이트 배열 범위를 넘지 않게 체크
             if (myRankIndex < rankSprites.Length)
             {
                 rankImage.sprite = rankSprites[myRankIndex];
             }
         }
+    }
+    // 내 앞 등수(타겟)를 찾아주는 함수
+    public KartController GetTargetFor(KartController shooter)
+    {
+        if (sortedKarts.Count == 0) return null;
+
+        int myIndex = sortedKarts.IndexOf(shooter);
+
+        // 내가 1등(인덱스 0)이거나 리스트에 없으면 타겟 없음
+        if (myIndex <= 0) return null;
+
+        // 내 바로 앞 등수(인덱스 - 1) 리턴
+        return sortedKarts[myIndex - 1];
+    }
+
+    // 내가 몇 등인지 알려주는 함수
+    public int GetRank(KartController kart)
+    {
+        if (sortedKarts.Contains(kart))
+            return sortedKarts.IndexOf(kart) + 1; // 1등부터 시작
+        return 99;
     }
 
     // 시간 포맷을 예쁘게 바꿔주는 함수

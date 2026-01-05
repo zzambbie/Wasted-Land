@@ -60,6 +60,11 @@ public class KartController : MonoBehaviour
     public int currentLap = 1;
     public int nextCheckpointIndex = 0;
 
+    [Header("피격 설정 (미사일)")]
+    public float hitJumpHeight = 1.5f; // 점프 높이
+    public float hitDuration = 0.8f;   // 구르는 시간 (짧을수록 빠름)
+    public int flipCount = 1;          // 몇 바퀴 구를지 (보통 1)
+
     // 드리프트/아이템 입력 신호 (AI가 이걸 true로 만들면 작동)
     public bool isDriftInput = false;
     public bool isItemUseInput = false;
@@ -84,6 +89,8 @@ public class KartController : MonoBehaviour
 
     private bool isBoosting = false; // 부스터 사용 중인지 체크
     private bool isUncontrollable = false; // 조작 불능 상태 체크
+   
+    private bool hasPassedStartLine = false; // 출발선을 통과한 적이 있는가?
     public float CurrentSpeed { get { return rb.linearVelocity.magnitude; } }
     public bool IsBoosting { get { return isBoosting; } }
 
@@ -231,10 +238,14 @@ public class KartController : MonoBehaviour
             {
                 // 게임 시작 후 어느 정도 시간이 지났을 때만 랩 증가 (초반 버그 방지)
                 // Time.timeSinceLevelLoad 등을 써도 되지만 간단하게 체크
-                if (Time.timeSinceLevelLoad > 5.0f)
+                if (!hasPassedStartLine)
                 {
+                    hasPassedStartLine = true;
+                }
+                else
+                {
+                    // 두 번째 통과부터 랩 증가
                     currentLap++;
-                    // 나중에 여기에 "랩 타임 기록" 로직 추가 가능
                 }
             }
 
@@ -588,13 +599,82 @@ public class KartController : MonoBehaviour
 
         Debug.Log("카트 상태 리셋 완료!");
     }
+    // 미사일 맞았을 때 호출되는 함수
+    public void HitByMissile()
+    {
+        // 이미 당하고 있거나 무적 상태면 무시
+        if (isUncontrollable) return;
+
+        StartCoroutine(HitRoutine());
+    }
+
+    IEnumerator HitRoutine()
+    {
+        isUncontrollable = true;
+        ResetStatus();
+
+        rb.isKinematic = true; // 물리 끄기
+
+        float elapsed = 0f;
+        Vector3 startPos = transform.position;
+        Quaternion startRot = transform.rotation;
+
+        // 회전의 축이 될 높이 (카트의 절반 높이)
+        // 이 값이 클수록 공중제비를 크게 돌고, 작을수록 제자리에서 돕니다.
+        float centerOffset = 0.5f;
+
+        float jumpBump = 0.5f;
+
+        while (elapsed < hitDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / hitDuration; // 0 ~ 1
+
+            // 1. 회전 각도
+            float currentAngle = t * 360f * flipCount;
+            Quaternion rot = Quaternion.Euler(currentAngle, 0, 0);
+
+            // 2.피벗 보정
+            Vector3 pivotOffset = new Vector3(0, centerOffset, 0);
+            Vector3 rotatedOffset = rot * -pivotOffset;
+            Vector3 finalPosOffset = pivotOffset + rotatedOffset;
+
+            // 3. 살짝 튀어오르는 느낌 추가
+            float bump = Mathf.Sin(t * Mathf.PI) * jumpBump;
+
+            // 최종 적용
+            transform.rotation = startRot * rot;
+            transform.position = startPos + finalPosOffset + (Vector3.up * bump);
+
+            yield return null;
+        }
+
+        // 복구 및 착지
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 5.0f, groundLayer))
+        {
+            transform.position = hit.point;
+        }
+        else
+        {
+            transform.position = startPos;
+        }
+
+        transform.rotation = startRot;
+        rb.isKinematic = false;
+        isUncontrollable = false;
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+    }
 
     // 충돌이 일어났을 때 자동으로 실행되는 함수
     void OnCollisionEnter(Collision collision)
     {
         // 그냥 태그가 Wall이면 튕김
         if (collision.gameObject.CompareTag("Wall"))
-        {
+        {   
             float impactSpeed = collision.relativeVelocity.magnitude;
             if (impactSpeed > 5f)
             {

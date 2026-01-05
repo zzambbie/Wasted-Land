@@ -1,5 +1,94 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2930262020180844523
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3682613528550394358}
+  - component: {fileID: 6166775714939291976}
+  - component: {fileID: 1382556491929566375}
+  m_Layer: 6
+  m_Name: Minimap_Icon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3682613528550394358
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2930262020180844523}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 20, z: 0}
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1951849014345334573}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &6166775714939291976
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2930262020180844523}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &1382556491929566375
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2930262020180844523}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 717a0a24fcbbbfd459839e74e7b788e5, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &3468322971181223087
 GameObject:
   m_ObjectHideFlags: 0
@@ -9800,6 +9889,7 @@ Transform:
   - {fileID: 5035941373431305656}
   - {fileID: 8363933452921311784}
   - {fileID: 8467339474591045564}
+  - {fileID: 3682613528550394358}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &8332858412956339270
@@ -9904,15 +9994,15 @@ MonoBehaviour:
   maxSpeed: 20
   turnSpeed: 100
   weight: 1000
-  gravityMultiplier: 50
-  drag: 1
+  gravityMultiplier: 80
+  drag: 0.6
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
   driftBaseTurnSpeed: 100
   driftSharpFactor: 1.5
   driftWideFactor: 0.5
-  jumpForce: 2.5
+  jumpForce: 2.25
   minDriftTime: 0.8
   boostForce: 50
   boostMaxSpeed: 40
@@ -9920,9 +10010,9 @@ MonoBehaviour:
   boostWindow: 0.5
   boostDeceleration: 25
   instantBoostDuration: 0.5
-  padBoostDuration: 2
-  driftDecel: 20
-  padDecel: 5
+  padBoostDuration: 1
+  driftDecel: 1
+  padDecel: 0.1
   groundCheckRadius: 0.5
   bounceForce: 0.6
   minBounceForce: 5
@@ -9945,11 +10035,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InventoryManager
   itemSlotImage: {fileID: 0}
   defaultIcon: {fileID: 0}
-  itemTypes: 0100000002000000
+  itemTypes: 010000000200000003000000
   itemIcons:
   - {fileID: 21300000, guid: 54adc46d8778a3140b0458142864a0a9, type: 3}
   - {fileID: 21300000, guid: 87fc7aea7ef479143a4a438655e53a67, type: 3}
+  - {fileID: 21300000, guid: a780a706f4a451643a0eadae6b8f1e86, type: 3}
   bananaPrefab: {fileID: 1228344613819013532, guid: 94a30e29854d4a14d896e9996087fc78, type: 3}
+  missilePrefab: {fileID: 7351423820973783754, guid: 9946dd5044696654d9a07b58effbf719, type: 3}
   currentItem: 0
   hasItem: 0
   isRolling: 0

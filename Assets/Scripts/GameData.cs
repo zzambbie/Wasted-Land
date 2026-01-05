@@ -12,11 +12,11 @@ public class GameData : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // 씬이 바뀌어도 나를 파괴하지 마!
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(gameObject); // 이미 있으면 나는 꺼진다 (중복 방지)
+            Destroy(gameObject);
         }
     }
 }
