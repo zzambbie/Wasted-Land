@@ -65,6 +65,13 @@ public class KartController : MonoBehaviour
     public float hitDuration = 0.8f;   // 구르는 시간 (짧을수록 빠름)
     public int flipCount = 1;          // 몇 바퀴 구를지 (보통 1)
 
+    [Header("폐유 효과")]
+    public GameObject oilEffectPanel;
+
+    [Header("방패 설정")]
+    public bool isShielded = false;
+    public GameObject shieldEffectObj;
+
     // 드리프트/아이템 입력 신호 (AI가 이걸 true로 만들면 작동)
     public bool isDriftInput = false;
     public bool isItemUseInput = false;
@@ -111,6 +118,25 @@ public class KartController : MonoBehaviour
         if (kartRenderer != null) originalColor = kartRenderer.material.color;
 
         currentBoostDecel = driftDecel;
+        InitClosestNode();
+    } 
+    void InitClosestNode()
+    {
+        if (trackNodes == null || trackNodes.Length == 0) return;
+
+        float minDst = Mathf.Infinity;
+        int bestIndex = 0;
+
+        for (int i = 0; i < trackNodes.Length; i++)
+        {
+            float dst = Vector3.Distance(transform.position, trackNodes[i].position);
+            if (dst < minDst)
+            {
+                minDst = dst;
+                bestIndex = i;
+            }
+        }
+        currentNodeIndex = bestIndex;
     }
 
     void Update()
@@ -168,28 +194,32 @@ public class KartController : MonoBehaviour
     {
         if (trackNodes == null || trackNodes.Length == 0) return;
 
-        // 현재 알고 있는 내 위치(currentNodeIndex)에서부터
-        // 앞뒤로 5개 정도만 검사해서 가장 가까운 점을 찾음 (최적화)
-        // (처음엔 전체 탐색, 이후엔 주변 탐색)
-
+        // 1. 가장 가까운 점 찾기
         float minDst = Mathf.Infinity;
-        int bestIndex = currentNodeIndex;
+        int closestIndex = 0;
 
-        // 전체를 다 뒤지면 무거우니까, 현재 인덱스 기준으로 앞뒤 5개씩만 검사
         for (int i = 0; i < trackNodes.Length; i++)
         {
             float dst = Vector3.Distance(transform.position, trackNodes[i].position);
             if (dst < minDst)
             {
                 minDst = dst;
-                bestIndex = i;
+                closestIndex = i;
             }
         }
 
-        // 역주행 방지 로직 (갑자기 0번에서 50번으로 점프하면 안됨)
-        // 정상 주행이라면 인덱스가 조금씩 늘어나야 함.
-        // 하지만 여기서는 단순하게 "가장 가까운 점"을 내 위치로 잡음.
-        currentNodeIndex = bestIndex;
+        // 2. [핵심 추가] 방향 보정 (내가 점을 지났나? 안 지났나?)
+        // 가장 가까운 점이 내 뒤에 있으면 -> 나는 그 점을 통과한 것임 -> 인덱스 유지
+        // 가장 가까운 점이 내 앞에 있으면 -> 나는 아직 그 점에 도달 못한 것임 -> 인덱스 - 1
+
+        Vector3 nodeToKart = transform.position - trackNodes[closestIndex].position;
+        Vector3 nodeForward = trackNodes[closestIndex].forward; // 점의 앞방향
+
+        // 내적(Dot)을 이용해 앞뒤 판별 (0보다 크면 앞, 작으면 뒤)
+        // (TrackPath의 점들이 트랙 진행 방향으로 회전되어 있어야 정확함. 
+        //  만약 점들 회전 안 맞췄으면 이 부분 생략하고 그냥 closestIndex 써도 됨)
+
+        currentNodeIndex = closestIndex;
     }
     void CheckGrounded()
     {
@@ -289,6 +319,7 @@ public class KartController : MonoBehaviour
     public void SlipAndSpin(float duration)
     {
         if (isUncontrollable) return; // 이미 돌고 있으면 무시
+        if (isShielded) { BreakShield(); return; }
         StartCoroutine(SpinRoutine(duration));
     }
 
@@ -604,8 +635,50 @@ public class KartController : MonoBehaviour
     {
         // 이미 당하고 있거나 무적 상태면 무시
         if (isUncontrollable) return;
+        if (isShielded) { BreakShield(); return; }
 
         StartCoroutine(HitRoutine());
+    }
+    public void HitByOil()
+    {
+        if (isShielded) // (방패 구현 후) 방패 있으면 막음
+        {
+            BreakShield();
+            return;
+        }
+
+        if (!isAI)
+        {
+            // 플레이어: 화면 가리기
+            StartCoroutine(OilScreenRoutine());
+        }
+        else
+        {
+            // AI: 속도 감속 및 비틀거림
+            StartCoroutine(AIBliendRoutine());
+        }
+    }
+    public void ActivateShield(float duration)
+    {
+        StartCoroutine(ShieldRoutine(duration));
+    }
+
+    IEnumerator ShieldRoutine(float duration)
+    {
+        isShielded = true;
+        if (shieldEffectObj != null) shieldEffectObj.SetActive(true);
+        Debug.Log("방어막 가동!");
+
+        yield return new WaitForSeconds(duration); // 지속 시간 (예: 5초)
+
+        // 시간 다 되면 방패 해제
+        if (isShielded) BreakShield();
+    }
+    public void BreakShield()
+    {
+        isShielded = false;
+        if (shieldEffectObj != null) shieldEffectObj.SetActive(false);
+        Debug.Log("방패 사라짐!");
     }
 
     IEnumerator HitRoutine()
@@ -653,7 +726,7 @@ public class KartController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 5.0f, groundLayer))
         {
-            transform.position = hit.point;
+            transform.position = hit.point + Vector3.up * 0.5f;
         }
         else
         {
@@ -668,7 +741,96 @@ public class KartController : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
+    IEnumerator OilScreenRoutine()
+    {
+        if (oilEffectPanel != null)
+        {
+            oilEffectPanel.SetActive(true);
+            Debug.Log("폐유가 화면을 가립니다!");
+            yield return new WaitForSeconds(3.0f); // 3초 지속
+            oilEffectPanel.SetActive(false);
+        }
+    }
+    IEnumerator AIBliendRoutine()
+    {
+        // AI는 3초 동안 감속 (기존 속도의 70%)
+        // AIController가 speedFactor를 참조하지만, 여기서 물리적으로 drag를 높여도 됨
+        float originalDrag = drag;
+        drag = 5.0f; // 저항을 높여서 느리게 만듦
 
+        Debug.Log(gameObject.name + " (AI): 앞이 안 보여서 감속!");
+
+        yield return new WaitForSeconds(3.0f);
+
+        drag = originalDrag; // 복구
+    }
+    // 트랙 진행률 정밀 계산 함수
+    public float debugRaceScore = 0f;
+
+    // [수정] 순위 계산용 함수 (지역 탐색 적용)
+    public float GetRaceDistance()
+    {
+        if (trackNodes == null || trackNodes.Length == 0) return 0f;
+
+        // 1. [핵심 수정] 전체 탐색 대신 '내 주변'만 탐색 (순위 널뛰기 방지)
+        float minDst = Mathf.Infinity;
+        int closestIndex = currentNodeIndex; // 지난번 위치부터 시작
+
+        // 내 현재 인덱스 기준으로 앞뒤 5개씩(총 11개)만 검사함
+        // 벽 너머에 있는 엉뚱한 점(예: 50번 점)이 물리적으로 가까워도, 검사 범위 밖이라 무시됨
+        for (int i = -5; i <= 5; i++)
+        {
+            // 인덱스 순환 처리 (0번 이전은 끝번, 끝번 다음은 0번)
+            // (a % n + n) % n 은 음수 나머지 처리를 위한 공식
+            int checkIndex = (currentNodeIndex + i + trackNodes.Length) % trackNodes.Length;
+            int safeIndex = (checkIndex + trackNodes.Length) % trackNodes.Length;
+
+            float dst = Vector3.Distance(transform.position, trackNodes[safeIndex].position);
+            if (dst < minDst)
+            {
+                minDst = dst;
+                closestIndex = safeIndex;
+            }
+        }
+
+        // 2. 방향 판별 (기존과 동일)
+        int nextIndex = (closestIndex + 1) % trackNodes.Length;
+        Vector3 nodeDir = trackNodes[nextIndex].position - trackNodes[closestIndex].position;
+        Vector3 kartDir = transform.position - trackNodes[closestIndex].position;
+
+        float dot = Vector3.Dot(nodeDir.normalized, kartDir);
+
+        int finalIndex = closestIndex;
+
+        if (dot < 0)
+        {
+            if (closestIndex == 0)
+            {
+                finalIndex = trackNodes.Length - 1;
+            }
+            else
+            {
+                finalIndex--;
+            }
+        }
+
+        currentNodeIndex = finalIndex; // 내 위치 갱신 (다음 프레임에선 여기서부터 찾음)
+
+        // 3. 정밀 위치 계산 (기존과 동일)
+        int targetNextIndex = (finalIndex + 1) % trackNodes.Length;
+        Vector3 a = trackNodes[finalIndex].position;
+        Vector3 b = trackNodes[targetNextIndex].position;
+
+        Vector3 segment = b - a;
+        Vector3 toKart = transform.position - a;
+
+        float progress = Vector3.Dot(toKart, segment) / segment.sqrMagnitude;
+
+        // 4. 최종 점수
+        float totalScore = (currentLap * 10000f) + (finalIndex * 10f) + progress;
+
+        return totalScore;
+    }
     // 충돌이 일어났을 때 자동으로 실행되는 함수
     void OnCollisionEnter(Collision collision)
     {

@@ -4,7 +4,7 @@ using System.Collections;
 
 public class InventoryManager : MonoBehaviour
 {
-    public enum ItemType { None, Mushroom, Banana, Bomb }
+    public enum ItemType { None, Mushroom, Banana, Bomb, FakeBox, Oil, Shield }
 
     [Header("UI 연결")]
     public Image itemSlotImage;
@@ -17,6 +17,7 @@ public class InventoryManager : MonoBehaviour
     [Header("아이템 프리팹")]
     public GameObject bananaPrefab;
     public GameObject missilePrefab;
+    public GameObject fakeBoxPrefab;
 
     [Header("상태")]
     public ItemType currentItem = ItemType.None;
@@ -24,6 +25,9 @@ public class InventoryManager : MonoBehaviour
     public bool isRolling = false;
 
     private KartController kart;
+
+    public float fakeBoxHeight = 1.5f;
+    public LayerMask groundLayer;
 
     void Start()
     {
@@ -135,6 +139,18 @@ public class InventoryManager : MonoBehaviour
             case ItemType.Bomb:
                 SpawnMissile();
                 break;
+
+            case ItemType.FakeBox:
+                SpawnFakeBox();
+                break;
+
+            case ItemType.Oil:
+                UseOilItem();
+                break;
+
+            case ItemType.Shield:
+                kart.ActivateShield(5.0f); // 5초간 지속
+                break;
         }
 
         currentItem = ItemType.None;
@@ -171,6 +187,53 @@ public class InventoryManager : MonoBehaviour
 
             Debug.Log("미사일 발사!");
         }
+    }
+    void SpawnFakeBox()
+    {
+        if (fakeBoxPrefab != null)
+        {
+            // 1. 카트 뒤쪽 위치 (X, Z 좌표만 사용)
+            Vector3 spawnPos = transform.position - (transform.forward * 3.0f);
+
+            // 2. 바닥 높이 찾기 (위에서 아래로 레이저 쏨)
+            RaycastHit hit;
+            // 카트 위치보다 좀 높은 곳(2.0f)에서 아래로 쏴서 바닥을 찾음
+            if (Physics.Raycast(spawnPos + Vector3.up * 2.0f, Vector3.down, out hit, 10.0f, groundLayer))
+            {
+                // 바닥(hit.point)을 찾았으면, 거기서 설정한 높이(fakeBoxHeight)만큼 올림
+                spawnPos.y = hit.point.y + fakeBoxHeight;
+            }
+            else
+            {
+                // 바닥을 못 찾았으면(공중 등) 그냥 카트 높이 사용
+                spawnPos.y = transform.position.y + fakeBoxHeight;
+            }
+
+            // 3. 생성
+            Instantiate(fakeBoxPrefab, spawnPos, transform.rotation);
+            Debug.Log("함정 설치 완료!");
+        }
+    }
+    void UseOilItem()
+    {
+        GameManager gm = FindFirstObjectByType<GameManager>();
+        if (gm == null) return;
+
+        // 내 등수 확인
+        int myRank = gm.GetRank(kart);
+
+        // 모든 카트를 돌면서 나보다 등수가 높은(숫자가 작은) 애들 공격
+        foreach (var target in gm.sortedKarts)
+        {
+            int targetRank = gm.GetRank(target);
+
+            // 1등부터 내 바로 앞 등수까지
+            if (targetRank < myRank)
+            {
+                target.HitByOil();
+            }
+        }
+        Debug.Log("앞서가는 녀석들에게 폐유 투척!");
     }
 
     void UpdateUI(Sprite sprite)

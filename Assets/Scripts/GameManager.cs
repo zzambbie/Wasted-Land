@@ -140,33 +140,32 @@ public class GameManager : MonoBehaviour
         // 1. 리스트 복사
         List<KartController> rankingList = new List<KartController>(allKarts);
 
-        // 2. 정렬
+        // 2. 정렬 (점수 높은 순)
         rankingList.Sort((KartController a, KartController b) => {
-            if (a.currentLap != b.currentLap) return b.currentLap.CompareTo(a.currentLap);
-            if (a.currentNodeIndex != b.currentNodeIndex) return b.currentNodeIndex.CompareTo(a.currentNodeIndex);
 
-            // 거리 비교 (null 체크 안전장치 추가)
-            if (a.trackNodes != null && b.trackNodes != null && a.trackNodes.Length > 0 && b.trackNodes.Length > 0)
-            {
-                float distA = Vector3.Distance(a.transform.position, a.trackNodes[a.currentNodeIndex].position);
-                float distB = Vector3.Distance(b.transform.position, b.trackNodes[b.currentNodeIndex].position);
-                return distA.CompareTo(distB);
-            }
-            return 0;
+            // 각 카트의 정밀한 주행 점수를 가져옴
+            float scoreA = a.GetRaceDistance();
+            float scoreB = b.GetRaceDistance();
+
+            // 점수가 큰 사람이 1등 (내림차순 정렬: B - A)
+            return scoreB.CompareTo(scoreA);
         });
 
-        // 3. 정렬된 리스트를 전역 변수에 저장
+        // 3. 리스트 갱신
         sortedKarts = rankingList;
 
-        // 4. UI 갱신
+        // 4. UI 갱신 (플레이어 등수 찾기)
         if (playerKart != null && rankImage != null && rankSprites.Length > 0)
         {
             int myRankIndex = rankingList.IndexOf(playerKart);
-            if (myRankIndex < rankSprites.Length)
+
+            // 이미지 교체
+            if (myRankIndex >= 0 && myRankIndex < rankSprites.Length)
             {
                 rankImage.sprite = rankSprites[myRankIndex];
             }
         }
+        if(sortedKarts.Count > 0) Debug.Log("현재 1등: " + sortedKarts[0].name);
     }
     // 내 앞 등수(타겟)를 찾아주는 함수
     public KartController GetTargetFor(KartController shooter)
