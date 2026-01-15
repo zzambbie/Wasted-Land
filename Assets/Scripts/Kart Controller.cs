@@ -80,6 +80,9 @@ public class KartController : MonoBehaviour
     private Renderer kartRenderer;
     private Color originalColor;
 
+    private int totalNodesPassed = 0;
+    private int lastNodeIndex = 0;
+
     private float moveInput;
     public float turnInput;
 
@@ -255,7 +258,7 @@ public class KartController : MonoBehaviour
         // 순서가 맞는지 확인
         if (index == nextCheckpointIndex)
         {
-            Debug.Log(gameObject.name + " 체크포인트 " + index + " 통과!");
+            // Debug.Log(gameObject.name + " 체크포인트 " + index + " 통과!");
 
             nextCheckpointIndex++;
             if (nextCheckpointIndex >= totalCheckpoints)
@@ -266,20 +269,20 @@ public class KartController : MonoBehaviour
             // 0번(출발선) 통과 시 처리
             if (index == 0)
             {
-                // 게임 시작 후 어느 정도 시간이 지났을 때만 랩 증가 (초반 버그 방지)
-                // Time.timeSinceLevelLoad 등을 써도 되지만 간단하게 체크
+                // "출발선을 통과한 적이 없다" = 이제 막 레이스 시작함
                 if (!hasPassedStartLine)
                 {
                     hasPassedStartLine = true;
+                    // Debug.Log("진짜 출발!");
                 }
                 else
                 {
-                    // 두 번째 통과부터 랩 증가
+                    // "이미 출발했었는데 또 0번을 지났다" = 한 바퀴 돔!
                     currentLap++;
                 }
             }
 
-            // [중요] 내가 플레이어라면? UI 업데이트 요청!
+            // 내가 플레이어라면? UI 업데이트 요청!
             if (!isAI)
             {
                 GameManager gm = FindFirstObjectByType<GameManager>();
@@ -767,68 +770,79 @@ public class KartController : MonoBehaviour
     // 트랙 진행률 정밀 계산 함수
     public float debugRaceScore = 0f;
 
-    // [수정] 순위 계산용 함수 (지역 탐색 적용)
+    // 순위 계산 함수 (넓은 트랙 보정판)
     public float GetRaceDistance()
     {
         if (trackNodes == null || trackNodes.Length == 0) return 0f;
 
-        // 1. [핵심 수정] 전체 탐색 대신 '내 주변'만 탐색 (순위 널뛰기 방지)
+        // 1. 내 주변에서 가장 가까운 점 찾기 (Local Search)
         float minDst = Mathf.Infinity;
-        int closestIndex = currentNodeIndex; // 지난번 위치부터 시작
+        int bestIndex = currentNodeIndex;
 
-        // 내 현재 인덱스 기준으로 앞뒤 5개씩(총 11개)만 검사함
-        // 벽 너머에 있는 엉뚱한 점(예: 50번 점)이 물리적으로 가까워도, 검사 범위 밖이라 무시됨
         for (int i = -5; i <= 5; i++)
         {
-            // 인덱스 순환 처리 (0번 이전은 끝번, 끝번 다음은 0번)
-            // (a % n + n) % n 은 음수 나머지 처리를 위한 공식
             int checkIndex = (currentNodeIndex + i + trackNodes.Length) % trackNodes.Length;
-            int safeIndex = (checkIndex + trackNodes.Length) % trackNodes.Length;
+            float dst = Vector3.Distance(transform.position, trackNodes[checkIndex].position);
 
-            float dst = Vector3.Distance(transform.position, trackNodes[safeIndex].position);
             if (dst < minDst)
             {
                 minDst = dst;
-                closestIndex = safeIndex;
+                bestIndex = checkIndex;
             }
         }
 
-        // 2. 방향 판별 (기존과 동일)
-        int nextIndex = (closestIndex + 1) % trackNodes.Length;
-        Vector3 nodeDir = trackNodes[nextIndex].position - trackNodes[closestIndex].position;
-        Vector3 kartDir = transform.position - trackNodes[closestIndex].position;
+        // 2. 방향 판별 및 인덱스 확정
+        int nextIndex = (bestIndex + 1) % trackNodes.Length;
+        Vector3 forwardDir = trackNodes[nextIndex].position - trackNodes[bestIndex].position;
+        Vector3 toKart = transform.position - trackNodes[bestIndex].position;
 
-        float dot = Vector3.Dot(nodeDir.normalized, kartDir);
-
-        int finalIndex = closestIndex;
-
-        if (dot < 0)
+        if (Vector3.Dot(forwardDir.normalized, toKart.normalized) < 0)
         {
-            if (closestIndex == 0)
-            {
-                finalIndex = trackNodes.Length - 1;
-            }
-            else
-            {
-                finalIndex--;
-            }
+            bestIndex--;
+            if (bestIndex < 0) bestIndex = trackNodes.Length - 1;
         }
 
-        currentNodeIndex = finalIndex; // 내 위치 갱신 (다음 프레임에선 여기서부터 찾음)
+        currentNodeIndex = bestIndex;
 
-        // 3. 정밀 위치 계산 (기존과 동일)
-        int targetNextIndex = (finalIndex + 1) % trackNodes.Length;
-        Vector3 a = trackNodes[finalIndex].position;
-        Vector3 b = trackNodes[targetNextIndex].position;
+        // 3. [핵심] 누적 노드 개수 업데이트 (Total Nodes Calculation)
+        // 인덱스가 변했을 때만 계산
+        if (currentNodeIndex != lastNodeIndex)
+        {
+            // 정방향 진행 (예: 2 -> 3)
+            if (currentNodeIndex == (lastNodeIndex + 1) % trackNodes.Length)
+            {
+                totalNodesPassed++;
+            }
+            // 한 바퀴 돌았을 때 (예: 11 -> 0)
+            else if (lastNodeIndex == trackNodes.Length - 1 && currentNodeIndex == 0)
+            {
+                totalNodesPassed++;
+            }
+            // 역주행 (예: 3 -> 2)
+            else if (currentNodeIndex == (lastNodeIndex - 1 + trackNodes.Length) % trackNodes.Length)
+            {
+                totalNodesPassed--;
+            }
+
+            lastNodeIndex = currentNodeIndex;
+        }
+
+        // 4. 진행률(t) 계산
+        int targetNext = (currentNodeIndex + 1) % trackNodes.Length;
+        Vector3 a = trackNodes[currentNodeIndex].position;
+        Vector3 b = trackNodes[targetNext].position;
 
         Vector3 segment = b - a;
-        Vector3 toKart = transform.position - a;
+        Vector3 proj = transform.position - a;
 
-        float progress = Vector3.Dot(toKart, segment) / segment.sqrMagnitude;
+        float t = Vector3.Dot(proj, segment) / segment.sqrMagnitude;
+        t = Mathf.Clamp01(t);
 
-        // 4. 최종 점수
-        float totalScore = (currentLap * 10000f) + (finalIndex * 10f) + progress;
+        // 5. 최종 점수 = (통과한 총 노드 개수 * 100) + 진행률
+        // 랩(Lap) 변수를 아예 안 씁니다. 그냥 노드를 많이 지난 사람이 1등입니다.
+        float totalScore = (totalNodesPassed * 100f) + (t * 100f);
 
+        debugRaceScore = totalScore;
         return totalScore;
     }
     // 충돌이 일어났을 때 자동으로 실행되는 함수
