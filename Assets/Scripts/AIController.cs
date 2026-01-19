@@ -22,7 +22,7 @@ public class AIController : MonoBehaviour
     public float sideSensorAngle = 45.0f;
     public float avoidMultiplier = 3.0f;
 
-    // [중요] 바닥은 감지하지 않기 위한 레이어 마스크
+    // 바닥은 감지하지 않기 위한 레이어 마스크
     public LayerMask obstacleLayer;
 
     private KartController kart;
@@ -92,11 +92,11 @@ public class AIController : MonoBehaviour
         Vector3 localTarget = transform.InverseTransformPoint(myTargetPos);
         float targetTurn = localTarget.x / localTarget.magnitude;
 
-        // --- 4. [수정] 센서 로직 (바닥 무시 & 높이 조절) ---
+        // --- 4. 센서 로직 (바닥 무시 & 높이 조절) ---
         float avoidTurn = 0f;
         float avoidanceFactor = 0f;
 
-        // [핵심] 센서 위치를 카트 바닥이 아니라 '눈높이(1.0m)'로 올림
+        // 센서 위치를 카트 바닥이 아니라 '눈높이(1.0m)'로 올림
         // 너무 낮으면 오르막길을 벽으로 인식함
         Vector3 sensorPos = transform.position + Vector3.up * 1.0f;
 
@@ -121,7 +121,7 @@ public class AIController : MonoBehaviour
             }
         }
 
-        // --- 6. [핵심] 속도 조절 (과감하게!) ---
+        // --- 6. 속도 조절 (과감하게!) ---
         float finalSpeed = speedFactor;
 
         // 장애물이 있어도 속도를 너무 줄이지 않음 (최소 0.8 유지)

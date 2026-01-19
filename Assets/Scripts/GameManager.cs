@@ -233,37 +233,47 @@ public class GameManager : MonoBehaviour
     // 게임 종료 처리
     void FinishGame()
     {
-        if (isGameFinished) return; // 이미 끝났으면 무시
+        if (isGameFinished) return;
         isGameFinished = true;
 
-        Debug.Log("게임 끝! 완주!");
+        // 1. 카트 멈추기
+        foreach (var kart in allKarts) { if (kart != null) kart.isControlled = false; }
 
-        // 1. 모든 카트 멈춤 (AI 포함)
-        foreach (var kart in allKarts)
+        // 2. 등수 확인 및 저장 로직
+        if (playerKart != null)
         {
-            if (kart != null) kart.isControlled = false;
-        }
+            // 내 등수 가져오기 (CalculateRanking이 선행되어야 함)
+            CalculateRanking();
+            int myRank = GetRank(playerKart);
 
-        // 2. 결과창 띄우기
-        if (finishUI != null)
-        {
-            finishUI.SetActive(true);
+            // 현재 스테이지 번호 (GameData에서 가져옴, 없으면 1)
+            int currentStage = (GameData.Instance != null) ? GameData.Instance.currentStage : 1;
 
-            // 최종 기록 텍스트 설정
-            if (finalTimeText != null)
+            // 3등 이내(1, 2, 3등)라면 다음 스테이지 잠금 해제!
+            if (myRank <= 3)
             {
-                finalTimeText.text = "RECORD: " + FormatTime(timer);
+                int nextStage = currentStage + 1;
+
+                // PlayerPrefs는 컴퓨터에 영구 저장하는 유니티 기본 기능
+                PlayerPrefs.SetInt("Stage_" + nextStage + "_Unlocked", 1);
+                PlayerPrefs.Save(); // 저장 확정
+
+                Debug.Log(currentStage + "탄 클리어! " + nextStage + "탄 해제됨!");
+            }
+            else
+            {
+                Debug.Log("패배... 3등 안에 들어야 합니다.");
             }
         }
 
-        // 3. 인게임 UI 숨기기 (선택사항)
+        // 3. UI 띄우기
+        if (finishUI != null)
+        {
+            finishUI.SetActive(true);
+            if (finalTimeText != null) finalTimeText.text = "RECORD: " + FormatTime(timer);
+        }
+
         if (lapText != null) lapText.gameObject.SetActive(false);
         if (timeText != null) timeText.gameObject.SetActive(false);
-    }
-
-    // 재시작 버튼 기능
-    public void OnRetryButton()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

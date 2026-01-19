@@ -53,7 +53,7 @@ public class CharacterSelectController : MonoBehaviour
         ShowKart(currentIndex);
     }
 
-    // --- [신규] 오른쪽 그리드 버튼용 함수 (직접 선택) ---
+    // --- 오른쪽 그리드 버튼용 함수 (직접 선택) ---
     public void SelectKartBtn(int index)
     {
         // 범위를 벗어나지 않게 안전장치
