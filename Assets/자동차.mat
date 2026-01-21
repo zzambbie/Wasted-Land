@@ -87,7 +87,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _LightMapTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: f20110a5b2c9c6e40bfa88434c538d01, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MTMap:
@@ -111,7 +111,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _PackedShadowRampTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 6f146e852c7edfb4db200cbeee49db1f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
@@ -168,7 +168,7 @@ Material:
     - _DstBlendAlpha: 0
     - _EmissionStrength: 1
     - _EmissionType: 0
-    - _EnvironmentLightingStrength: 1
+    - _EnvironmentLightingStrength: 0.353
     - _EnvironmentReflections: 1
     - _EyeGlowStrength: 1
     - _FaceBlushStrength: 0
@@ -179,7 +179,7 @@ Material:
     - _GlossyReflections: 0
     - _HitColorFresnelPower: 1.5
     - _HitColorScaler: 6
-    - _LightArea: 0.55
+    - _LightArea: 0.86
     - _MTMapBrightness: 3
     - _MTMapTileScale: 1
     - _MTSharpLayerOffset: 1
@@ -196,7 +196,7 @@ Material:
     - _NoseBlushStrength: 0
     - _OcclusionStrength: 1
     - _OutlineType: 1
-    - _OutlineWidth: 0.0006
+    - _OutlineWidth: 0.0007
     - _Parallax: 0.005
     - _Pattern_Speed: -0.033
     - _ProceduralUVs: 0
@@ -233,7 +233,7 @@ Material:
     - _ScanColorScaler: 0
     - _ScanDirection_Switch: 0
     - _ScanSpeed: 0.8
-    - _ShadowRampWidth: 1
+    - _ShadowRampWidth: 2.68
     - _ShadowTransitionRange: 0.01
     - _ShadowTransitionRange2: 0.01
     - _ShadowTransitionRange3: 0.01
@@ -329,8 +329,8 @@ Material:
     - m_start_faceblush: 0
     - m_start_faceshading: 0
     - m_start_fresnel: 0
-    - m_start_lightandshadow: 0
-    - m_start_lighting: 0
+    - m_start_lightandshadow: 1
+    - m_start_lighting: 1
     - m_start_main: 1
     - m_start_mainalpha: 0
     - m_start_maindetail: 0
@@ -347,7 +347,7 @@ Material:
     - m_start_shadowcolorsday: 0
     - m_start_shadowcolorsnight: 0
     - m_start_shadowtransitions: 0
-    - m_start_specialeffects: 0
+    - m_start_specialeffects: 1
     - m_start_specular: 0
     - m_start_weaponscan: 0
     - m_start_weaponshading: 0

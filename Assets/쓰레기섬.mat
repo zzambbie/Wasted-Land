@@ -111,7 +111,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _PackedShadowRampTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 8985c2acc4ce6f0459c8f1f9e97e1bf4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
@@ -179,7 +179,7 @@ Material:
     - _GlossyReflections: 0
     - _HitColorFresnelPower: 1.5
     - _HitColorScaler: 6
-    - _LightArea: 0.55
+    - _LightArea: 0.113
     - _MTMapBrightness: 3
     - _MTMapTileScale: 1
     - _MTSharpLayerOffset: 1
@@ -233,7 +233,7 @@ Material:
     - _ScanColorScaler: 0
     - _ScanDirection_Switch: 0
     - _ScanSpeed: 0.8
-    - _ShadowRampWidth: 1
+    - _ShadowRampWidth: 2.093
     - _ShadowTransitionRange: 0.01
     - _ShadowTransitionRange2: 0.01
     - _ShadowTransitionRange3: 0.01
@@ -324,14 +324,14 @@ Material:
     - m_end_weaponshading: 0
     - m_start_debugOptions: 0
     - m_start_emissioneyeglow: 0
-    - m_start_emissionglow: 0
+    - m_start_emissionglow: 1
     - m_start_emissionpulse: 0
     - m_start_faceblush: 0
     - m_start_faceshading: 0
-    - m_start_fresnel: 0
-    - m_start_lightandshadow: 0
-    - m_start_lighting: 0
-    - m_start_main: 0
+    - m_start_fresnel: 1
+    - m_start_lightandshadow: 1
+    - m_start_lighting: 1
+    - m_start_main: 1
     - m_start_mainalpha: 0
     - m_start_maindetail: 0
     - m_start_matid: 0
@@ -340,15 +340,15 @@ Material:
     - m_start_normalmap: 0
     - m_start_outlines: 1
     - m_start_outlinescolor: 1
-    - m_start_outlinesoffset: 0
-    - m_start_reflections: 0
-    - m_start_renderingOptions: 0
-    - m_start_rimlight: 0
+    - m_start_outlinesoffset: 1
+    - m_start_reflections: 1
+    - m_start_renderingOptions: 1
+    - m_start_rimlight: 1
     - m_start_shadowcolorsday: 0
     - m_start_shadowcolorsnight: 0
-    - m_start_shadowtransitions: 0
-    - m_start_specialeffects: 0
-    - m_start_specular: 0
+    - m_start_shadowtransitions: 1
+    - m_start_specialeffects: 1
+    - m_start_specular: 1
     - m_start_weaponscan: 0
     - m_start_weaponshading: 0
     - shader_is_using_thry_editor: 69
