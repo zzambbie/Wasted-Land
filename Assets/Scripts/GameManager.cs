@@ -231,49 +231,69 @@ public class GameManager : MonoBehaviour
     }
 
     // 게임 종료 처리
+    // 게임 종료 처리
     void FinishGame()
     {
         if (isGameFinished) return;
         isGameFinished = true;
 
-        // 1. 카트 멈추기
-        foreach (var kart in allKarts) { if (kart != null) kart.isControlled = false; }
+        Debug.Log("게임 끝! 완주!");
 
-        // 2. 등수 확인 및 저장 로직
+        // 1. 모든 카트 멈춤
+        foreach (var kart in allKarts)
+        {
+            if (kart != null) kart.isControlled = false;
+        }
+
+        // 2. 클리어 여부 저장 로직
         if (playerKart != null)
         {
-            // 내 등수 가져오기 (CalculateRanking이 선행되어야 함)
+            // 마지막으로 등수 확실하게 계산
             CalculateRanking();
             int myRank = GetRank(playerKart);
 
-            // 현재 스테이지 번호 (GameData에서 가져옴, 없으면 1)
-            int currentStage = (GameData.Instance != null) ? GameData.Instance.currentStage : 1;
-
-            // 3등 이내(1, 2, 3등)라면 다음 스테이지 잠금 해제!
+            // 3등 안에 들어야 클리어! (조건은 변경 가능)
             if (myRank <= 3)
             {
+                // 현재 몇 탄인지 가져옴 (GameData가 없으면 1탄으로 가정)
+                int currentStage = (GameData.Instance != null) ? GameData.Instance.currentStage : 1;
+
+                // 다음 스테이지 번호
                 int nextStage = currentStage + 1;
 
-                // PlayerPrefs는 컴퓨터에 영구 저장하는 유니티 기본 기능
                 PlayerPrefs.SetInt("Stage_" + nextStage + "_Unlocked", 1);
-                PlayerPrefs.Save(); // 저장 확정
+                PlayerPrefs.Save();
 
-                Debug.Log(currentStage + "탄 클리어! " + nextStage + "탄 해제됨!");
+                Debug.Log(currentStage + "탄 클리어! " + nextStage + "탄 해제됨! (등수: " + myRank + ")");
             }
             else
             {
-                Debug.Log("패배... 3등 안에 들어야 합니다.");
+                Debug.Log("패배... 다음 스테이지 해제 실패. (등수: " + myRank + ")");
             }
         }
 
-        // 3. UI 띄우기
+        // 3. 결과창 UI 띄우기
         if (finishUI != null)
         {
             finishUI.SetActive(true);
-            if (finalTimeText != null) finalTimeText.text = "RECORD: " + FormatTime(timer);
+
+            if (finalTimeText != null)
+                finalTimeText.text = "RECORD: " + FormatTime(timer);
+
+            // (선택) 등수도 텍스트로 보여주기
+            if (finalRankText != null)
+            {
+                int rank = GetRank(playerKart);
+                finalRankText.text = rank + (rank == 1 ? "st" : (rank == 2 ? "nd" : (rank == 3 ? "rd" : "th")));
+            }
         }
 
+        // 인게임 UI 숨기기
         if (lapText != null) lapText.gameObject.SetActive(false);
         if (timeText != null) timeText.gameObject.SetActive(false);
+    }
+    public void OnClickReturnMap()
+    {
+        SceneManager.LoadScene("StoryMapScene");
     }
 }
