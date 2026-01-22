@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/CharSelectScene.unity
+    guid: ffdb81111de485b45998a0f036351710
+  - enabled: 1
+    path: Assets/Scenes/Map_01_Oval.unity
+    guid: 7a2d1367940d8da449376eff05ed8a4e
+  - enabled: 1
+    path: Assets/Scenes/StoryMapScene.unity
+    guid: 5e572932da489c248b838b29b5013e83
+  - enabled: 1
+    path: Assets/Scenes/TitleScene.unity
+    guid: 304a82ed65e15164587728d63004aadc
+  - enabled: 1
+    path: Assets/Scenes/Track_1.unity
+    guid: 99c9720ab356a0642a771bea13969a05
+  m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0
