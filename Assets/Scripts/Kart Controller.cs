@@ -3,6 +3,9 @@ using System.Collections;
 
 public class KartController : MonoBehaviour
 {
+    [Header("마리오 카트식 순위 계산")]
+    public int targetNodeIndex = 1; // 내가 지금 향해 가고 있는 점 (시작은 1번)
+
     [Header("기본 설정")]
     public bool isAI = false; // 이게 체크되면 키보드 입력 무시
     public bool isControlled = true; // 카트 조작 가능 여부 (기본값은 false로 해서 시작하자마자 못 움직이게)
@@ -110,7 +113,7 @@ public class KartController : MonoBehaviour
 
         // 1. 무게 적용 (Rigidbody의 Mass를 스탯에 맞춤)
         rb.mass = weight;
-        rb.linearDamping = drag;
+        rb.linearDamping = drag;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
         rb.centerOfMass = new Vector3(0, -0.5f, 0);
         rb.useGravity = true;
 
@@ -177,6 +180,70 @@ public class KartController : MonoBehaviour
             Quaternion upright = Quaternion.Euler(0, yRot, 0);
             transform.rotation = Quaternion.Lerp(transform.rotation, upright, Time.deltaTime * 2.0f);
         }
+        TrackNextNode();
+    }
+    void TrackNextNode()
+    {
+        if (trackNodes == null || trackNodes.Length == 0) return;
+
+        // 현재 목표 점
+        Vector3 targetPos = trackNodes[targetNodeIndex].position;
+        float distToTarget = Vector3.Distance(transform.position, targetPos);
+
+        // [수정] 거리만 보지 않고, "이미 지나쳤는지"를 내적(Dot)으로 확인
+        // (가끔 거리가 멀어도 속도가 빨라서 휙 지나치는 경우 대비)
+
+        int prevIndex = (targetNodeIndex - 1 + trackNodes.Length) % trackNodes.Length;
+        Vector3 prevPos = trackNodes[prevIndex].position;
+
+        // "이전 점 -> 목표 점" 벡터
+        Vector3 segment = targetPos - prevPos;
+        // "이전 점 -> 내 카트" 벡터
+        Vector3 toKart = transform.position - prevPos;
+
+        // 투영률 계산 (1.0을 넘으면 목표 점을 통과한 것임)
+        float t = Vector3.Dot(toKart, segment) / segment.sqrMagnitude;
+
+        // 거리가 가깝거나(3m), 이미 선을 넘었으면(t > 1) 다음 점으로 갱신
+        if (distToTarget < 3.0f || t > 1.0f)
+        {
+            targetNodeIndex = (targetNodeIndex + 1) % trackNodes.Length;
+        }
+    }
+
+    // [최종] 게임 매니저가 등수 매길 때 부르는 함수
+    public float GetRaceDistance()
+    {
+        if (trackNodes == null || trackNodes.Length == 0) return 0f;
+
+        // 1. 이전 점(A)과 목표 점(B) 정의
+        int prevIndex = (targetNodeIndex - 1 + trackNodes.Length) % trackNodes.Length;
+
+        Vector3 A = trackNodes[prevIndex].position;
+        Vector3 B = trackNodes[targetNodeIndex].position;
+        Vector3 P = transform.position;
+
+        // 2. 진행률 계산
+        Vector3 segment = B - A;
+        Vector3 toKart = P - A;
+
+        float t = 0f;
+        if (segment.sqrMagnitude > 0.0001f)
+        {
+            t = Vector3.Dot(toKart, segment) / segment.sqrMagnitude;
+        }
+
+        int scoreLap = currentLap;
+
+        if (targetNodeIndex == 0 && !hasPassedStartLine)
+        {
+            scoreLap--;
+        }
+
+        float totalScore = (scoreLap * 100000f) + (prevIndex * 100f) + (t * 100f);
+
+        debugRaceScore = totalScore;
+        return totalScore;
     }
     void FixedUpdate()
     {
@@ -210,17 +277,8 @@ public class KartController : MonoBehaviour
                 closestIndex = i;
             }
         }
-
-        // 2. [핵심 추가] 방향 보정 (내가 점을 지났나? 안 지났나?)
-        // 가장 가까운 점이 내 뒤에 있으면 -> 나는 그 점을 통과한 것임 -> 인덱스 유지
-        // 가장 가까운 점이 내 앞에 있으면 -> 나는 아직 그 점에 도달 못한 것임 -> 인덱스 - 1
-
         Vector3 nodeToKart = transform.position - trackNodes[closestIndex].position;
         Vector3 nodeForward = trackNodes[closestIndex].forward; // 점의 앞방향
-
-        // 내적(Dot)을 이용해 앞뒤 판별 (0보다 크면 앞, 작으면 뒤)
-        // (TrackPath의 점들이 트랙 진행 방향으로 회전되어 있어야 정확함. 
-        //  만약 점들 회전 안 맞췄으면 이 부분 생략하고 그냥 closestIndex 써도 됨)
 
         currentNodeIndex = closestIndex;
     }
@@ -770,81 +828,6 @@ public class KartController : MonoBehaviour
     // 트랙 진행률 정밀 계산 함수
     public float debugRaceScore = 0f;
 
-    // 순위 계산 함수 (넓은 트랙 보정판)
-    public float GetRaceDistance()
-    {
-        if (trackNodes == null || trackNodes.Length == 0) return 0f;
-
-        // 1. 내 주변에서 가장 가까운 점 찾기 (Local Search)
-        float minDst = Mathf.Infinity;
-        int bestIndex = currentNodeIndex;
-
-        for (int i = -5; i <= 5; i++)
-        {
-            int checkIndex = (currentNodeIndex + i + trackNodes.Length) % trackNodes.Length;
-            float dst = Vector3.Distance(transform.position, trackNodes[checkIndex].position);
-
-            if (dst < minDst)
-            {
-                minDst = dst;
-                bestIndex = checkIndex;
-            }
-        }
-
-        // 2. 방향 판별 및 인덱스 확정
-        int nextIndex = (bestIndex + 1) % trackNodes.Length;
-        Vector3 forwardDir = trackNodes[nextIndex].position - trackNodes[bestIndex].position;
-        Vector3 toKart = transform.position - trackNodes[bestIndex].position;
-
-        if (Vector3.Dot(forwardDir.normalized, toKart.normalized) < 0)
-        {
-            bestIndex--;
-            if (bestIndex < 0) bestIndex = trackNodes.Length - 1;
-        }
-
-        currentNodeIndex = bestIndex;
-
-        // 3. [핵심] 누적 노드 개수 업데이트 (Total Nodes Calculation)
-        // 인덱스가 변했을 때만 계산
-        if (currentNodeIndex != lastNodeIndex)
-        {
-            // 정방향 진행 (예: 2 -> 3)
-            if (currentNodeIndex == (lastNodeIndex + 1) % trackNodes.Length)
-            {
-                totalNodesPassed++;
-            }
-            // 한 바퀴 돌았을 때 (예: 11 -> 0)
-            else if (lastNodeIndex == trackNodes.Length - 1 && currentNodeIndex == 0)
-            {
-                totalNodesPassed++;
-            }
-            // 역주행 (예: 3 -> 2)
-            else if (currentNodeIndex == (lastNodeIndex - 1 + trackNodes.Length) % trackNodes.Length)
-            {
-                totalNodesPassed--;
-            }
-
-            lastNodeIndex = currentNodeIndex;
-        }
-
-        // 4. 진행률(t) 계산
-        int targetNext = (currentNodeIndex + 1) % trackNodes.Length;
-        Vector3 a = trackNodes[currentNodeIndex].position;
-        Vector3 b = trackNodes[targetNext].position;
-
-        Vector3 segment = b - a;
-        Vector3 proj = transform.position - a;
-
-        float t = Vector3.Dot(proj, segment) / segment.sqrMagnitude;
-        t = Mathf.Clamp01(t);
-
-        // 5. 최종 점수 = (통과한 총 노드 개수 * 100) + 진행률
-        // 랩(Lap) 변수를 아예 안 씁니다. 그냥 노드를 많이 지난 사람이 1등입니다.
-        float totalScore = (totalNodesPassed * 100f) + (t * 100f);
-
-        debugRaceScore = totalScore;
-        return totalScore;
-    }
     // 충돌이 일어났을 때 자동으로 실행되는 함수
     void OnCollisionEnter(Collision collision)
     {

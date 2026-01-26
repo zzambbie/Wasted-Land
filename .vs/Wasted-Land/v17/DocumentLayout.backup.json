@@ -3,20 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\admin\\Wasted-Land\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\missile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\missile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|c:\\users\\admin\\wasted-land\\assets\\scripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\inventorymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\inventorymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\storymapcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\storymapcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\crusher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\crusher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\titlecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\titlecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|c:\\users\\admin\\wasted-land\\assets\\scripts\\gamedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gamedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\kart controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\kart controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\fakeitembox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\fakeitembox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\trackvisualizer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\trackvisualizer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\aicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -35,20 +43,36 @@
       "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\checkpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\minimapfollow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\minimapfollow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\inventorymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\inventorymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\kartcamera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\kartcamera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\floatingobject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\floatingobject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\itembox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\itembox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\kart controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\kart controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\gamedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gamedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\kartcamera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\kartcamera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\missile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\missile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\crusher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\crusher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\obstacle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -57,14 +81,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\speedpad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\speedpad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\storymapcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\storymapcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|C:\\Users\\admin\\Wasted-Land\\assets\\scripts\\minimapfollow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C1733611-F0F7-1740-81A2-958DA584A9D9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\minimapfollow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -74,11 +90,59 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 13,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
+              "Title": "TitleController.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\TitleController.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\TitleController.cs",
+              "ToolTip": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\TitleController.cs",
+              "RelativeToolTip": "Assets\\Scripts\\TitleController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-21T01:51:56.766Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TrackVisualizer.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\TrackVisualizer.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\TrackVisualizer.cs",
+              "ToolTip": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\TrackVisualizer.cs",
+              "RelativeToolTip": "Assets\\Scripts\\TrackVisualizer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-14T07:47:10.259Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "FloatingObject.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\FloatingObject.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\FloatingObject.cs",
+              "ToolTip": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\FloatingObject.cs",
+              "RelativeToolTip": "Assets\\Scripts\\FloatingObject.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-08T02:50:37.722Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "FakeItemBox.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\FakeItemBox.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\FakeItemBox.cs",
+              "ToolTip": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\FakeItemBox.cs",
+              "RelativeToolTip": "Assets\\Scripts\\FakeItemBox.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-08T01:26:09.616Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
               "Title": "Missile.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\Missile.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Missile.cs",
@@ -86,12 +150,11 @@
               "RelativeToolTip": "Assets\\Scripts\\Missile.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAADQAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-29T01:11:32.934Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-29T01:11:32.934Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 10,
               "Title": "MinimapFollow.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\MinimapFollow.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\MinimapFollow.cs",
@@ -99,25 +162,23 @@
               "RelativeToolTip": "Assets\\Scripts\\MinimapFollow.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-26T02:42:00.647Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-26T02:42:00.647Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 1,
               "Title": "StoryMapController.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\StoryMapController.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\StoryMapController.cs",
               "ToolTip": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\StoryMapController.cs",
               "RelativeToolTip": "Assets\\Scripts\\StoryMapController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAADsAAAAAAAAAAAAgwE0AAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-24T03:59:49.564Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-24T03:59:49.564Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 19,
               "Title": "SpeedPad.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\SpeedPad.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\SpeedPad.cs",
@@ -125,12 +186,11 @@
               "RelativeToolTip": "Assets\\Scripts\\SpeedPad.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-24T03:59:47.878Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-24T03:59:47.878Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 18,
               "Title": "Obstacle.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\Obstacle.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Obstacle.cs",
@@ -138,12 +198,11 @@
               "RelativeToolTip": "Assets\\Scripts\\Obstacle.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-24T03:59:45.784Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-24T03:59:45.784Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "KartCamera.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\KartCamera.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\KartCamera.cs",
@@ -151,25 +210,23 @@
               "RelativeToolTip": "Assets\\Scripts\\KartCamera.cs",
               "ViewState": "AgIAAHAAAAAAAAAAAAAswDwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-24T03:59:44.245Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-24T03:59:44.245Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 3,
               "Title": "Kart Controller.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\Kart Controller.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Kart Controller.cs",
               "ToolTip": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\Kart Controller.cs",
               "RelativeToolTip": "Assets\\Scripts\\Kart Controller.cs",
-              "ViewState": "AgIAACMBAAAAAAAAAAAiwCIBAAA1AAAAAAAAAA==",
+              "ViewState": "AgIAAJkAAAAAAAAAAAAowIcAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-24T03:59:41.232Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-24T03:59:41.232Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 14,
               "Title": "ItemBox.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\ItemBox.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\ItemBox.cs",
@@ -177,64 +234,60 @@
               "RelativeToolTip": "Assets\\Scripts\\ItemBox.cs",
               "ViewState": "AgIAABsAAAAAAAAAAAAYwCYAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-24T03:59:37.973Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-24T03:59:37.973Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 11,
               "Title": "InventoryManager.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\InventoryManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\InventoryManager.cs",
               "ToolTip": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\InventoryManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\InventoryManager.cs",
-              "ViewState": "AgIAAJIAAAAAAAAAAAAnwKQAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAABkAAAAAAAAAAAAQwCYAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-24T03:59:36.593Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-24T03:59:36.593Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 0,
               "Title": "GameManager.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\GameManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\GameManager.cs",
               "ToolTip": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\GameManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\GameManager.cs",
-              "ViewState": "AgIAAKgAAAAAAAAAAAAgwP8AAAA8AAAAAAAAAA==",
+              "ViewState": "AgIAAOQAAAAAAAAAAAAYwOoAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-24T03:59:35.18Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "Checkpoint.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\Checkpoint.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Checkpoint.cs",
               "ToolTip": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\Checkpoint.cs",
               "RelativeToolTip": "Assets\\Scripts\\Checkpoint.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-24T03:59:28.872Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-24T03:59:28.872Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "CharacterSelectController.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\CharacterSelectController.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\CharacterSelectController.cs",
               "ToolTip": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\CharacterSelectController.cs",
               "RelativeToolTip": "Assets\\Scripts\\CharacterSelectController.cs",
-              "ViewState": "AgIAAGQAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAgwDQAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-24T03:59:26.832Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-24T03:59:26.832Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "BananaItem.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\BananaItem.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\BananaItem.cs",
@@ -242,25 +295,23 @@
               "RelativeToolTip": "Assets\\Scripts\\BananaItem.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-24T03:59:24.864Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-24T03:59:24.864Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "AIController.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\AIController.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\AIController.cs",
               "ToolTip": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\AIController.cs",
               "RelativeToolTip": "Assets\\Scripts\\AIController.cs",
-              "ViewState": "AgIAAKIAAAAAAAAAAAAYwEQAAABPAAAAAAAAAA==",
+              "ViewState": "AgIAAGIAAAAAAAAAAAAcwHsAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-24T03:59:22.069Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-24T03:59:22.069Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 15,
               "Title": "GameData.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\GameData.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\GameData.cs",
@@ -268,12 +319,11 @@
               "RelativeToolTip": "Assets\\Scripts\\GameData.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-24T03:59:17.053Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-24T03:59:17.053Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 17,
               "Title": "Crusher.cs",
               "DocumentMoniker": "C:\\Users\\admin\\Wasted-Land\\Assets\\Scripts\\Crusher.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Crusher.cs",
@@ -281,8 +331,7 @@
               "RelativeToolTip": "Assets\\Scripts\\Crusher.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-24T03:59:00.629Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-24T03:59:00.629Z"
             }
           ]
         }

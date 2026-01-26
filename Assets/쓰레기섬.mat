@@ -107,7 +107,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 3504a7566442cf7499d339dae2815818, type: 3}
+        m_Texture: {fileID: 2800000, guid: dd201f86447c31c44b7ad7b05c7b1d70, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -392,7 +392,7 @@ Material:
     - _BaseColor: {r: 1, g: 0.8964449, b: 0.8254717, a: 1}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
     - _ClipPlane: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.49019608, g: 0.49019608, b: 0.49019608, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _CoolShadowMultColor: {r: 0.9, g: 0.7, b: 0.75, a: 1}
     - _CoolShadowMultColor2: {r: 0.9, g: 0.7, b: 0.75, a: 1}
