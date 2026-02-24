@@ -62,39 +62,39 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\Presets.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\Helper.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ShaderOptimizer.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\GUIHelper.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\Localization.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\UnitTests.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\DataStructs.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\GradientEditor2.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\DecalSceneTool.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\GradiantEditor.cs" />
     <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\Config.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\Parser.cs" />
     <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\EditorStructs.cs" />
     <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\Settings.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\Unity.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ShaderOptimizer.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ShaderTranslator.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\GUIHelper.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\Styles.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ThryEditor.cs" />
     <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\HelperWeb.cs" />
     <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\DecalTool.cs" />
     <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\Drawers.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\Localization.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\EditorLocale.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\UnitTests.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\DataStructs.cs" />
     <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\TexturePackerConfig.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\GradientEditor2.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\Styles.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\DecalSceneTool.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\TexturePacker.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\GradiantEditor.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\Mediator.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ThryEditor.cs" />
-    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\MaterialLinker.cs" />
     <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ThryFileBuilder.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\Helper.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\Parser.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\Unity.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ShaderTranslator.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\EditorLocale.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\TexturePacker.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\Mediator.cs" />
+    <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\MaterialLinker.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ThryTexturePacker.compute" />
     <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\DecalGizmos.shader" />
+    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ChannelPreview.shader" />
     <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ParserTests.txt" />
     <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ThryAssemblyDefinition.asmdef" />
-    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ThryTexturePacker.compute" />
-    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ChannelPreview.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -601,8 +601,8 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.2.15f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEditor.Android.Extensions">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.2.15f1\Editor\Data\PlaybackEngines\AndroidPlayer\UnityEditor.Android.Extensions.dll</HintPath>
+    <Reference Include="Unity.Collections.LowLevel.ILSupport">
+      <HintPath>Library\PackageCache\com.unity.collections@aea9d3bd5e19\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="nunit.framework">
@@ -617,16 +617,20 @@
       <HintPath>Assets\EasyRoads3D\lib\EasyRoads3Dv3.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.IO.Hashing">
+      <HintPath>Library\PackageCache\com.unity.collections@aea9d3bd5e19\Unity.Collections.Tests\System.IO.Hashing\System.IO.Hashing.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="DelaunayER">
       <HintPath>Assets\EasyRoads3D\lib\DelaunayER.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Android.Types">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.2.15f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Types.dll</HintPath>
+    <Reference Include="Mono.Cecil">
+      <HintPath>Library\PackageCache\com.unity.nuget.mono-cecil@d78732e851eb\Mono.Cecil.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Android.Gradle">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.2.15f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Gradle.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>Library\PackageCache\com.unity.collections@aea9d3bd5e19\Unity.Collections.Tests\System.Runtime.CompilerServices.Unsafe\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">
@@ -1141,12 +1145,12 @@
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.TestRunner">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.TestRunner.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEditor.TestRunner">
       <HintPath>Library\ScriptAssemblies\UnityEditor.TestRunner.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TestRunner">
+      <HintPath>Library\ScriptAssemblies\UnityEngine.TestRunner.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
