@@ -124,6 +124,8 @@ public class AIController : MonoBehaviour
         // --- 6. 속도 조절 (과감하게!) ---
         float finalSpeed = speedFactor;
 
+        // 장애물이 있어도 속도를 너무 줄이지 않음 (최소 0.8 유지)
+        // 속도가 있어야 핸들이 먹혀서 피할 수 있음!
         if (avoidanceFactor > 0) finalSpeed *= 0.8f;
         else if (Mathf.Abs(currentSteer) > 0.6f) finalSpeed *= 0.9f;
 
@@ -134,7 +136,7 @@ public class AIController : MonoBehaviour
     {
         Vector3 dir = Quaternion.Euler(0, angle, 0) * transform.forward;
 
-        // obstacleLayer 마스크를 추가해서 '바닥'은 무시하고 '벽'만 감지
+        // [수정] obstacleLayer 마스크를 추가해서 '바닥'은 무시하고 '벽'만 감지
         if (Physics.Raycast(pos, dir, out RaycastHit hit, dist, obstacleLayer))
         {
             Debug.DrawLine(pos, hit.point, Color.red);

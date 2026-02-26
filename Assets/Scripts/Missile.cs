@@ -38,20 +38,19 @@ public class Missile : MonoBehaviour
 
     void Update()
     {
+        // 1. 유도 로직
         if (target != null)
         {
-            Vector3 aimTarget = target.position + Vector3.up * 1.0f;
-
             // 목표 방향 계산
-            Vector3 dir = aimTarget - transform.position;
+            Vector3 dir = target.position - transform.position;
             dir.Normalize();
 
-            // 회전
+            // 캡슐 앞방향 벡터(transform.up)를 목표 방향으로 회전
             Quaternion targetRot = Quaternion.FromToRotation(transform.up, dir) * transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, turnSpeed * Time.deltaTime);
         }
 
-        // 전진
+        // 2. 전진
         transform.Translate(Vector3.up * speed * Time.deltaTime);
     }
 

@@ -19,9 +19,6 @@ public class InventoryManager : MonoBehaviour
     public GameObject missilePrefab;
     public GameObject fakeBoxPrefab;
 
-    [Header("치트용 임시 프리팹")]
-    public GameObject cheatPrefab;
-
     [Header("상태")]
     public ItemType currentItem = ItemType.None;
     public bool hasItem = false;
@@ -158,33 +155,28 @@ public class InventoryManager : MonoBehaviour
 
         currentItem = ItemType.None;
         hasItem = false;
-        cheatPrefab = null;
         if (!kart.isAI) UpdateUI(null);
     }
 
     void SpawnBanana()
     {
-        GameObject prefabToUse = (cheatPrefab != null) ? cheatPrefab : bananaPrefab;
-
-        if (prefabToUse != null)
+        if (bananaPrefab != null)
         {
             Vector3 spawnPos = transform.position - (transform.forward * 2.0f);
             spawnPos.y = transform.position.y;
-            Instantiate(prefabToUse, spawnPos, transform.rotation);
+            Instantiate(bananaPrefab, spawnPos, transform.rotation);
         }
     }
 
     //미사일 발사 시 정보 전달 수정
     void SpawnMissile()
     {
-        GameObject prefabToUse = (cheatPrefab != null) ? cheatPrefab : missilePrefab;
-
-        if (prefabToUse != null)
+        if (missilePrefab != null)
         {
             // 위치: 카트 앞쪽 위
             Vector3 spawnPos = transform.position + (transform.forward * 3.0f) + (Vector3.up * 1.2f);
 
-            GameObject missileObj = Instantiate(prefabToUse, spawnPos, transform.rotation);
+            GameObject missileObj = Instantiate(missilePrefab, spawnPos, transform.rotation);
 
             Missile missileScript = missileObj.GetComponent<Missile>();
             if (missileScript != null)
@@ -198,8 +190,6 @@ public class InventoryManager : MonoBehaviour
     }
     void SpawnFakeBox()
     {
-        GameObject prefabToUse = (cheatPrefab != null) ? cheatPrefab : fakeBoxPrefab;
-
         if (fakeBoxPrefab != null)
         {
             // 1. 카트 뒤쪽 위치 (X, Z 좌표만 사용)

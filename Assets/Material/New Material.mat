@@ -87,7 +87,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _LightMapTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: f20110a5b2c9c6e40bfa88434c538d01, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MTMap:
@@ -99,7 +99,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: ee672f56106e92043ba78d2bac8c7bcc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -331,7 +331,7 @@ Material:
     - m_start_fresnel: 0
     - m_start_lightandshadow: 0
     - m_start_lighting: 0
-    - m_start_main: 0
+    - m_start_main: 1
     - m_start_mainalpha: 0
     - m_start_maindetail: 0
     - m_start_matid: 0
@@ -351,7 +351,7 @@ Material:
     - m_start_specular: 0
     - m_start_weaponscan: 0
     - m_start_weaponshading: 0
-    - shader_is_using_thry_editor: 0
+    - shader_is_using_thry_editor: 69
     - shader_master_label: 0
     - variant_selector: 0
     m_Colors:

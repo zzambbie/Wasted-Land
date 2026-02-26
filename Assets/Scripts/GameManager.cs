@@ -1,91 +1,51 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement; // ì¬ì‹œì‘ì„ ìœ„í•´ í•„ìˆ˜
+using UnityEngine.SceneManagement; // Àç½ÃÀÛÀ» À§ÇØ ÇÊ¼ö
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public KartController[] kartPrefabs; // ìºë¦­í„° ì„ íƒìš© í”„ë¦¬íŒ¹ ë¦¬ìŠ¤íŠ¸ (Inspectorì—ì„œ ì±„ì›Œì•¼ í•¨)
-    public Transform startPoint;         // í”Œë ˆì´ì–´ ìƒì„± ìœ„ì¹˜
+    [Header("UI ¿¬°á")]
+    public TextMeshProUGUI lapText;     // °ÔÀÓ Áß »ó´Ü Lap Ç¥½Ã
+    public TextMeshProUGUI timeText;    // °ÔÀÓ Áß »ó´Ü ½Ã°£ Ç¥½Ã
+    public TextMeshProUGUI countText;   // 3, 2, 1 Ä«¿îÆ®
 
-    [Header("UI ì—°ê²°")]
-    public TextMeshProUGUI lapText;     // ê²Œì„ ì¤‘ ìƒë‹¨ Lap í‘œì‹œ
-    public TextMeshProUGUI timeText;    // ê²Œì„ ì¤‘ ìƒë‹¨ ì‹œê°„ í‘œì‹œ
-    public TextMeshProUGUI countText;   // 3, 2, 1 ì¹´ìš´íŠ¸
+    [Header("µî¼ö UI")]
+    public Image rankImage;       // µî¼ö¸¦ º¸¿©ÁÙ ÀÌ¹ÌÁö
+    public Sprite[] rankSprites; // 1st, 2nd, 3rd... ÀÌ¹ÌÁöµé
 
-    [Header("ë“±ìˆ˜ UI")]
-    public Image rankImage;       // ë“±ìˆ˜ë¥¼ ë³´ì—¬ì¤„ ì´ë¯¸ì§€
-    public Sprite[] rankSprites; // 1st, 2nd, 3rd... ì´ë¯¸ì§€ë“¤
+    [Header("°á°ú È­¸é UI")]
+    public GameObject finishUI;         // °ÔÀÓ ³¡³ª¸é ÄÑÁú ÆĞ³Î (ResultPanel)
+    public TextMeshProUGUI finalTimeText; // °á°úÃ¢¿¡ ¶ã ÃÖÁ¾ ±â·Ï ÅØ½ºÆ®
+    public TextMeshProUGUI finalRankText; // °á°úÃ¢¿¡µµ µî¼ö ³ª¿À°Ô
 
-    [Header("ê²°ê³¼ í™”ë©´ UI")]
-    public GameObject finishUI;         // ê²Œì„ ëë‚˜ë©´ ì¼œì§ˆ íŒ¨ë„ (ResultPanel)
-    public TextMeshProUGUI finalTimeText; // ê²°ê³¼ì°½ì— ëœ° ìµœì¢… ê¸°ë¡ í…ìŠ¤íŠ¸
-    public TextMeshProUGUI finalRankText; // ê²°ê³¼ì°½ì—ë„ ë“±ìˆ˜ ë‚˜ì˜¤ê²Œ
-
-    [Header("ì¼ì‹œì •ì§€ UI")]
-    public GameObject pausePanel;
-    private bool isPaused = false; // ì§€ê¸ˆ ë©ˆì·„ëŠ”ì§€ í™•ì¸ìš©
-
-    [Header("ê²Œì„ ì„¤ì •")]
-    public KartController[] allKarts;   // í”Œë ˆì´ì–´ + AI ëª¨ë‘ í¬í•¨
-    public KartController playerKart; // í”Œë ˆì´ì–´ê°€ ëˆ„êµ°ì§€ ì•Œì•„ì•¼ UIë¥¼ ë„ì›€
+    [Header("°ÔÀÓ ¼³Á¤")]
+    public KartController[] allKarts;   // ÇÃ·¹ÀÌ¾î + AI ¸ğµÎ Æ÷ÇÔ
+    public KartController playerKart; // ÇÃ·¹ÀÌ¾î°¡ ´©±ºÁö ¾Ë¾Æ¾ß UI¸¦ ¶ç¿ò
 
     
-    public Checkpoint[] checkpoints; // ì²´í¬í¬ì¸íŠ¸ë“¤ì˜ ìœ„ì¹˜ë¥¼ ì•Œê¸° ìœ„í•´ ì €ì¥
-    public int totalLaps = 3;           // ì´ ë°”í€´ ìˆ˜
+    public Checkpoint[] checkpoints; // Ã¼Å©Æ÷ÀÎÆ®µéÀÇ À§Ä¡¸¦ ¾Ë±â À§ÇØ ÀúÀå
+    public int totalLaps = 3;           // ÃÑ ¹ÙÄû ¼ö
 
-    public List<KartController> sortedKarts = new List<KartController>(); // ì‹¤ì‹œê°„ìœ¼ë¡œ ë“±ìˆ˜ëŒ€ë¡œ ì •ë ¬ëœ ì¹´íŠ¸ ë¦¬ìŠ¤íŠ¸
-    public List<KartController> finishedKarts = new List<KartController>(); // ê²°ìŠ¹ì„  í†µê³¼í•œ ì¹´íŠ¸ë“¤ì„ ìˆœì„œëŒ€ë¡œ ì €ì¥í•˜ëŠ” ëª…ë‹¨
+    public List<KartController> sortedKarts = new List<KartController>(); // ½Ç½Ã°£À¸·Î µî¼ö´ë·Î Á¤·ÄµÈ Ä«Æ® ¸®½ºÆ®
 
     [HideInInspector] public int totalCheckpoints;
 
     public Transform trackPathRoot;
 
-    public Image itemSlotUI;
-
     private float timer = 0f;
     private bool isGameFinished = false;
     private bool isRaceStarted = false;
 
-    // í”Œë ˆì´ì–´ ë¶€í™œ ìœ„ì¹˜ ì €ì¥ìš©
+    // ÇÃ·¹ÀÌ¾î ºÎÈ° À§Ä¡ ÀúÀå¿ë
     private Vector3 lastCheckpointPos;
     private Quaternion lastCheckpointRot;
 
     void Start()
     {
-        // === ì„ íƒí•œ ìºë¦­í„°ë¡œ í”Œë ˆì´ì–´ ì¹´íŠ¸ êµì²´ ===
-        if (GameData.Instance != null && kartPrefabs != null && kartPrefabs.Length > 0)
-        {
-            int selectedIndex = Mathf.Clamp(GameData.Instance.selectedKartIndex, 0, kartPrefabs.Length - 1);
-
-            // ê¸°ì¡´ í”Œë ˆì´ì–´ ì¹´íŠ¸ ì°¾ê¸° & ì œê±°
-            for (int i = 0; i < allKarts.Length; i++)
-            {
-                if (allKarts[i] != null && !allKarts[i].isAI)
-                {
-                    Vector3 pos = allKarts[i].transform.position;
-                    Quaternion rot = allKarts[i].transform.rotation;
-
-                    Destroy(allKarts[i].gameObject);
-
-                    // ì„ íƒí•œ ì¹´íŠ¸ ìŠ¤í°
-                    KartController newKart = Instantiate(kartPrefabs[selectedIndex], pos, rot);
-                    newKart.isAI = false;
-                    allKarts[i] = newKart;
-                    playerKart = newKart;
-
-                    // ì¹´ë©”ë¼ íƒ€ê²Ÿ ì¬ì„¤ì •
-                    KartCamera cam = FindAnyObjectByType<KartCamera>();
-                    if (cam != null) cam.targetKart = newKart;
-
-                    break;
-                }
-            }
-        }
-
-        // 1. íŠ¸ë™íŒ¨ìŠ¤ì˜ ëª¨ë“  ì ì„ ê°€ì ¸ì˜´
+        // 1. Æ®·¢ÆĞ½ºÀÇ ¸ğµç Á¡À» °¡Á®¿È
         List<Transform> nodes = new List<Transform>();
         if (trackPathRoot != null)
         {
@@ -93,13 +53,13 @@ public class GameManager : MonoBehaviour
         }
         Transform[] nodeArray = nodes.ToArray();
 
-        // 2. ëª¨ë“  ì¹´íŠ¸ì—ê²Œ "ì´ê²Œ íŠ¸ë™ ì§€ë„ì•¼"ë¼ê³  ì•Œë ¤ì¤Œ
+        // 2. ¸ğµç Ä«Æ®¿¡°Ô "ÀÌ°Ô Æ®·¢ Áöµµ¾ß"¶ó°í ¾Ë·ÁÁÜ
         foreach (var kart in allKarts)
         {
             if (kart != null) kart.trackNodes = nodeArray;
         }
 
-        // ì”¬ì— ìˆëŠ” ì²´í¬í¬ì¸íŠ¸ë“¤ì„ ìˆœì„œëŒ€ë¡œ(Indexìˆœ) ì •ë ¬í•´ì„œ ê°€ì ¸ì˜´
+        // ¾À¿¡ ÀÖ´Â Ã¼Å©Æ÷ÀÎÆ®µéÀ» ¼ø¼­´ë·Î(Index¼ø) Á¤·ÄÇØ¼­ °¡Á®¿È
         Checkpoint[] unsortedPoints = FindObjectsByType<Checkpoint>(FindObjectsSortMode.None);
         checkpoints = new Checkpoint[unsortedPoints.Length];
 
@@ -109,16 +69,16 @@ public class GameManager : MonoBehaviour
                 checkpoints[cp.index] = cp;
         }
 
-        // í”Œë ˆì´ì–´ ì°¾ê¸° (allKarts ì¤‘ì—ì„œ isAIê°€ falseì¸ ë…€ì„)
+        // ÇÃ·¹ÀÌ¾î Ã£±â (allKarts Áß¿¡¼­ isAI°¡ falseÀÎ ³à¼®)
         foreach (var kart in allKarts)
         {
             if (!kart.isAI) playerKart = kart;
         }
 
-        UpdateLapUI(1); // 1ë°”í€´ì§¸ë¡œ UI ì´ˆê¸°í™”!
+        UpdateLapUI(1); // 1¹ÙÄûÂ°·Î UI ÃÊ±âÈ­!
         if (finishUI != null) finishUI.SetActive(false);
 
-        // (ë¦¬ìŠ¤í° ì§€ì  ì´ˆê¸°í™” ì½”ë“œ ìƒëµ)
+        // (¸®½ºÆù ÁöÁ¡ ÃÊ±âÈ­ ÄÚµå »ı·«)
         if (checkpoints.Length > 0)
         {
             lastCheckpointPos = checkpoints[0].transform.position;
@@ -130,14 +90,14 @@ public class GameManager : MonoBehaviour
 
     IEnumerator StartCountdownRoutine()
     {
-        // 1. ëª¨ë“  ì¹´íŠ¸ ì–¼ìŒ!
+        // 1. ¸ğµç Ä«Æ® ¾óÀ½!
         foreach (var kart in allKarts)
         {
             if (kart != null) kart.isControlled = false;
         }
         isRaceStarted = false;
 
-        // ì¹´ìš´íŠ¸ë‹¤ìš´
+        // Ä«¿îÆ®´Ù¿î
         if (countText != null) { countText.gameObject.SetActive(true); countText.text = "3"; }
         yield return new WaitForSeconds(1.0f);
 
@@ -149,7 +109,7 @@ public class GameManager : MonoBehaviour
 
         if (countText != null) countText.text = "GO!";
 
-        // 2. ì¶œë°œ!
+        // 2. Ãâ¹ß!
         foreach (var kart in allKarts)
         {
             if (kart != null) kart.isControlled = true;
@@ -164,13 +124,6 @@ public class GameManager : MonoBehaviour
     {
         if (isGameFinished) return;
 
-        // ESC í‚¤ ì…ë ¥ ê°ì§€
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (isPaused) ResumeGame();
-            else PauseGame();
-        }
-
         if (isRaceStarted)
         {
             timer += Time.deltaTime;
@@ -178,117 +131,65 @@ public class GameManager : MonoBehaviour
             CalculateRanking();
         }
 
-        // ì‹¤ì‹œê°„ íƒ€ì´ë¨¸ í‘œì‹œ
+        // ½Ç½Ã°£ Å¸ÀÌ¸Ó Ç¥½Ã
         if (timeText != null) timeText.text = FormatTime(timer);
     }
-
-    // ê²Œì„ ë©ˆì¶”ê¸°
-    public void PauseGame()
-    {
-        isPaused = true;
-        Time.timeScale = 0f; // [í•µì‹¬] ì‹œê°„ì„ ë©ˆì¶¤! (ëª¨ë“  ë¬¼ë¦¬, ì´ë™ ì •ì§€)
-        if (pausePanel != null) pausePanel.SetActive(true); // UI ì¼œê¸°
-    }
-
-    // ê²Œì„ ì¬ê°œ
-    public void ResumeGame()
-    {
-        isPaused = false;
-        Time.timeScale = 1f; // [í•µì‹¬] ì‹œê°„ ë‹¤ì‹œ íë¦„
-        if (pausePanel != null) pausePanel.SetActive(false); // UI ë„ê¸°
-    }
-
-    // ì¬ì‹œì‘ (ë²„íŠ¼ìš©)
-    public void OnClickRestart()
-    {
-        // ì‹œê°„ì€ ë‹¤ì‹œ íë¥´ê²Œ í•´ì¤˜ì•¼ í•¨ (ì•ˆ ê·¸ëŸ¬ë©´ ë©ˆì¶˜ ì±„ë¡œ ì¬ì‹œì‘ë¨)
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    // ë‚˜ê°€ê¸° (ë²„íŠ¼ìš©)
-    public void OnClickExit()
-    {
-        Time.timeScale = 1f; // ì‹œê°„ ì •ìƒí™”
-        SceneManager.LoadScene("StoryMapScene"); // ë§µ ì„ íƒ í™”ë©´ìœ¼ë¡œ
-    }
-
-    // ë“±ìˆ˜ ê³„ì‚° í•¨ìˆ˜
+    // µî¼ö °è»ê ÇÔ¼ö
     void CalculateRanking()
     {
-        // 1. ì•„ì§ ë‹¬ë¦¬ê³  ìˆëŠ” ì¹´íŠ¸ë“¤ë§Œ ë¦¬ìŠ¤íŠ¸ì— ë‹´ìŒ
-        List<KartController> racingList = new List<KartController>();
-        foreach (var kart in allKarts)
-        {
-            // ì´ë¯¸ ë„ì°© ëª…ë‹¨ì— ìˆëŠ” ì• ë“¤ì€ ëºŒ
-            if (!finishedKarts.Contains(kart))
-            {
-                racingList.Add(kart);
-            }
-        }
+        // 1. ¸®½ºÆ® º¹»ç
+        List<KartController> rankingList = new List<KartController>(allKarts);
 
-        // 2. ë‹¬ë¦¬ëŠ” ì• ë“¤ë¼ë¦¬ëŠ” 'ì ìˆ˜'ë¡œ ë“±ìˆ˜ ë§¤ê¹€ (ê¸°ì¡´ ë°©ì‹)
-        racingList.Sort((KartController a, KartController b) => {
+        // 2. Á¤·Ä (Á¡¼ö ³ôÀº ¼ø)
+        rankingList.Sort((KartController a, KartController b) => {
+
+            // °¢ Ä«Æ®ÀÇ Á¤¹ĞÇÑ ÁÖÇà Á¡¼ö¸¦ °¡Á®¿È
             float scoreA = a.GetRaceDistance();
             float scoreB = b.GetRaceDistance();
+
+            // Á¡¼ö°¡ Å« »ç¶÷ÀÌ 1µî (³»¸²Â÷¼ø Á¤·Ä: B - A)
             return scoreB.CompareTo(scoreA);
         });
 
-        // 3. [ìµœì¢… ëª…ë‹¨ í•©ì²´] (ë„ì°©í•œ ì• ë“¤) + (ë‹¬ë¦¬ëŠ” ì• ë“¤)
-        // sortedKartsë¥¼ ìƒˆë¡œ êµ¬ì„±í•¨
-        sortedKarts.Clear();
-        sortedKarts.AddRange(finishedKarts); // 1, 2ë“± ë¨¼ì € ë„£ê³ 
-        sortedKarts.AddRange(racingList);    // ë‚˜ë¨¸ì§€ ë’¤ì— ë¶™ì„
+        // 3. ¸®½ºÆ® °»½Å
+        sortedKarts = rankingList;
 
-        // 4. UI ê°±ì‹  (ê¸°ì¡´ ì½”ë“œ ìœ ì§€)
+        // 4. UI °»½Å (ÇÃ·¹ÀÌ¾î µî¼ö Ã£±â)
         if (playerKart != null && rankImage != null && rankSprites.Length > 0)
         {
-            int myRankIndex = sortedKarts.IndexOf(playerKart);
+            int myRankIndex = rankingList.IndexOf(playerKart);
+
+            // ÀÌ¹ÌÁö ±³Ã¼
             if (myRankIndex >= 0 && myRankIndex < rankSprites.Length)
             {
                 rankImage.sprite = rankSprites[myRankIndex];
             }
         }
+        if(sortedKarts.Count > 0) Debug.Log("ÇöÀç 1µî: " + sortedKarts[0].name);
     }
-    // ì¹´íŠ¸ê°€ ì™„ì£¼í–ˆì„ ë•Œ í˜¸ì¶œí•˜ëŠ” í•¨ìˆ˜ (ë„ì°© ë„ì¥ ì¾…!)
-    public void RegisterFinish(KartController kart)
-    {
-        // ì´ë¯¸ ëª…ë‹¨ì— ì—†ìœ¼ë©´ ì¶”ê°€
-        if (!finishedKarts.Contains(kart))
-        {
-            finishedKarts.Add(kart);
-            Debug.Log(kart.name + " ì™„ì£¼! í˜„ì¬ ìˆœìœ„: " + finishedKarts.Count + "ë“±");
-
-            // ë§Œì•½ í”Œë ˆì´ì–´ë¼ë©´ ê²Œì„ ì¢…ë£Œ ì²˜ë¦¬
-            if (kart == playerKart)
-            {
-                FinishGame();
-            }
-        }
-    }
-    // ë‚´ ì• ë“±ìˆ˜(íƒ€ê²Ÿ)ë¥¼ ì°¾ì•„ì£¼ëŠ” í•¨ìˆ˜
+    // ³» ¾Õ µî¼ö(Å¸°Ù)¸¦ Ã£¾ÆÁÖ´Â ÇÔ¼ö
     public KartController GetTargetFor(KartController shooter)
     {
         if (sortedKarts.Count == 0) return null;
 
         int myIndex = sortedKarts.IndexOf(shooter);
 
-        // ë‚´ê°€ 1ë“±(ì¸ë±ìŠ¤ 0)ì´ê±°ë‚˜ ë¦¬ìŠ¤íŠ¸ì— ì—†ìœ¼ë©´ íƒ€ê²Ÿ ì—†ìŒ
+        // ³»°¡ 1µî(ÀÎµ¦½º 0)ÀÌ°Å³ª ¸®½ºÆ®¿¡ ¾øÀ¸¸é Å¸°Ù ¾øÀ½
         if (myIndex <= 0) return null;
 
-        // ë‚´ ë°”ë¡œ ì• ë“±ìˆ˜(ì¸ë±ìŠ¤ - 1) ë¦¬í„´
+        // ³» ¹Ù·Î ¾Õ µî¼ö(ÀÎµ¦½º - 1) ¸®ÅÏ
         return sortedKarts[myIndex - 1];
     }
 
-    // ë‚´ê°€ ëª‡ ë“±ì¸ì§€ ì•Œë ¤ì£¼ëŠ” í•¨ìˆ˜
+    // ³»°¡ ¸î µîÀÎÁö ¾Ë·ÁÁÖ´Â ÇÔ¼ö
     public int GetRank(KartController kart)
     {
         if (sortedKarts.Contains(kart))
-            return sortedKarts.IndexOf(kart) + 1; // 1ë“±ë¶€í„° ì‹œì‘
+            return sortedKarts.IndexOf(kart) + 1; // 1µîºÎÅÍ ½ÃÀÛ
         return 99;
     }
 
-    // ì‹œê°„ í¬ë§·ì„ ì˜ˆì˜ê²Œ ë°”ê¿”ì£¼ëŠ” í•¨ìˆ˜
+    // ½Ã°£ Æ÷¸ËÀ» ¿¹»Ú°Ô ¹Ù²ãÁÖ´Â ÇÔ¼ö
     string FormatTime(float t)
     {
         int minutes = Mathf.FloorToInt(t / 60F);
@@ -296,82 +197,82 @@ public class GameManager : MonoBehaviour
         int milliseconds = Mathf.FloorToInt((t * 100F) % 100F);
         return string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
     }
-    // 1. ì²´í¬í¬ì¸íŠ¸ê°€ ë¦¬ìŠ¤í° ìœ„ì¹˜ ì—…ë°ì´íŠ¸ ìš”ì²­
+    // 1. Ã¼Å©Æ÷ÀÎÆ®°¡ ¸®½ºÆù À§Ä¡ ¾÷µ¥ÀÌÆ® ¿äÃ»
     public void UpdateRespawnPoint(Vector3 pos, Quaternion rot)
     {
         lastCheckpointPos = pos;
         lastCheckpointRot = rot;
-        Debug.Log("ë¶€í™œ ì§€ì  ì €ì¥ë¨!");
+        Debug.Log("ºÎÈ° ÁöÁ¡ ÀúÀåµÊ!");
     }
 
-    // 2. í”Œë ˆì´ì–´(KartController)ê°€ ì¶”ë½í–ˆì„ ë•Œ êµ¬ì¡° ìš”ì²­
+    // 2. ÇÃ·¹ÀÌ¾î(KartController)°¡ Ãß¶ôÇßÀ» ¶§ ±¸Á¶ ¿äÃ»
     public void RespawnPlayer(KartController player)
     {
-        Debug.Log("êµ¬ì¡° ì¤‘...");
+        Debug.Log("±¸Á¶ Áß...");
         player.transform.position = lastCheckpointPos;
         player.transform.rotation = lastCheckpointRot;
         player.ResetStatus();
     }
 
-    // 3. í”Œë ˆì´ì–´(KartController)ê°€ ë©ì´ ì˜¬ëì„ ë•Œ UI ê°±ì‹  ìš”ì²­
+    // 3. ÇÃ·¹ÀÌ¾î(KartController)°¡ ·¦ÀÌ ¿Ã¶úÀ» ¶§ UI °»½Å ¿äÃ»
     public void UpdateLapUI(int currentLap)
     {
-        // ì•„ì§ ì™„ì£¼ ì „ì´ë¼ë©´
+        // ¾ÆÁ÷ ¿ÏÁÖ ÀüÀÌ¶ó¸é
         if (currentLap <= totalLaps)
         {
             if (lapText != null)
                 lapText.text = currentLap + " / " + totalLaps;
         }
-        // ì™„ì£¼í–ˆë‹¤ë©´
+        // ¿ÏÁÖÇß´Ù¸é
         else
         {
             FinishGame();
         }
     }
 
-    // ê²Œì„ ì¢…ë£Œ ì²˜ë¦¬
-    // ê²Œì„ ì¢…ë£Œ ì²˜ë¦¬
+    // °ÔÀÓ Á¾·á Ã³¸®
+    // °ÔÀÓ Á¾·á Ã³¸®
     void FinishGame()
     {
         if (isGameFinished) return;
         isGameFinished = true;
 
-        Debug.Log("ê²Œì„ ë! ì™„ì£¼!");
+        Debug.Log("°ÔÀÓ ³¡! ¿ÏÁÖ!");
 
-        // 1. ëª¨ë“  ì¹´íŠ¸ ë©ˆì¶¤
+        // 1. ¸ğµç Ä«Æ® ¸ØÃã
         foreach (var kart in allKarts)
         {
             if (kart != null) kart.isControlled = false;
         }
 
-        // 2. í´ë¦¬ì–´ ì—¬ë¶€ ì €ì¥ ë¡œì§
+        // 2. Å¬¸®¾î ¿©ºÎ ÀúÀå ·ÎÁ÷
         if (playerKart != null)
         {
-            // ë§ˆì§€ë§‰ìœ¼ë¡œ ë“±ìˆ˜ í™•ì‹¤í•˜ê²Œ ê³„ì‚°
+            // ¸¶Áö¸·À¸·Î µî¼ö È®½ÇÇÏ°Ô °è»ê
             CalculateRanking();
             int myRank = GetRank(playerKart);
 
-            // 3ë“± ì•ˆì— ë“¤ì–´ì•¼ í´ë¦¬ì–´! (ì¡°ê±´ì€ ë³€ê²½ ê°€ëŠ¥)
+            // 3µî ¾È¿¡ µé¾î¾ß Å¬¸®¾î! (Á¶°ÇÀº º¯°æ °¡´É)
             if (myRank <= 3)
             {
-                // í˜„ì¬ ëª‡ íƒ„ì¸ì§€ ê°€ì ¸ì˜´ (GameDataê°€ ì—†ìœ¼ë©´ 1íƒ„ìœ¼ë¡œ ê°€ì •)
+                // ÇöÀç ¸î ÅºÀÎÁö °¡Á®¿È (GameData°¡ ¾øÀ¸¸é 1ÅºÀ¸·Î °¡Á¤)
                 int currentStage = (GameData.Instance != null) ? GameData.Instance.currentStage : 1;
 
-                // ë‹¤ìŒ ìŠ¤í…Œì´ì§€ ë²ˆí˜¸
+                // ´ÙÀ½ ½ºÅ×ÀÌÁö ¹øÈ£
                 int nextStage = currentStage + 1;
 
                 PlayerPrefs.SetInt("Stage_" + nextStage + "_Unlocked", 1);
                 PlayerPrefs.Save();
 
-                Debug.Log(currentStage + "íƒ„ í´ë¦¬ì–´! " + nextStage + "íƒ„ í•´ì œë¨! (ë“±ìˆ˜: " + myRank + ")");
+                Debug.Log(currentStage + "Åº Å¬¸®¾î! " + nextStage + "Åº ÇØÁ¦µÊ! (µî¼ö: " + myRank + ")");
             }
             else
             {
-                Debug.Log("íŒ¨ë°°... ë‹¤ìŒ ìŠ¤í…Œì´ì§€ í•´ì œ ì‹¤íŒ¨. (ë“±ìˆ˜: " + myRank + ")");
+                Debug.Log("ÆĞ¹è... ´ÙÀ½ ½ºÅ×ÀÌÁö ÇØÁ¦ ½ÇÆĞ. (µî¼ö: " + myRank + ")");
             }
         }
 
-        // 3. ê²°ê³¼ì°½ UI ë„ìš°ê¸°
+        // 3. °á°úÃ¢ UI ¶ç¿ì±â
         if (finishUI != null)
         {
             finishUI.SetActive(true);
@@ -379,7 +280,7 @@ public class GameManager : MonoBehaviour
             if (finalTimeText != null)
                 finalTimeText.text = "RECORD: " + FormatTime(timer);
 
-            // (ì„ íƒ) ë“±ìˆ˜ë„ í…ìŠ¤íŠ¸ë¡œ ë³´ì—¬ì£¼ê¸°
+            // (¼±ÅÃ) µî¼öµµ ÅØ½ºÆ®·Î º¸¿©ÁÖ±â
             if (finalRankText != null)
             {
                 int rank = GetRank(playerKart);
@@ -387,7 +288,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // ì¸ê²Œì„ UI ìˆ¨ê¸°ê¸°
+        // ÀÎ°ÔÀÓ UI ¼û±â±â
         if (lapText != null) lapText.gameObject.SetActive(false);
         if (timeText != null) timeText.gameObject.SetActive(false);
     }

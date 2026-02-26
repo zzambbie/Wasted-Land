@@ -41,14 +41,6 @@ public class KartController : MonoBehaviour
     public float minDriftTime = 0.8f;
     private float jumpCooldown = 0f;  // 점프 연타 방지용 쿨타임
 
-    [Header("단계별 드리프트 설정")]
-    public float driftLevel1Time = 0.5f; // 1단계 도달 시간
-    public float driftLevel2Time = 1.2f; // 2단계 도달 시간
-    public float driftLevel3Time = 2.0f; // 3단계 도달 시간
-
-    private int currentDriftLevel = 0; // 현재 단계 (0, 1, 2, 3)
-    private int storedDriftLevel = 0;  // 부스터 쓰려고 저장해둔 단계
-
     [Header("부스터")]
     public float boostForce = 100f;      // 순간 가속 힘
     public float boostMaxSpeed = 40f;    // 부스터 시 허용되는 최고 속도
@@ -198,7 +190,7 @@ public class KartController : MonoBehaviour
         Vector3 targetPos = trackNodes[targetNodeIndex].position;
         float distToTarget = Vector3.Distance(transform.position, targetPos);
 
-        // 거리만 보지 않고, "이미 지나쳤는지"를 내적(Dot)으로 확인
+        // [수정] 거리만 보지 않고, "이미 지나쳤는지"를 내적(Dot)으로 확인
         // (가끔 거리가 멀어도 속도가 빨라서 휙 지나치는 경우 대비)
 
         int prevIndex = (targetNodeIndex - 1 + trackNodes.Length) % trackNodes.Length;
@@ -219,7 +211,7 @@ public class KartController : MonoBehaviour
         }
     }
 
-    // 게임 매니저가 등수 매길 때 부르는 함수
+    // [최종] 게임 매니저가 등수 매길 때 부르는 함수
     public float GetRaceDistance()
     {
         if (trackNodes == null || trackNodes.Length == 0) return 0f;
@@ -262,16 +254,6 @@ public class KartController : MonoBehaviour
     public void SetInput(float move, float turn, bool drift, bool itemUse)
     {
         if (!isAI) return;
-
-        if (!isControlled || isUncontrollable)
-        {
-            moveInput = 0;
-            turnInput = 0;
-            isDriftInput = false;
-            isItemUseInput = false;
-            return;
-        }
-
         moveInput = move;
         turnInput = turn;
         isDriftInput = drift;
@@ -355,21 +337,6 @@ public class KartController : MonoBehaviour
                 {
                     // "이미 출발했었는데 또 0번을 지났다" = 한 바퀴 돔!
                     currentLap++;
-                    GameManager gm = FindFirstObjectByType<GameManager>();
-                    if (gm != null)
-                    {
-                        // 완주했으면 매니저에게 등록! (AI, 플레이어 모두)
-                        if (currentLap > gm.totalLaps)
-                        {
-                            gm.RegisterFinish(this);
-                        }
-
-                        // 플레이어라면 UI 업데이트
-                        if (!isAI && currentLap <= gm.totalLaps)
-                        {
-                            gm.UpdateLapUI(currentLap);
-                        }
-                    }
                 }
             }
 
@@ -479,118 +446,58 @@ public class KartController : MonoBehaviour
     }
     void HandleDrift()
     {
-        if (isUncontrollable) return;
+        if (isUncontrollable) return; // AI는 드리프트 로직 패스
 
+        // Player는 키보드, AI는 변수(isDriftInput)로 판단
         bool driftInput = isAI ? isDriftInput : Input.GetKey(KeyCode.LeftShift);
 
-        // 1. 드리프트 시작
+        // 1. 드리프트 시작 (조건: 드리프트 키 + 땅 + 전진 중 + 핸들 꺾음)
+        // AI의 경우 isDriftInput이 true로 바뀌는 순간이 GetKeyDown과 유사하게 처리되도록 로직 보완이 필요하지만
+        // 간단하게는 '현재 드리프트 중이 아닌데 드리프트 키가 들어오면' 시작으로 봄.
         if (!isDrifting && driftInput && isGrounded && moveInput > 0 && Mathf.Abs(turnInput) > 0.3f && jumpCooldown <= 0)
         {
             isDrifting = true;
             driftTimer = 0f;
-            currentDriftLevel = 0; // 레벨 초기화
             jumpCooldown = 0.5f;
             driftDirection = Mathf.Sign(turnInput);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
-
-            // 파티클 켜기 & 초기 색상 (흰색 or 연기색)
-            SetDriftParticleColor(Color.white);
         }
 
-        // 2. 드리프트 유지 (레벨 계산)
+        // 2. Shift 누르고 있는 중: 게이지 충전 (색깔 변화)
         if (isDrifting && driftInput && isGrounded)
         {
-            driftTimer += Time.deltaTime;
-
-            // 시간 경과에 따른 레벨 승급 및 색상 변경
-            if (driftTimer >= driftLevel3Time)
+            driftTimer += Time.deltaTime; // 시간 누적
+            
+            if (kartRenderer != null) // 시각 효과: 오래 누를수록 빨갛게 변하게 (충전 느낌)
             {
-                currentDriftLevel = 3;
-                SetDriftParticleColor(Color.red); // 3단계: 빨강
+                // 0초~maxDriftTime 사이의 값을 0~1로 변환해서 색깔 섞기
+                float lerpVal = Mathf.Clamp01(driftTimer / 2.0f);
+                kartRenderer.material.color = Color.Lerp(originalColor, Color.red, lerpVal);
             }
-            else if (driftTimer >= driftLevel2Time)
-            {
-                currentDriftLevel = 2;
-                SetDriftParticleColor(new Color(1f, 0.5f, 0f)); // 2단계: 주황
-            }
-            else if (driftTimer >= driftLevel1Time)
-            {
-                currentDriftLevel = 1;
-                SetDriftParticleColor(Color.cyan); // 1단계: 파랑
-            }
-            else
-            {
-                currentDriftLevel = 0;
-                SetDriftParticleColor(Color.white); // 0단계: 기본
-            }
-
-            // 카트 몸체 색 변하는 건 이제 촌스러우니 뺍시다 (파티클로 대체)
         }
-        else if (isDrifting && moveInput <= 0)
+        else if (isDrifting && moveInput <= 0) 
         {
-            StopDrift();
+            StopDrift(); // 속도 줄거나 멈추면 취소
         }
 
-        // 3. 드리프트 종료 & 보상 지급
+        // 3. Shift 뗀 순간: 부스터 발사!
         if (isDrifting && !driftInput)
         {
-            // [핵심] 바로 발사하지 않고, 레벨을 '저장'만 함
-            storedDriftLevel = currentDriftLevel;
-
             StopDrift();
 
-            // 1단계 이상 모았을 때만 부스터 기회 제공
-            if (storedDriftLevel > 0)
+            // 드리프트 시간이 최소 시간(1초)을 넘겼다면 부스터 발동!
+            if (driftTimer >= minDriftTime)
             {
                 OpenBoostWindow();
 
-                // AI는 기회가 생기자마자 즉시 발동 (사람은 키 눌러야 함)
-                if (isAI) HandleInstantBoost();
+                if (isAI) HandleInstantBoost();  // AI는 기회가 생기자마자 즉시 발동
             }
-        }
-    }
-    void FireDriftBoost(int level)
-    {
-        float powerMultiplier = 1.0f;
-        float duration = 0f;
-
-        switch (level)
-        {
-            case 1: // 파랑 (약함)
-                powerMultiplier = 0.5f;
-                duration = 0.3f;
-                break;
-            case 2: // 주황 (보통)
-                powerMultiplier = 0.8f;
-                duration = 0.5f;
-                break;
-            case 3: // 빨강 (강함)
-                powerMultiplier = 1.1f;
-                duration = 0.7f;
-                break;
-        }
-
-        ActivateBoost(boostForce * powerMultiplier, duration, driftDecel);
-        // Debug.Log("부스터 발동! 레벨: " + level);
-    }
-    void SetDriftParticleColor(Color color)
-    {
-        foreach (var p in driftParticles)
-        {
-            var main = p.main;
-            main.startColor = color;
         }
     }
     void StopDrift()
     {
         isDrifting = false;
-        driftDirection = 0f;
-        currentDriftLevel = 0;
-
-        // 파티클 끄기
-        foreach (var p in driftParticles) p.Stop();
-
-        // (선택) 카트 색 복구 코드는 지우거나 유지
+        driftDirection = 0f; // 방향 초기화
         if (kartRenderer != null) kartRenderer.material.color = originalColor;
     }
 
@@ -610,15 +517,15 @@ public class KartController : MonoBehaviour
     {
         if (isUncontrollable) return;
 
+        // 플레이어: 키를 눌러야 발동
+        // AI: 기회가 생기면(canInstantBoost) 무조건 즉시 발동
         bool triggerBoost = isAI ? canInstantBoost : (canInstantBoost && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)));
 
+        // 기회가 있고(canInstantBoost), '위쪽 화살표'를 딱! 눌렀을 때(GetKeyDown)
         if (triggerBoost)
         {
-            // 저장된 레벨(storedDriftLevel)에 따라 발사!
-            FireDriftBoost(storedDriftLevel);
-
+            ActivateBoost(storedBoostPower, instantBoostDuration, driftDecel);
             canInstantBoost = false;
-            storedDriftLevel = 0; // 사용했으니 초기화
             CancelInvoke("CloseBoostWindow");
         }
     }
