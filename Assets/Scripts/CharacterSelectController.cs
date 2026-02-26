@@ -4,12 +4,15 @@ using UnityEngine.SceneManagement;
 
 public class CharacterSelectController : MonoBehaviour
 {
-    [Header("3D ¸ðµ¨¸µ")]
-    public GameObject[] kartPrefabs; // Ä«Æ® ÇÁ¸®ÆÕ 4°³
-    public Transform spawnPoint;     // ´Ü»ó À§Ä¡
+    [Header("3D ëª¨ë¸ë§")]
+    public GameObject[] kartPrefabs; // ì¹´íŠ¸ í”„ë¦¬íŒ¹ 4ê°œ
+    public Transform spawnPoint;     // ë‹¨ìƒ ìœ„ì¹˜
 
-    [Header("UI ¿¬°á")]
-    public TextMeshProUGUI statusText; // ½ºÅÈ Ç¥½Ã
+    [Header("UI ì—°ê²°")]
+    public TextMeshProUGUI statusText; // ìŠ¤íƒ¯ í‘œì‹œ
+
+    [Header("íšŒì „ ì—°ì¶œ")]
+    public float rotateSpeed = 30f; // ì´ˆë‹¹ íšŒì „ ê°ë„ (ì•½ 12ì´ˆì— í•œ ë°”í€´)
 
     private GameObject currentModel;
     private int currentIndex = 0;
@@ -21,7 +24,13 @@ public class CharacterSelectController : MonoBehaviour
 
     void Update()
     {
-        // 1. Å°º¸µå ¹æÇâÅ° ÀÔ·Â (Prev/Next)
+        // ì¹´íŠ¸ ëª¨ë¸ ì²œì²œížˆ íšŒì „ (ì „ì‹  ë³´ì—¬ì£¼ê¸°)
+        if (currentModel != null)
+        {
+            currentModel.transform.Rotate(0f, rotateSpeed * Time.deltaTime, 0f);
+        }
+
+        // 1. í‚¤ë³´ë“œ ë°©í–¥í‚¤ ìž…ë ¥ (Prev/Next)
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             PrevKart();
@@ -31,14 +40,14 @@ public class CharacterSelectController : MonoBehaviour
             NextKart();
         }
 
-        // 2. ¿£ÅÍÅ°·Î °ÔÀÓ ½ÃÀÛ
+        // 2. ì—”í„°í‚¤ë¡œ ê²Œìž„ ì‹œìž‘
         if (Input.GetKeyDown(KeyCode.Return))
         {
             OnClickStartGame();
         }
     }
 
-    // --- È­»ìÇ¥ ¹öÆ°¿ë ÇÔ¼ö ---
+    // --- í™”ì‚´í‘œ ë²„íŠ¼ìš© í•¨ìˆ˜ ---
     public void NextKart()
     {
         currentIndex++;
@@ -53,18 +62,18 @@ public class CharacterSelectController : MonoBehaviour
         ShowKart(currentIndex);
     }
 
-    // --- ¿À¸¥ÂÊ ±×¸®µå ¹öÆ°¿ë ÇÔ¼ö (Á÷Á¢ ¼±ÅÃ) ---
+    // --- ì˜¤ë¥¸ìª½ ê·¸ë¦¬ë“œ ë²„íŠ¼ìš© í•¨ìˆ˜ (ì§ì ‘ ì„ íƒ) ---
     public void SelectKartBtn(int index)
     {
-        // ¹üÀ§¸¦ ¹þ¾î³ªÁö ¾Ê°Ô ¾ÈÀüÀåÄ¡
+        // ë²”ìœ„ë¥¼ ë²—ì–´ë‚˜ì§€ ì•Šê²Œ ì•ˆì „ìž¥ì¹˜
         if (index >= 0 && index < kartPrefabs.Length)
         {
-            currentIndex = index; // ÇöÀç ¹øÈ£¸¦ ´©¸¥ ¹öÆ° ¹øÈ£·Î °»½Å
+            currentIndex = index; // í˜„ìž¬ ë²ˆí˜¸ë¥¼ ëˆ„ë¥¸ ë²„íŠ¼ ë²ˆí˜¸ë¡œ ê°±ì‹ 
             ShowKart(currentIndex);
         }
     }
 
-    // --- °øÅë: Ä«Æ® º¸¿©ÁÖ±â ÇÔ¼ö ---
+    // --- ê³µí†µ: ì¹´íŠ¸ ë³´ì—¬ì£¼ê¸° í•¨ìˆ˜ ---
     void ShowKart(int index)
     {
         if (currentModel != null) Destroy(currentModel);
@@ -81,7 +90,7 @@ public class CharacterSelectController : MonoBehaviour
         {
             kart.enabled = false;
 
-            // ÀÌÆåÆ®/»ç¿îµå ²ô±â
+            // ì´íŽ™íŠ¸/ì‚¬ìš´ë“œ ë„ê¸°
             ParticleSystem[] particles = currentModel.GetComponentsInChildren<ParticleSystem>();
             foreach (ParticleSystem p in particles) { p.Stop(); p.gameObject.SetActive(false); }
             AudioSource[] audios = currentModel.GetComponentsInChildren<AudioSource>();
