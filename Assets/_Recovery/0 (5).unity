@@ -134072,37 +134072,6 @@ MonoBehaviour:
   locked: 0
   child: 0
   sectionIndex: -1
---- !u!1 &1717329983
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1717329984}
-  m_Layer: 0
-  m_Name: StartPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1717329984
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1717329983}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 170, y: 15, z: 7}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1717671954
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -143291,12 +143260,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8262552d710d4f949822a2ad77ca703e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  kartPrefabs:
-  - {fileID: 6246371888014964579, guid: 47375da119501cf48b389aa10f228891, type: 3}
-  - {fileID: 6246371888014964579, guid: 9bc1ea1d6c902c347b6f01dd626bc3cd, type: 3}
-  - {fileID: 6246371888014964579, guid: 183448036b716ff4e84583ef10739735, type: 3}
-  - {fileID: 6246371888014964579, guid: c0136fcd9f4bc654b87d31701c42ed36, type: 3}
-  startPoint: {fileID: 1717329984}
   lapText: {fileID: 209166347}
   timeText: {fileID: 1375025789}
   countText: {fileID: 302489728867250693}
@@ -154792,4 +154755,3 @@ SceneRoots:
   - {fileID: 1846757448}
   - {fileID: 1773190250}
   - {fileID: 1366868877}
-  - {fileID: 1717329984}

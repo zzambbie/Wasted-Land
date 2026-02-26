@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement; // 씬 이동을 위해 필수!
 
 public class TitleController : MonoBehaviour
 {
+    public GameObject optionPanel;
+
     // 1. 스토리 모드 버튼
     public void OnClickStoryMode()
     {
@@ -19,8 +21,13 @@ public class TitleController : MonoBehaviour
     // 3. 옵션 버튼
     public void OnClickOption()
     {
-        Debug.Log("옵션 창은 나중에 만들 거예요!");
-        // 나중에 여기에 optionPanel.SetActive(true); 넣으면 됨
+        if (optionPanel != null)
+            optionPanel.SetActive(true); // 켜기
+    }
+    public void CloseOption()
+    {
+        if (optionPanel != null)
+            optionPanel.SetActive(false); // 끄기
     }
     // 4. 게임 종료 버튼
     public void OnClickQuit()
