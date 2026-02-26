@@ -124,7 +124,7 @@ Material:
     - _DeepColor: {r: 0, g: 0.6095789, b: 0.6603774, a: 0.078431375}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FormColor: {r: 1, g: 1, b: 1, a: 0.07058824}
-    - _Horizon_Color: {r: 1, g: 0.77157485, b: 0.427451, a: 0.6509804}
+    - _Horizon_Color: {r: 0.427451, g: 1, b: 0.9543061, a: 0.6509804}
     - _Intersection_Foam_Color: {r: 1, g: 1, b: 1, a: 1}
     - _Shallow_Color: {r: 0.018022425, g: 0.764151, b: 0.63275915, a: 1}
     - _UV: {r: 0, g: 0, b: 0, a: 0}
