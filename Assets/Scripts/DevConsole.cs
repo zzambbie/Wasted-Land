@@ -20,6 +20,8 @@ public class DevConsole : MonoBehaviour
     private string inputText = "";
     private List<string> logLines = new List<string>();
     private Vector2 scrollPos;
+    private bool shouldSubmit = false; // Update→OnGUI 입력 전달용
+    private bool needsFocus = false;   // 포커스 요청 플래그
 
     // 치트 상태
     private bool godMode = false;
@@ -50,11 +52,24 @@ public class DevConsole : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.BackQuote))
         {
             isOpen = !isOpen;
-            if (isOpen && !isAuthenticated)
+            if (isOpen)
             {
-                isPasswordMode = true;
                 inputText = "";
+                needsFocus = true;
+                if (!isAuthenticated) isPasswordMode = true;
             }
+        }
+
+        // ESC 키로도 닫기
+        if (isOpen && Input.GetKeyDown(KeyCode.Escape))
+        {
+            isOpen = false;
+        }
+
+        // 엔터키 → 입력 제출 (OnGUI의 이벤트는 불안정하므로 Update에서 처리)
+        if (isOpen && Input.GetKeyDown(KeyCode.Return))
+        {
+            shouldSubmit = true;
         }
 
         // 콘솔 열려있을 때 게임 입력 차단용
@@ -127,6 +142,13 @@ public class DevConsole : MonoBehaviour
 
         GUI.Label(new Rect(x, y + 5, w, 30), isAuthenticated ? "[ DEV CONSOLE ]" : "[ ACCESS DENIED - ENTER PASSWORD ]", titleStyle);
 
+        // 닫기 안내 (우상단)
+        GUIStyle hintStyle = new GUIStyle(GUI.skin.label);
+        hintStyle.fontSize = 12;
+        hintStyle.normal.textColor = new Color(0.6f, 0.6f, 0.6f);
+        hintStyle.alignment = TextAnchor.MiddleRight;
+        GUI.Label(new Rect(x, y + 5, w - 15, 30), "ESC 또는 ` 키로 닫기", hintStyle);
+
         // 로그 영역
         float logY = y + 40;
         float logH = h - 80;
@@ -149,24 +171,31 @@ public class DevConsole : MonoBehaviour
 
         GUI.SetNextControlName("ConsoleInput");
         inputText = GUI.TextField(new Rect(x + 25, inputY, w - 40, 25), inputText, inputStyle);
-        GUI.FocusControl("ConsoleInput");
 
-        // 엔터키로 입력 처리
-        if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Return)
+        // 백틱(`) 문자가 입력란에 들어가는 것 방지
+        if (inputText.Contains("`"))
         {
-            if (!string.IsNullOrEmpty(inputText))
-            {
-                ProcessInput(inputText.Trim());
-                inputText = "";
-            }
-            Event.current.Use();
+            inputText = inputText.Replace("`", "");
         }
 
-        // ESC로 닫기
-        if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape)
+        // 포커스 설정
+        if (needsFocus)
         {
-            isOpen = false;
-            Event.current.Use();
+            GUI.FocusControl("ConsoleInput");
+            needsFocus = false;
+        }
+
+        // Update()에서 엔터키가 눌렸으면 입력 처리
+        if (shouldSubmit)
+        {
+            shouldSubmit = false;
+            string trimmed = inputText.Trim();
+            if (!string.IsNullOrEmpty(trimmed))
+            {
+                ProcessInput(trimmed);
+                inputText = "";
+                needsFocus = true;
+            }
         }
     }
 
