@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-2911337833685490806
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Editor::UnityEditor.Rendering.Universal.AssetVersion
-  version: 10
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -20,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: "\uC790\uB3D9\uCC28"
+  m_Name: "\uD070\uB0C4\uBE44"
   m_Shader: {fileID: 4800000, guid: 0e85370a028ae2247a2ea6508b153691, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -44,16 +31,11 @@ Material:
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2000
   stringTagMap: {}
-  disabledShaderPasses:
-  - MOTIONVECTORS
+  disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _BaseMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -87,7 +69,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _LightMapTex:
-        m_Texture: {fileID: 2800000, guid: f20110a5b2c9c6e40bfa88434c538d01, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MTMap:
@@ -99,7 +81,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: ee672f56106e92043ba78d2bac8c7bcc, type: 3}
+        m_Texture: {fileID: 2800000, guid: 166fa973f9369d34e9ebf073ec824009, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -111,7 +93,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _PackedShadowRampTex:
-        m_Texture: {fileID: 2800000, guid: 6f146e852c7edfb4db200cbeee49db1f, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
@@ -119,10 +101,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ScanPatternTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SpecGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -134,52 +112,30 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AddPrecomputedVelocity: 0
-    - _AlphaClip: 0
-    - _AlphaToMask: 0
-    - _Blend: 0
-    - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
-    - _ClearCoatMask: 0
-    - _ClearCoatSmoothness: 0
     - _ClipAlphaThreshold: 1
     - _ClipPlaneWorld: 1
-    - _Cull: 2
+    - _Cull: 0
     - _Cutoff: 0.5
     - _DayOrNight: 0
-    - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DissolveDirection_Toggle: 0
     - _DstBlend: 0
-    - _DstBlendAlpha: 0
     - _EmissionStrength: 1
     - _EmissionType: 0
-    - _EnvironmentLightingStrength: 0.353
-    - _EnvironmentReflections: 1
+    - _EnvironmentLightingStrength: 1
     - _EyeGlowStrength: 1
     - _FaceBlushStrength: 0
     - _FaceMapSoftness: 0.001
     - _FallbackOutlines: 1
-    - _GlossMapScale: 0
-    - _Glossiness: 0
-    - _GlossyReflections: 0
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
     - _HitColorFresnelPower: 1.5
     - _HitColorScaler: 6
-    - _LightArea: 0.86
+    - _LightArea: 0.55
     - _MTMapBrightness: 3
     - _MTMapTileScale: 1
     - _MTSharpLayerOffset: 1
@@ -193,18 +149,17 @@ Material:
     - _MaxOutlineZOffset: 1
     - _MetalMaterial: 1
     - _Metallic: 0
+    - _Mode: 0
     - _NoseBlushStrength: 0
     - _OcclusionStrength: 1
     - _OutlineType: 1
-    - _OutlineWidth: 0.0007
-    - _Parallax: 0.005
+    - _OutlineWidth: 0.0003
+    - _Parallax: 0.02
     - _Pattern_Speed: -0.033
     - _ProceduralUVs: 0
     - _PulseMaxStrength: 1
     - _PulseMinStrength: 0
     - _PulseSpeed: 1
-    - _QueueOffset: 0
-    - _ReceiveShadows: 1
     - _ReturnDiffuseA: 0
     - _ReturnDiffuseRGB: 0
     - _ReturnEmissionFactor: 0
@@ -233,7 +188,7 @@ Material:
     - _ScanColorScaler: 0
     - _ScanDirection_Switch: 0
     - _ScanSpeed: 0.8
-    - _ShadowRampWidth: 2.68
+    - _ShadowRampWidth: 1
     - _ShadowTransitionRange: 0.01
     - _ShadowTransitionRange2: 0.01
     - _ShadowTransitionRange3: 0.01
@@ -251,7 +206,6 @@ Material:
     - _Shininess5: 10
     - _SkillEmissionScaler: 3.2
     - _SkillEmisssionPower: 0.6
-    - _Smoothness: 1
     - _SmoothnessTextureChannel: 0
     - _SpecMulti: 0.1
     - _SpecMulti2: 0.1
@@ -260,14 +214,13 @@ Material:
     - _SpecMulti5: 0.1
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _SrcBlendAlpha: 1
-    - _Surface: 0
     - _TextureBiasWhenDithering: -1
     - _TextureLineSmoothness: 0.15
     - _TextureLineThickness: 0.55
     - _TextureLineUse: 0
     - _ToggleEyeGlow: 1
     - _TogglePulse: 0
+    - _UVSec: 0
     - _UseBackFaceUV2: 1
     - _UseBumpMap: 0
     - _UseClipPlane: 0
@@ -284,8 +237,6 @@ Material:
     - _UseWeapon: 0
     - _VertexColorLinear: 0
     - _WeaponDissolveValue: 1
-    - _WorkflowMode: 1
-    - _XRMotionVectorsPass: 1
     - _ZTest: 4
     - _ZWrite: 1
     - _flipFaceLighting: 0
@@ -329,8 +280,8 @@ Material:
     - m_start_faceblush: 0
     - m_start_faceshading: 0
     - m_start_fresnel: 0
-    - m_start_lightandshadow: 1
-    - m_start_lighting: 1
+    - m_start_lightandshadow: 0
+    - m_start_lighting: 0
     - m_start_main: 1
     - m_start_mainalpha: 0
     - m_start_maindetail: 0
@@ -347,7 +298,7 @@ Material:
     - m_start_shadowcolorsday: 0
     - m_start_shadowcolorsnight: 0
     - m_start_shadowtransitions: 0
-    - m_start_specialeffects: 1
+    - m_start_specialeffects: 0
     - m_start_specular: 0
     - m_start_weaponscan: 0
     - m_start_weaponshading: 0
@@ -355,9 +306,8 @@ Material:
     - shader_master_label: 0
     - variant_selector: 0
     m_Colors:
-    - _BaseColor: {r: 0.09718762, g: 0.24311714, b: 0.5283019, a: 1}
     - _ClipPlane: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.09718762, g: 0.24311714, b: 0.5283019, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _CoolShadowMultColor: {r: 0.9, g: 0.7, b: 0.75, a: 1}
     - _CoolShadowMultColor2: {r: 0.9, g: 0.7, b: 0.75, a: 1}
     - _CoolShadowMultColor3: {r: 0.9, g: 0.7, b: 0.75, a: 1}
@@ -387,7 +337,6 @@ Material:
     - _OutlineWidthAdjustZs: {r: 0.001, g: 2, b: 6, a: 0}
     - _ScanColor: {r: 0.8970588, g: 0.8970588, b: 0.8970588, a: 1}
     - _SkillEmisssionColor: {r: 0, g: 0, b: 0, a: 0}
-    - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _TextureLineDistanceControl: {r: 0.1, g: 0.6, b: 1, a: 1}
     - _TextureLineMultiplier: {r: 0.6, g: 0.6, b: 0.6, a: 1}

@@ -112,7 +112,7 @@ Material:
     - _SufaceFoamDirection: 0.1
     - _SurfaceFoamDistortion: 0.1
     - _SurfaceFoamSpeed: -0.007
-    - _SurfaceFoamTiling: 3.32
+    - _SurfaceFoamTiling: 124.7
     - _UVSec: 0
     - _Wave_Length: 18.95
     - _Wave_Speed: 3
@@ -121,12 +121,12 @@ Material:
     - _wave_Steepness: 0.27
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DeepColor: {r: 0, g: 0.6095789, b: 0.6603774, a: 0.078431375}
+    - _DeepColor: {r: 0.5849056, g: 0.27331942, b: 0, a: 0.078431375}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FormColor: {r: 1, g: 1, b: 1, a: 0.07058824}
-    - _Horizon_Color: {r: 0.427451, g: 1, b: 0.9543061, a: 0.6509804}
+    - _FormColor: {r: 1, g: 1, b: 1, a: 0.38431373}
+    - _Horizon_Color: {r: 0.047169805, g: 0.028251419, b: 0, a: 0.6509804}
     - _Intersection_Foam_Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Shallow_Color: {r: 0.018022425, g: 0.764151, b: 0.63275915, a: 1}
+    - _Shallow_Color: {r: 0.7647059, g: 0.49157903, b: 0.019607842, a: 1}
     - _UV: {r: 0, g: 0, b: 0, a: 0}
     - _Wave_Directions: {r: 21, g: 33, b: 22, a: 0}
   m_BuildTextureStacks: []
