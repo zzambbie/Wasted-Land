@@ -20,8 +20,6 @@ public class DevConsole : MonoBehaviour
     private string inputText = "";
     private List<string> logLines = new List<string>();
     private Vector2 scrollPos;
-    private bool shouldSubmit = false; // Update→OnGUI 입력 전달용
-    private bool needsFocus = false;   // 포커스 요청 플래그
 
     // 치트 상태
     private bool godMode = false;
@@ -55,38 +53,19 @@ public class DevConsole : MonoBehaviour
             if (isOpen)
             {
                 inputText = "";
-                needsFocus = true;
+                framesSinceOpen = 0;
                 if (!isAuthenticated) isPasswordMode = true;
             }
         }
 
-        // ESC 키로도 닫기
-        if (isOpen && Input.GetKeyDown(KeyCode.Escape))
-        {
-            isOpen = false;
-        }
-
-        // 엔터키 → 입력 제출 (OnGUI의 이벤트는 불안정하므로 Update에서 처리)
-        if (isOpen && Input.GetKeyDown(KeyCode.Return))
-        {
-            shouldSubmit = true;
-        }
-
-        // 콘솔 열려있을 때 게임 입력 차단용
-        if (isOpen && godMode)
+        // 콘솔 열려있을 때 무적 모드 적용
+        if (godMode)
         {
             ApplyGodMode();
         }
     }
 
-    void LateUpdate()
-    {
-        // 무적 모드 유지
-        if (godMode && !isOpen)
-        {
-            ApplyGodMode();
-        }
-    }
+    private int framesSinceOpen = 0;
 
     void ApplyGodMode()
     {
@@ -124,6 +103,30 @@ public class DevConsole : MonoBehaviour
         if (!isOpen) return;
 
         InitStyles();
+
+        // ── 키 입력을 TextField보다 먼저 가로채기 ──
+        Event e = Event.current;
+
+        // ESC로 닫기
+        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Escape)
+        {
+            isOpen = false;
+            e.Use();
+            return;
+        }
+
+        // 엔터키로 입력 제출 (TextField가 이벤트를 소비하기 전에 먼저 처리!)
+        if (e.type == EventType.KeyDown && (e.keyCode == KeyCode.Return || e.keyCode == KeyCode.KeypadEnter))
+        {
+            string trimmed = inputText.Trim();
+            if (!string.IsNullOrEmpty(trimmed))
+            {
+                ProcessInput(trimmed);
+                inputText = "";
+            }
+            e.Use();
+            return;
+        }
 
         float w = Screen.width * 0.6f;
         float h = Screen.height * 0.5f;
@@ -178,20 +181,11 @@ public class DevConsole : MonoBehaviour
             inputText = inputText.Replace("`", "");
         }
 
-        // 항상 입력란에 포커스 유지 (클릭 안 해도 바로 타이핑 가능)
-        GUI.FocusControl("ConsoleInput");
-
-        // Update()에서 엔터키가 눌렸으면 입력 처리
-        if (shouldSubmit)
+        // 콘솔 열린 직후 몇 프레임 동안만 포커스 설정 (매 프레임 하면 키 입력이 깨짐)
+        framesSinceOpen++;
+        if (framesSinceOpen <= 3)
         {
-            shouldSubmit = false;
-            string trimmed = inputText.Trim();
-            if (!string.IsNullOrEmpty(trimmed))
-            {
-                ProcessInput(trimmed);
-                inputText = "";
-                needsFocus = true;
-            }
+            GUI.FocusControl("ConsoleInput");
         }
     }
 
