@@ -75,6 +75,14 @@ public class GameManager : MonoBehaviour
                         // allKarts 배열 갱신
                         allKarts[i] = newKart;
                         playerKart = newKart;
+
+                        // 카메라도 새 카트를 따라가도록 갱신
+                        KartCamera kartCam = FindFirstObjectByType<KartCamera>();
+                        if (kartCam != null)
+                        {
+                            kartCam.targetKart = newKart;
+                        }
+
                         break;
                     }
                 }

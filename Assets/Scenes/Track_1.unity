@@ -144579,6 +144579,11 @@ MonoBehaviour:
   - {fileID: 1078798680}
   - {fileID: 413677481}
   playerKart: {fileID: 1880602117}
+  kartPrefabs:
+  - {fileID: 5592807550669899606, guid: 47375da119501cf48b389aa10f228891, type: 3}
+  - {fileID: 5592807550669899606, guid: 9bc1ea1d6c902c347b6f01dd626bc3cd, type: 3}
+  - {fileID: 5592807550669899606, guid: 183448036b716ff4e84583ef10739735, type: 3}
+  - {fileID: 5592807550669899606, guid: c0136fcd9f4bc654b87d31701c42ed36, type: 3}
   checkpoints: []
   totalLaps: 1
   sortedKarts: []
