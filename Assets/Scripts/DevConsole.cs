@@ -178,12 +178,8 @@ public class DevConsole : MonoBehaviour
             inputText = inputText.Replace("`", "");
         }
 
-        // 포커스 설정
-        if (needsFocus)
-        {
-            GUI.FocusControl("ConsoleInput");
-            needsFocus = false;
-        }
+        // 항상 입력란에 포커스 유지 (클릭 안 해도 바로 타이핑 가능)
+        GUI.FocusControl("ConsoleInput");
 
         // Update()에서 엔터키가 눌렸으면 입력 처리
         if (shouldSubmit)
@@ -254,6 +250,10 @@ public class DevConsole : MonoBehaviour
                 CmdWin();
                 break;
 
+            case "finish":
+                CmdFinish();
+                break;
+
             case "rank":
                 CmdRank();
                 break;
@@ -296,7 +296,8 @@ public class DevConsole : MonoBehaviour
         Log("<color=cyan>item [이름]</color>  - 아이템 즉시 획득");
         Log("   → mushroom, banana, bomb, fakebox, oil, shield");
         Log("<color=cyan>lap [번호]</color>   - 랩 수 강제 변경");
-        Log("<color=cyan>win</color>          - 즉시 완주");
+        Log("<color=cyan>win</color>          - 1등으로 즉시 우승");
+        Log("<color=cyan>finish</color>       - 현재 등수로 즉시 완주");
         Log("<color=cyan>rank</color>         - 현재 순위 표시");
         Log("<color=cyan>tp [번호]</color>    - 체크포인트로 텔레포트");
         Log("<color=cyan>allitem</color>      - 모든 AI 아이템 강제 사용");
@@ -403,8 +404,33 @@ public class DevConsole : MonoBehaviour
         GameManager gm = FindFirstObjectByType<GameManager>();
         if (gm == null) { Log("<color=red>GameManager를 찾을 수 없습니다.</color>"); return; }
 
+        KartController player = FindPlayerKart();
+        if (player == null) { Log("<color=red>플레이어 카트를 찾을 수 없습니다.</color>"); return; }
+
+        // 모든 AI를 플레이어 뒤로 텔레포트 → 1등 보장
+        foreach (var kart in gm.sortedKarts)
+        {
+            if (kart.isAI)
+            {
+                kart.transform.position = player.transform.position - player.transform.forward * 30f;
+                Rigidbody aiRb = kart.GetComponent<Rigidbody>();
+                if (aiRb != null) aiRb.linearVelocity = Vector3.zero;
+            }
+        }
+
+        // 1등 확정 후 완주
         gm.UpdateLapUI(gm.totalLaps + 1);
-        Log("<color=yellow>즉시 완주!</color>");
+        Log("<color=yellow>1등 우승!</color>");
+        isOpen = false;
+    }
+
+    void CmdFinish()
+    {
+        GameManager gm = FindFirstObjectByType<GameManager>();
+        if (gm == null) { Log("<color=red>GameManager를 찾을 수 없습니다.</color>"); return; }
+
+        gm.UpdateLapUI(gm.totalLaps + 1);
+        Log("<color=yellow>현재 등수로 즉시 완주!</color>");
         isOpen = false;
     }
 
