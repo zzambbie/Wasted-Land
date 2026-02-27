@@ -90,11 +90,11 @@
     <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\MaterialLinker.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ThryTexturePacker.compute" />
     <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\DecalGizmos.shader" />
+    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ChannelPreview.shader" />
     <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ParserTests.txt" />
     <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ThryAssemblyDefinition.asmdef" />
-    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ThryTexturePacker.compute" />
-    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ChannelPreview.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -601,10 +601,6 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.2.15f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEditor.Android.Extensions">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.2.15f1\Editor\Data\PlaybackEngines\AndroidPlayer\UnityEditor.Android.Extensions.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.Collections.LowLevel.ILSupport">
       <HintPath>Library\PackageCache\com.unity.collections@aea9d3bd5e19\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
       <Private>False</Private>
@@ -635,14 +631,6 @@
     </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe">
       <HintPath>Library\PackageCache\com.unity.collections@aea9d3bd5e19\Unity.Collections.Tests\System.Runtime.CompilerServices.Unsafe\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Android.Types">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.2.15f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Types.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Android.Gradle">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.2.15f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Gradle.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib">
