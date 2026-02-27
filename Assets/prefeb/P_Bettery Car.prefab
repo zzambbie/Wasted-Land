@@ -9876,13 +9876,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5457310151075394218}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.051, z: 0}
   m_LocalScale: {x: 8, y: 8, z: 8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1951849014345334573}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!33 &5630899182492888501
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -10072,6 +10072,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13fdc85ee4cbb0849b5dd6d5830cdb5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KartController
+  targetNodeIndex: 1
   isAI: 0
   isControlled: 0
   trackNodes: []
@@ -10085,11 +10086,11 @@ MonoBehaviour:
   maxSpeed: 20
   turnSpeed: 100
   weight: 1000
-  gravityMultiplier: 80
-  drag: 0.6
+  gravityMultiplier: 50
+  drag: 1
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   driftBaseTurnSpeed: 100
   driftSharpFactor: 1.5
   driftWideFactor: 0.5
@@ -10101,9 +10102,9 @@ MonoBehaviour:
   boostWindow: 0.5
   boostDeceleration: 25
   instantBoostDuration: 0.5
-  padBoostDuration: 1
-  driftDecel: 1
-  padDecel: 0.1
+  padBoostDuration: 2
+  driftDecel: 20
+  padDecel: 5
   groundCheckRadius: 0.5
   bounceForce: 0.6
   minBounceForce: 5
@@ -15048,19 +15049,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f860a463d081af145a212dd766f09efd, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.5086186
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f860a463d081af145a212dd766f09efd, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.50861865
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f860a463d081af145a212dd766f09efd, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.49123013
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f860a463d081af145a212dd766f09efd, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.49123034
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f860a463d081af145a212dd766f09efd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -15072,7 +15073,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f860a463d081af145a212dd766f09efd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -88.007
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: f860a463d081af145a212dd766f09efd, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
