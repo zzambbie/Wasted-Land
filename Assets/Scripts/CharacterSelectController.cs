@@ -82,6 +82,17 @@ public class CharacterSelectController : MonoBehaviour
 
         currentModel = Instantiate(kartPrefabs[index], spawnPoint.position, spawnPoint.rotation);
 
+        // 배터리 카의 Cube 모델이 선택화면에서 뒤를 보는 문제 보정
+        // (배터리 카만 3D 모델의 기본 방향이 다른 차와 다름)
+        if (kartPrefabs[index].name.Contains("Bettery"))
+        {
+            Transform cubeChild = currentModel.transform.Find("Cube");
+            if (cubeChild != null)
+            {
+                cubeChild.Rotate(0f, 180f, 0f);
+            }
+        }
+
         Rigidbody rb = currentModel.GetComponent<Rigidbody>();
         if (rb) rb.isKinematic = true;
 
