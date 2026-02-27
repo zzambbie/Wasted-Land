@@ -372,6 +372,20 @@ public class DevConsole : MonoBehaviour
         inv.currentItem = itemType;
         inv.hasItem = true;
         inv.isRolling = false;
+
+        // 아이콘 표시: itemTypes 배열에서 해당 아이템의 인덱스를 찾아 아이콘 설정
+        if (inv.itemTypes != null && inv.itemIcons != null)
+        {
+            for (int i = 0; i < inv.itemTypes.Length; i++)
+            {
+                if (inv.itemTypes[i] == itemType && i < inv.itemIcons.Length)
+                {
+                    inv.UpdateUI(inv.itemIcons[i]);
+                    break;
+                }
+            }
+        }
+
         Log("<color=yellow>아이템 획득: " + itemType + "</color>");
     }
 
@@ -401,16 +415,22 @@ public class DevConsole : MonoBehaviour
         KartController player = FindPlayerKart();
         if (player == null) { Log("<color=red>플레이어 카트를 찾을 수 없습니다.</color>"); return; }
 
-        // 모든 AI를 플레이어 뒤로 텔레포트 → 1등 보장
-        foreach (var kart in gm.sortedKarts)
+        // 모든 AI의 랩을 1로 되돌리고 뒤로 텔레포트 → 1등 보장
+        foreach (var kart in gm.allKarts)
         {
-            if (kart.isAI)
+            if (kart != null && kart.isAI)
             {
-                kart.transform.position = player.transform.position - player.transform.forward * 30f;
+                kart.currentLap = 1;
+                kart.nextCheckpointIndex = 0;
+                kart.isControlled = false;
+                kart.transform.position = player.transform.position - player.transform.forward * 50f;
                 Rigidbody aiRb = kart.GetComponent<Rigidbody>();
                 if (aiRb != null) aiRb.linearVelocity = Vector3.zero;
             }
         }
+
+        // 플레이어 랩을 마지막으로 설정
+        player.currentLap = gm.totalLaps;
 
         // 1등 확정 후 완주
         gm.UpdateLapUI(gm.totalLaps + 1);

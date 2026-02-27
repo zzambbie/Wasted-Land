@@ -6,20 +6,20 @@ public class InventoryManager : MonoBehaviour
 {
     public enum ItemType { None, Mushroom, Banana, Bomb, FakeBox, Oil, Shield }
 
-    [Header("UI ¿¬°á")]
+    [Header("UI ì—°ê²°")]
     public Image itemSlotImage;
     public Sprite defaultIcon;
 
-    [Header("¾ÆÀÌÅÛ µ¥ÀÌÅÍ")]
+    [Header("ì•„ì´í…œ ë°ì´í„°")]
     public ItemType[] itemTypes;
     public Sprite[] itemIcons;
 
-    [Header("¾ÆÀÌÅÛ ÇÁ¸®ÆÕ")]
+    [Header("ì•„ì´í…œ í”„ë¦¬íŒ¹")]
     public GameObject bananaPrefab;
     public GameObject missilePrefab;
     public GameObject fakeBoxPrefab;
 
-    [Header("»óÅÂ")]
+    [Header("ìƒíƒœ")]
     public ItemType currentItem = ItemType.None;
     public bool hasItem = false;
     public bool isRolling = false;
@@ -32,17 +32,17 @@ public class InventoryManager : MonoBehaviour
     void Start()
     {
         kart = GetComponent<KartController>();
-        UpdateUI(null); // ½ÃÀÛÇÒ ¶© ºó ½½·Ô
+        UpdateUI(null); // ì‹œì‘í•  ë• ë¹ˆ ìŠ¬ë¡¯
     }
 
     void Update()
     {
-        // Player: Å°º¸µå ÀÔ·Â
+        // Player: í‚¤ë³´ë“œ ì…ë ¥
         if (!kart.isAI && hasItem && !isRolling && Input.GetKeyDown(KeyCode.LeftControl))
         {
             UseItem();
         }
-        // AI: ÀÔ·Â ½ÅÈ£ È®ÀÎ
+        // AI: ì…ë ¥ ì‹ í˜¸ í™•ì¸
         if (kart.isAI && hasItem && !isRolling && kart.isItemUseInput)
         {
             UseItem();
@@ -68,7 +68,7 @@ public class InventoryManager : MonoBehaviour
         {
             int randomIndex = Random.Range(0, itemIcons.Length);
 
-            // ·ê·¿ µ¹¸± ¶§ »ö±òÀ» ÇÏ¾é°Ô(ºÒÅõ¸í) ÇØÁà¾ß º¸ÀÓ!
+            // ë£°ë › ëŒë¦´ ë•Œ ìƒ‰ê¹”ì„ í•˜ì–—ê²Œ(ë¶ˆíˆ¬ëª…) í•´ì¤˜ì•¼ ë³´ì„!
             if (!kart.isAI && itemSlotImage != null)
             {
                 itemSlotImage.color = Color.white;
@@ -81,28 +81,28 @@ public class InventoryManager : MonoBehaviour
             if (elapsed > duration * 0.7f) switchTime += 0.05f;
         }
 
-        //1µî Ã¼Å© ¹× ¾ÆÀÌÅÛ °áÁ¤
+        //1ë“± ì²´í¬ ë° ì•„ì´í…œ ê²°ì •
         int finalIndex = 0;
 
-        // ¸Å´ÏÀú¿¡°Ô µî¼ö ¹°¾îº¸±â
+        // ë§¤ë‹ˆì €ì—ê²Œ ë“±ìˆ˜ ë¬¼ì–´ë³´ê¸°
         GameManager gm = FindFirstObjectByType<GameManager>();
         int myRank = gm != null ? gm.GetRank(kart) : 99;
 
         if (myRank == 1)
         {
-            // 1µîÀÌ¸é: BombÀÌ³ª NoneÀÌ ¾Æ´Ò ¶§±îÁö °è¼Ó »ÌÀ½ (ÀçÃßÃ·)
+            // 1ë“±ì´ë©´: Bombì´ë‚˜ Noneì´ ì•„ë‹ ë•Œê¹Œì§€ ê³„ì† ë½‘ìŒ (ì¬ì¶”ì²¨)
             do
             {
                 finalIndex = Random.Range(0, itemTypes.Length);
             }
             while (itemTypes[finalIndex] == ItemType.Bomb || itemTypes[finalIndex] == ItemType.None);
 
-            // (µğ¹ö±ë¿ë ·Î±×)
-            // Debug.Log(gameObject.name + "´Â 1µîÀÌ¶ó¼­ °ø°İ ¾ÆÀÌÅÛ Á¦¿ÜµÊ.");
+            // (ë””ë²„ê¹…ìš© ë¡œê·¸)
+            // Debug.Log(gameObject.name + "ëŠ” 1ë“±ì´ë¼ì„œ ê³µê²© ì•„ì´í…œ ì œì™¸ë¨.");
         }
         else
         {
-            // 1µî ¾Æ´Ï¸é: ±×³É ·£´ı
+            // 1ë“± ì•„ë‹ˆë©´: ê·¸ëƒ¥ ëœë¤
             finalIndex = Random.Range(0, itemTypes.Length);
         }
 
@@ -121,7 +121,7 @@ public class InventoryManager : MonoBehaviour
             Invoke("UseItem", Random.Range(1.0f, 3.0f));
         }
 
-        Debug.Log("¾ÆÀÌÅÛ È¹µæ: " + currentItem);
+        Debug.Log("ì•„ì´í…œ íšë“: " + currentItem);
     }
 
     void UseItem()
@@ -149,7 +149,7 @@ public class InventoryManager : MonoBehaviour
                 break;
 
             case ItemType.Shield:
-                kart.ActivateShield(5.0f); // 5ÃÊ°£ Áö¼Ó
+                kart.ActivateShield(5.0f); // 5ì´ˆê°„ ì§€ì†
                 break;
         }
 
@@ -168,12 +168,12 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    //¹Ì»çÀÏ ¹ß»ç ½Ã Á¤º¸ Àü´Ş ¼öÁ¤
+    //ë¯¸ì‚¬ì¼ ë°œì‚¬ ì‹œ ì •ë³´ ì „ë‹¬ ìˆ˜ì •
     void SpawnMissile()
     {
         if (missilePrefab != null)
         {
-            // À§Ä¡: Ä«Æ® ¾ÕÂÊ À§
+            // ìœ„ì¹˜: ì¹´íŠ¸ ì•ìª½ ìœ„
             Vector3 spawnPos = transform.position + (transform.forward * 3.0f) + (Vector3.up * 1.2f);
 
             GameObject missileObj = Instantiate(missilePrefab, spawnPos, transform.rotation);
@@ -181,37 +181,37 @@ public class InventoryManager : MonoBehaviour
             Missile missileScript = missileObj.GetComponent<Missile>();
             if (missileScript != null)
             {
-                // GameObject ´ë½Å KartController ½ºÅ©¸³Æ® ÀÚÃ¼¸¦ ³Ñ°ÜÁÜ (GameManager°¡ µî¼ö Ã£À» ¶§ ¾¸)
+                // GameObject ëŒ€ì‹  KartController ìŠ¤í¬ë¦½íŠ¸ ìì²´ë¥¼ ë„˜ê²¨ì¤Œ (GameManagerê°€ ë“±ìˆ˜ ì°¾ì„ ë•Œ ì”€)
                 missileScript.ownerScript = kart;
             }
 
-            Debug.Log("¹Ì»çÀÏ ¹ß»ç!");
+            Debug.Log("ë¯¸ì‚¬ì¼ ë°œì‚¬!");
         }
     }
     void SpawnFakeBox()
     {
         if (fakeBoxPrefab != null)
         {
-            // 1. Ä«Æ® µÚÂÊ À§Ä¡ (X, Z ÁÂÇ¥¸¸ »ç¿ë)
+            // 1. ì¹´íŠ¸ ë’¤ìª½ ìœ„ì¹˜ (X, Z ì¢Œí‘œë§Œ ì‚¬ìš©)
             Vector3 spawnPos = transform.position - (transform.forward * 3.0f);
 
-            // 2. ¹Ù´Ú ³ôÀÌ Ã£±â (À§¿¡¼­ ¾Æ·¡·Î ·¹ÀÌÀú ½ô)
+            // 2. ë°”ë‹¥ ë†’ì´ ì°¾ê¸° (ìœ„ì—ì„œ ì•„ë˜ë¡œ ë ˆì´ì € ì¨)
             RaycastHit hit;
-            // Ä«Æ® À§Ä¡º¸´Ù Á» ³ôÀº °÷(2.0f)¿¡¼­ ¾Æ·¡·Î ½÷¼­ ¹Ù´ÚÀ» Ã£À½
+            // ì¹´íŠ¸ ìœ„ì¹˜ë³´ë‹¤ ì¢€ ë†’ì€ ê³³(2.0f)ì—ì„œ ì•„ë˜ë¡œ ì´ì„œ ë°”ë‹¥ì„ ì°¾ìŒ
             if (Physics.Raycast(spawnPos + Vector3.up * 2.0f, Vector3.down, out hit, 10.0f, groundLayer))
             {
-                // ¹Ù´Ú(hit.point)À» Ã£¾ÒÀ¸¸é, °Å±â¼­ ¼³Á¤ÇÑ ³ôÀÌ(fakeBoxHeight)¸¸Å­ ¿Ã¸²
+                // ë°”ë‹¥(hit.point)ì„ ì°¾ì•˜ìœ¼ë©´, ê±°ê¸°ì„œ ì„¤ì •í•œ ë†’ì´(fakeBoxHeight)ë§Œí¼ ì˜¬ë¦¼
                 spawnPos.y = hit.point.y + fakeBoxHeight;
             }
             else
             {
-                // ¹Ù´ÚÀ» ¸ø Ã£¾ÒÀ¸¸é(°øÁß µî) ±×³É Ä«Æ® ³ôÀÌ »ç¿ë
+                // ë°”ë‹¥ì„ ëª» ì°¾ì•˜ìœ¼ë©´(ê³µì¤‘ ë“±) ê·¸ëƒ¥ ì¹´íŠ¸ ë†’ì´ ì‚¬ìš©
                 spawnPos.y = transform.position.y + fakeBoxHeight;
             }
 
-            // 3. »ı¼º
+            // 3. ìƒì„±
             Instantiate(fakeBoxPrefab, spawnPos, transform.rotation);
-            Debug.Log("ÇÔÁ¤ ¼³Ä¡ ¿Ï·á!");
+            Debug.Log("í•¨ì • ì„¤ì¹˜ ì™„ë£Œ!");
         }
     }
     void UseOilItem()
@@ -219,24 +219,24 @@ public class InventoryManager : MonoBehaviour
         GameManager gm = FindFirstObjectByType<GameManager>();
         if (gm == null) return;
 
-        // ³» µî¼ö È®ÀÎ
+        // ë‚´ ë“±ìˆ˜ í™•ì¸
         int myRank = gm.GetRank(kart);
 
-        // ¸ğµç Ä«Æ®¸¦ µ¹¸é¼­ ³ªº¸´Ù µî¼ö°¡ ³ôÀº(¼ıÀÚ°¡ ÀÛÀº) ¾Öµé °ø°İ
+        // ëª¨ë“  ì¹´íŠ¸ë¥¼ ëŒë©´ì„œ ë‚˜ë³´ë‹¤ ë“±ìˆ˜ê°€ ë†’ì€(ìˆ«ìê°€ ì‘ì€) ì• ë“¤ ê³µê²©
         foreach (var target in gm.sortedKarts)
         {
             int targetRank = gm.GetRank(target);
 
-            // 1µîºÎÅÍ ³» ¹Ù·Î ¾Õ µî¼ö±îÁö
+            // 1ë“±ë¶€í„° ë‚´ ë°”ë¡œ ì• ë“±ìˆ˜ê¹Œì§€
             if (targetRank < myRank)
             {
                 target.HitByOil();
             }
         }
-        Debug.Log("¾Õ¼­°¡´Â ³à¼®µé¿¡°Ô ÆóÀ¯ ÅõÃ´!");
+        Debug.Log("ì•ì„œê°€ëŠ” ë…€ì„ë“¤ì—ê²Œ íìœ  íˆ¬ì²™!");
     }
 
-    void UpdateUI(Sprite sprite)
+    public void UpdateUI(Sprite sprite)
     {
         if (itemSlotImage != null)
         {
@@ -249,13 +249,13 @@ public class InventoryManager : MonoBehaviour
                 }
                 else
                 {
-                    itemSlotImage.color = Color.clear; // Åõ¸í
+                    itemSlotImage.color = Color.clear; // íˆ¬ëª…
                 }
             }
             else
             {
                 itemSlotImage.sprite = sprite;
-                itemSlotImage.color = Color.white; // ºÒÅõ¸í
+                itemSlotImage.color = Color.white; // ë¶ˆíˆ¬ëª…
             }
         }
     }
