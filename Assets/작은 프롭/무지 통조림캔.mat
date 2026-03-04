@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: "\uC1FC\uD30C 1"
+  m_Name: "\uBB34\uC9C0 \uD1B5\uC870\uB9BC\uCE94"
   m_Shader: {fileID: 4800000, guid: e7cceac56cd93594da28291002b43c01, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -29,14 +29,22 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: 4450
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Albedo:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap2:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -81,10 +89,14 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 9021a8d7b7af22c40ae845aac2836ae8, type: 3}
+        m_Texture: {fileID: 2800000, guid: a996e4fafd464f546aba01c32bebaa17, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap2:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -112,9 +124,19 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord4:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _BumpScale: 1
+    - _BumpScale1: 1
+    - _BumpScale2: 1
     - _ClipAlphaThreshold: 1
     - _ClipPlaneWorld: 1
     - _Cull: 0
@@ -143,6 +165,10 @@ Material:
     - _MTSpecularAttenInShadow: 0.2
     - _MTSpecularScale: 15
     - _MTUseSpecularRamp: 0
+    - _MainMetallicPower3: 0
+    - _MainMetallicPower4: 0
+    - _MainSmoothnessPower3: 1
+    - _MainSmoothnessPower4: 1
     - _MainTexAlphaCutoff: 0.5
     - _MainTexAlphaUse: 0
     - _MaterialID: 2
@@ -152,8 +178,12 @@ Material:
     - _Mode: 0
     - _NoseBlushStrength: 0
     - _OcclusionStrength: 1
+    - _OcclusionStrength3: 1
+    - _OcclusionStrength4: 1
+    - _OffsetFactor: -1
+    - _OffsetUnit: -1
     - _OutlineType: 1
-    - _OutlineWidth: 0.005
+    - _OutlineWidth: 0.0007
     - _Parallax: 0.02
     - _Pattern_Speed: -0.033
     - _ProceduralUVs: 0
@@ -218,6 +248,7 @@ Material:
     - _TextureLineSmoothness: 0.15
     - _TextureLineThickness: 0.55
     - _TextureLineUse: 0
+    - _Threshold: 0.5
     - _ToggleEyeGlow: 1
     - _TogglePulse: 0
     - _UVSec: 0
@@ -239,6 +270,7 @@ Material:
     - _WeaponDissolveValue: 1
     - _ZTest: 4
     - _ZWrite: 1
+    - __dirty: 1
     - _flipFaceLighting: 0
     - footer_discord: 0
     - footer_github: 0
@@ -282,7 +314,7 @@ Material:
     - m_start_fresnel: 0
     - m_start_lightandshadow: 0
     - m_start_lighting: 0
-    - m_start_main: 1
+    - m_start_main: 0
     - m_start_mainalpha: 0
     - m_start_maindetail: 0
     - m_start_matid: 0
@@ -308,6 +340,7 @@ Material:
     m_Colors:
     - _ClipPlane: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color0: {r: 1, g: 1, b: 1, a: 1}
     - _CoolShadowMultColor: {r: 0.9, g: 0.7, b: 0.75, a: 1}
     - _CoolShadowMultColor2: {r: 0.9, g: 0.7, b: 0.75, a: 1}
     - _CoolShadowMultColor3: {r: 0.9, g: 0.7, b: 0.75, a: 1}

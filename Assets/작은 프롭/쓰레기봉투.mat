@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: "\uC4F0\uB808\uAE30\uBD09\uD22C"
+  m_Shader: {fileID: 4800000, guid: e7cceac56cd93594da28291002b43c01, type: 3}
+  m_Parent: {fileID: 2100000, guid: 5bb7bdcbc275b39489073e52992d4a82, type: 2}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _CLIPPLANEWORLD_ON
+  - _FALLBACKOUTLINES_ON
+  - _METALMATERIAL_ON
+  - _TOGGLEEYEGLOW_ON
+  - _USEFRESNEL_ON
+  - _USELIGHTMAPCOLORAO_ON
+  - _USEMATERIAL2_ON
+  - _USEMATERIAL3_ON
+  - _USEMATERIAL4_ON
+  - _USEMATERIAL5_ON
+  - _USEPATTERN_ON
+  - _USESHADOWRAMP_ON
+  - _USEVERTEXCOLORAO_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: fe873312d3cdeed40b8956056c44428b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _OutlineWidth: 0.03
+    - m_start_outlines: 0
+    m_Colors: []
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

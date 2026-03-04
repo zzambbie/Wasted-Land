@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: "\uC1FC\uD30C"
-  m_Shader: {fileID: 4800000, guid: 5be750e0d2330b74abe37e6fbd08fb68, type: 3}
+  m_Shader: {fileID: 4800000, guid: e7cceac56cd93594da28291002b43c01, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -183,7 +183,7 @@ Material:
     - _NoseBlushStrength: 0
     - _OcclusionStrength: 1
     - _OutlineType: 1
-    - _OutlineWidth: 0.03
+    - _OutlineWidth: 0.003
     - _Parallax: 0.005
     - _Pattern_Speed: -0.033
     - _ProceduralUVs: 0
@@ -325,7 +325,7 @@ Material:
     - m_start_metallics: 0
     - m_start_metallicscolor: 0
     - m_start_normalmap: 0
-    - m_start_outlines: 0
+    - m_start_outlines: 1
     - m_start_outlinescolor: 0
     - m_start_outlinesoffset: 0
     - m_start_reflections: 0
