@@ -121,12 +121,12 @@ Material:
     - _wave_Steepness: 0.27
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DeepColor: {r: 0.5849056, g: 0.27331942, b: 0, a: 0.078431375}
+    - _DeepColor: {r: 0.5161979, g: 0.63980997, b: 0.754717, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FormColor: {r: 1, g: 1, b: 1, a: 0.38431373}
     - _Horizon_Color: {r: 0.047169805, g: 0.028251419, b: 0, a: 0.6509804}
     - _Intersection_Foam_Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Shallow_Color: {r: 0.7647059, g: 0.49157903, b: 0.019607842, a: 1}
+    - _Shallow_Color: {r: 0.19063722, g: 0.566772, b: 0.7924528, a: 1}
     - _UV: {r: 0, g: 0, b: 0, a: 0}
     - _Wave_Directions: {r: 21, g: 33, b: 22, a: 0}
   m_BuildTextureStacks: []
