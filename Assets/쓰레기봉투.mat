@@ -42,8 +42,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _OutlineWidth: 0.03
-    - m_start_outlines: 0
+    - _OutlineWidth: 0
+    - m_start_outlines: 1
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1
