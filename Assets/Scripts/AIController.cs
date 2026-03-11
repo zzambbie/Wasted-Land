@@ -1,28 +1,26 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 
 public class AIController : MonoBehaviour
 {
-    [Header("°æ·Î µ¥ÀÌÅÍ")]
+    [Header("ê²½ë¡œ ì„¤ì •")]
     public Transform pathRoot;
 
-    [Header("AI ¿îÀü ¼ºÇâ")]
+    [Header("AI ì£¼í–‰ ì„¤ì •")]
     public float steeringSensitivity = 5.0f;
-    public float laneOffset = 0f;
-    public float speedFactor = 1.0f; // ±âº» ¼Óµµ 1.0 (ÃÖ´ë)
+    public float speedFactor = 1.0f;
 
-    [Header("¾ÆÀÌÅÛ »ç¿ë")]
+    [Header("ì•„ì´í…œ ì‚¬ìš©")]
     public float itemUseDelayMin = 1.0f;
     public float itemUseDelayMax = 4.0f;
 
-    [Header("¼¾¼­ ¼³Á¤")]
+    [Header("ì„¼ì„œ ì„¤ì •")]
     public float sensorLength = 12.0f;
     public float frontSensorAngle = 15.0f;
     public float sideSensorAngle = 45.0f;
-    public float avoidMultiplier = 3.0f;
+    public float avoidMultiplier = 1.5f;
 
-    // ¹Ù´ÚÀº °¨ÁöÇÏÁö ¾Ê±â À§ÇÑ ·¹ÀÌ¾î ¸¶½ºÅ©
     public LayerMask obstacleLayer;
 
     private KartController kart;
@@ -30,10 +28,21 @@ public class AIController : MonoBehaviour
     public List<Transform> nodes = new List<Transform>();
     private int currentNode = 0;
 
-    private float nodeStuckTimer = 0f;
+    // === ë ˆì´ì‹± ë¼ì¸ ë¶„ë°° ì‹œìŠ¤í…œ ===
+    // static ì¹´ìš´í„°: AIê°€ ìƒì„±ë  ë•Œë§ˆë‹¤ ìë™ìœ¼ë¡œ ë‹¤ë¥¸ ë¼ì¸ ë°°ì •
+    private static int aiSpawnCount = 0;
+    private int myLaneIndex;                // 0, 1, 2... (ì´ AIì˜ ê³ ìœ  ë²ˆí˜¸)
+    private float personalLanePreference;   // ê³ ìœ  ì°¨ì„  ìœ„ì¹˜
+    private float personalSpeedVariation;   // ê³ ìœ  ì†ë„ í¸ì°¨
+    private float laneOffset = 0f;
+    private float laneChangeTimer = 0f;
+
+    // === ë¼ì„ ê°ì§€ ===
+    private float stuckTimer = 0f;          // ì •ì§€ ìƒíƒœ ê°ì§€ (ì†ë„ < 2)
+    private float wallProximityTimer = 0f;  // ë²½ ê·¼ì²˜ ì‹œê°„ (ì„¼ì„œë¡œ ê°ì§€)
     private float itemTimer = 0f;
     private float currentSteer = 0f;
-    private bool isReversing = false;
+    private bool isRescuing = false;
 
     void Start()
     {
@@ -43,20 +52,41 @@ public class AIController : MonoBehaviour
 
         if (pathRoot != null) { foreach (Transform child in pathRoot) nodes.Add(child); }
 
-        laneOffset = Random.Range(-1.0f, 1.0f);
+        // === ë ˆì´ì‹± ë¼ì¸ ê³ ìœ  ë°°ì • (ë§ˆë¦¬ì˜¤ ì¹´íŠ¸ ë°©ì‹) ===
+        // AI #0 = ì™¼ìª½(-1.0), AI #1 = ì¤‘ì•™(0), AI #2 = ì˜¤ë¥¸ìª½(+1.0)
+        // ë²½ì— ì•ˆ ë‹¿ì„ ì •ë„ì˜ ì ì ˆí•œ ê°„ê²©
+        myLaneIndex = aiSpawnCount;
+        aiSpawnCount++;
+
+        // 3ëŒ€ ê¸°ì¤€: -1.0, 0.0, +1.0 (ë²½ì— ì•ˆ ë‹¿ëŠ” ì•ˆì „í•œ ë²”ìœ„)
+        int totalLanes = Mathf.Max(aiSpawnCount, 3);
+        personalLanePreference = Mathf.Lerp(-1.0f, 1.0f, (float)myLaneIndex / (totalLanes - 1));
+        laneOffset = personalLanePreference;
+
+        // ì†ë„ í¸ì°¨: ê° AIë§ˆë‹¤ ì‚´ì§ ë‹¤ë¥¸ ì†ë„ (0.88~1.08)
+        personalSpeedVariation = 0.88f + (myLaneIndex * 0.1f);
+        personalSpeedVariation = Mathf.Clamp(personalSpeedVariation, 0.85f, 1.1f);
+
+        laneChangeTimer = Random.Range(8.0f, 15.0f);
         itemTimer = Random.Range(itemUseDelayMin, itemUseDelayMax);
+    }
+
+    void OnDestroy()
+    {
+        // ì”¬ ì „í™˜ ì‹œ ì¹´ìš´í„° ë¦¬ì…‹
+        aiSpawnCount = 0;
     }
 
     void Update()
     {
         if (nodes.Count == 0) return;
+        if (isRescuing) return;
 
-        // --- 1. ±æÃ£±â ·ÎÁ÷ ---
+        // --- 1. ì›¨ì´í¬ì¸íŠ¸ ì¶”ì  ---
         Vector3 nodePos = nodes[currentNode].position;
         int nextIndex = (currentNode + 1) % nodes.Count;
         Vector3 nextNodePos = nodes[nextIndex].position;
 
-        // ÁøÇà ¹æÇâ °è»ê
         Vector3 roadDirection = (nextNodePos - nodePos).normalized;
         Vector3 roadRight = Vector3.Cross(Vector3.up, roadDirection).normalized;
         Vector3 myTargetPos = nodePos + (roadRight * laneOffset);
@@ -64,40 +94,64 @@ public class AIController : MonoBehaviour
         float distToTarget = Vector3.Distance(transform.position, myTargetPos);
         float distToNext = Vector3.Distance(transform.position, nextNodePos);
 
-        // Á¡ Áö³ªÄ§ Ã¼Å©
         if (distToNext < distToTarget || distToTarget < 12.0f)
         {
             currentNode = nextIndex;
-            nodeStuckTimer = 0f;
-            laneOffset = Random.Range(-1.0f, 1.0f);
+            stuckTimer = 0f;
         }
 
-        // --- 2. ÈÄÁø ·ÎÁ÷ (³¢ÀÓ Å»Ãâ) ---
-        // ¼Óµµ°¡ °ÅÀÇ ¾ø´Âµ¥(1.0 ¹Ì¸¸) ÀüÁøÇÏ·Á°í ÇÏ¸é ³¢ÀÎ °Í
-        if (kart.CurrentSpeed < 1.0f && !isReversing)
+        // --- 2. ì°¨ì„  ë³€ê²½ (ê°€ë”, ê³ ìœ  ì„ í˜¸ ë¼ì¸ ê·¼ì²˜ì—ì„œë§Œ) ---
+        laneChangeTimer -= Time.deltaTime;
+        if (laneChangeTimer <= 0f)
         {
-            nodeStuckTimer += Time.deltaTime;
-            if (nodeStuckTimer > 2.0f) StartCoroutine(ReverseRoutine());
+            // ê³ ìœ  ë¼ì¸ ì¤‘ì‹¬ì—ì„œ Â±0.3 ë²”ìœ„ì—ì„œë§Œ ë¯¸ì„¸ ë³€ê²½
+            float newOffset = personalLanePreference + Random.Range(-0.3f, 0.3f);
+            laneOffset = Mathf.Clamp(newOffset, -1.2f, 1.2f);
+            laneChangeTimer = Random.Range(8.0f, 15.0f);
         }
-        else nodeStuckTimer = 0f;
 
-        if (isReversing)
+        // --- 3. ë¼ì„ ê°ì§€ (2ê°€ì§€ ì¡°ê±´) ---
+        if (kart.isControlled)
         {
-            // ÈÄÁøÇÒ ¶§´Â ÇÚµéÀ» ¹İ´ë·Î ²ªÁö ¸»°í, ±×³É ·£´ıÇÏ°Ô ²ª¾î¼­ Å»Ãâ ½Ãµµ
-            kart.SetInput(-1.0f, Random.Range(-1f, 1f), false, false);
-            return;
+            // A) ì†ë„ê°€ ê±°ì˜ 0 â†’ ì™„ì „ ì •ì§€ ìƒíƒœ (4ì´ˆ í›„ êµ¬ì¡°)
+            if (kart.CurrentSpeed < 2.0f)
+            {
+                stuckTimer += Time.deltaTime;
+            }
+            else
+            {
+                stuckTimer = 0f;
+            }
+
+            // B) ì •ë©´ ì„¼ì„œê°€ ë²½ì„ ê³„ì† ê°ì§€ â†’ ë²½ì— ë°•í˜€ì„œ ì§„ë™ ì¤‘ (3ì´ˆ í›„ êµ¬ì¡°)
+            // ì†ë„ì™€ ë¬´ê´€! ë²½ì—ì„œ íŠ•ê¸°ë©´ì„œ ì†ë„ > 2ì¼ ìˆ˜ ìˆì§€ë§Œ ì„¼ì„œê°€ ê³„ì† ë²½ì„ ë´„
+            Vector3 frontCheck = transform.position + Vector3.up * 1.0f;
+            bool frontWall = CastRay(frontCheck, 0, 4.0f, out _); // ì§§ì€ ê±°ë¦¬(4m)ë¡œ "ì½”ì•ì˜ ë²½" ê°ì§€
+            if (frontWall)
+            {
+                wallProximityTimer += Time.deltaTime;
+            }
+            else
+            {
+                wallProximityTimer = 0f;
+            }
+
+            // ì–´ëŠ ì¡°ê±´ì´ë“  ì¶©ì¡±í•˜ë©´ êµ¬ì¡°
+            if (stuckTimer > 4.0f || wallProximityTimer > 3.0f)
+            {
+                StartCoroutine(LakituRescue());
+                return;
+            }
         }
 
-        // --- 3. ÇÚµé¸µ ---
+        // --- 4. ì¡°í–¥ ---
         Vector3 localTarget = transform.InverseTransformPoint(myTargetPos);
         float targetTurn = localTarget.x / localTarget.magnitude;
 
-        // --- 4. ¼¾¼­ ·ÎÁ÷ (¹Ù´Ú ¹«½Ã & ³ôÀÌ Á¶Àı) ---
+        // --- 5. ì„¼ì„œ íšŒí”¼ ---
         float avoidTurn = 0f;
         float avoidanceFactor = 0f;
 
-        // ¼¾¼­ À§Ä¡¸¦ Ä«Æ® ¹Ù´ÚÀÌ ¾Æ´Ï¶ó '´«³ôÀÌ(1.0m)'·Î ¿Ã¸²
-        // ³Ê¹« ³·À¸¸é ¿À¸£¸·±æÀ» º®À¸·Î ÀÎ½ÄÇÔ
         Vector3 sensorPos = transform.position + Vector3.up * 1.0f;
 
         if (CastRay(sensorPos, 0, sensorLength, out _)) { avoidTurn += (targetTurn > 0 ? 1.0f : -1.0f); avoidanceFactor = 1.0f; }
@@ -109,7 +163,7 @@ public class AIController : MonoBehaviour
         float finalTurn = (avoidTurn != 0) ? avoidTurn * avoidMultiplier : targetTurn;
         currentSteer = Mathf.Lerp(currentSteer, finalTurn, Time.deltaTime * 5.0f);
 
-        // --- 5. ¾ÆÀÌÅÛ ---
+        // --- 6. ì•„ì´í…œ ---
         bool wantUseItem = false;
         if (inventory != null && inventory.hasItem && !inventory.isRolling)
         {
@@ -121,13 +175,13 @@ public class AIController : MonoBehaviour
             }
         }
 
-        // --- 6. ¼Óµµ Á¶Àı (°ú°¨ÇÏ°Ô!) ---
-        float finalSpeed = speedFactor;
+        // --- 7. ì†ë„ ---
+        float finalSpeed = speedFactor * personalSpeedVariation;
 
-        // Àå¾Ö¹°ÀÌ ÀÖ¾îµµ ¼Óµµ¸¦ ³Ê¹« ÁÙÀÌÁö ¾ÊÀ½ (ÃÖ¼Ò 0.8 À¯Áö)
-        // ¼Óµµ°¡ ÀÖ¾î¾ß ÇÚµéÀÌ ¸ÔÇô¼­ ÇÇÇÒ ¼ö ÀÖÀ½!
-        if (avoidanceFactor > 0) finalSpeed *= 0.8f;
+        if (avoidanceFactor > 0) finalSpeed *= 0.5f;  // ë²½ ê·¼ì²˜: ë” ë§ì´ ê°ì† (0.6â†’0.5)
         else if (Mathf.Abs(currentSteer) > 0.6f) finalSpeed *= 0.9f;
+
+        finalSpeed = Mathf.Max(finalSpeed, 0.3f);
 
         kart.SetInput(finalSpeed, currentSteer, false, wantUseItem);
     }
@@ -136,7 +190,6 @@ public class AIController : MonoBehaviour
     {
         Vector3 dir = Quaternion.Euler(0, angle, 0) * transform.forward;
 
-        // [¼öÁ¤] obstacleLayer ¸¶½ºÅ©¸¦ Ãß°¡ÇØ¼­ '¹Ù´Ú'Àº ¹«½ÃÇÏ°í 'º®'¸¸ °¨Áö
         if (Physics.Raycast(pos, dir, out RaycastHit hit, dist, obstacleLayer))
         {
             Debug.DrawLine(pos, hit.point, Color.red);
@@ -151,11 +204,33 @@ public class AIController : MonoBehaviour
         }
     }
 
-    System.Collections.IEnumerator ReverseRoutine()
+    // =============================================
+    // ë¼ì¿ íˆ¬ êµ¬ì¡° ì‹œìŠ¤í…œ
+    // =============================================
+    System.Collections.IEnumerator LakituRescue()
     {
-        isReversing = true;
-        yield return new WaitForSeconds(1.5f);
-        isReversing = false;
-        nodeStuckTimer = 0f;
+        isRescuing = true;
+
+        int rescueNode = currentNode;
+        int nextNode = (rescueNode + 1) % nodes.Count;
+        Vector3 rescuePos = nodes[rescueNode].position + Vector3.up * 1.5f;
+        Vector3 lookDir = (nodes[nextNode].position - nodes[rescueNode].position).normalized;
+
+        kart.ResetStatus();
+
+        transform.position = rescuePos;
+        if (lookDir.sqrMagnitude > 0.01f)
+        {
+            transform.rotation = Quaternion.LookRotation(lookDir);
+        }
+
+        currentNode = nextNode;
+        laneOffset = personalLanePreference;
+        stuckTimer = 0f;
+        wallProximityTimer = 0f;
+
+        yield return new WaitForSeconds(0.5f);
+
+        isRescuing = false;
     }
 }

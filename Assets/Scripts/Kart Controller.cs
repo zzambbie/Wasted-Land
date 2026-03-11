@@ -104,6 +104,8 @@ public class KartController : MonoBehaviour
     private bool isUncontrollable = false; // 조작 불능 상태 체크
    
     private bool hasPassedStartLine = false; // 출발선을 통과한 적이 있는가?
+    private float wallHitCooldown = 0f;   // 벽 충돌 후 AI 전진 차단 타이머
+    private float wallContactTimer = 0f;  // 벽 접촉 지속 시간 (강제 탈출용)
     public float CurrentSpeed { get { return rb.linearVelocity.magnitude; } }
     public bool IsBoosting { get { return isBoosting; } }
 
@@ -113,7 +115,7 @@ public class KartController : MonoBehaviour
 
         // 1. 무게 적용 (Rigidbody의 Mass를 스탯에 맞춤)
         rb.mass = weight;
-        rb.linearDamping = drag;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+        rb.linearDamping = drag;
         rb.centerOfMass = new Vector3(0, -0.5f, 0);
         rb.useGravity = true;
 
@@ -121,7 +123,8 @@ public class KartController : MonoBehaviour
 
         defaultScale = transform.localScale; // 시작할 때 원래 크기를 기억해둠
         kartRenderer = GetComponent<Renderer>();
-        if (kartRenderer != null) originalColor = kartRenderer.material.color;
+        if (kartRenderer != null && kartRenderer.material.HasProperty("_Color"))
+            originalColor = kartRenderer.material.color;
 
         currentBoostDecel = driftDecel;
         InitClosestNode();
@@ -393,7 +396,7 @@ public class KartController : MonoBehaviour
         isBoosting = false;
         canInstantBoost = false;
         StopCoroutine("BoostRoutine");
-        if (kartRenderer != null) kartRenderer.material.color = originalColor;
+        if (kartRenderer != null && kartRenderer.material.HasProperty("_Color")) kartRenderer.material.color = originalColor;
 
         // 2. 회전 변수 설정
         float elapsed = 0f;
@@ -468,7 +471,7 @@ public class KartController : MonoBehaviour
         {
             driftTimer += Time.deltaTime; // 시간 누적
             
-            if (kartRenderer != null) // 시각 효과: 오래 누를수록 빨갛게 변하게 (충전 느낌)
+            if (kartRenderer != null && kartRenderer.material.HasProperty("_Color")) // 시각 효과: 오래 누를수록 빨갛게 변하게 (충전 느낌)
             {
                 // 0초~maxDriftTime 사이의 값을 0~1로 변환해서 색깔 섞기
                 float lerpVal = Mathf.Clamp01(driftTimer / 2.0f);
@@ -498,7 +501,7 @@ public class KartController : MonoBehaviour
     {
         isDrifting = false;
         driftDirection = 0f; // 방향 초기화
-        if (kartRenderer != null) kartRenderer.material.color = originalColor;
+        if (kartRenderer != null && kartRenderer.material.HasProperty("_Color")) kartRenderer.material.color = originalColor;
     }
 
     // 부스터 타이밍을 열어주는 함수
@@ -545,6 +548,13 @@ public class KartController : MonoBehaviour
 
     void Move()
     {
+        // [벽 충돌 쿨다운] AI가 벽에 부딪힌 직후 잠시 전진 힘을 안 줘서 바운스가 완료되게 함
+        if (wallHitCooldown > 0f)
+        {
+            wallHitCooldown -= Time.fixedDeltaTime;
+            if (isAI) return;  // AI는 쿨다운 중 물리 힘 안 더함
+        }
+
         float speedPenalty = isFlattened ? 0.4f : 1.0f;
         float currentAccel = moveInput * acceleration * speedPenalty;
         if (moveInput < 0) currentAccel *= 0.5f;
@@ -680,7 +690,7 @@ public class KartController : MonoBehaviour
         CancelInvoke("CloseBoostWindow");
 
         // 4. 시각 효과 초기화
-        if (kartRenderer != null) kartRenderer.material.color = originalColor;
+        if (kartRenderer != null && kartRenderer.material.HasProperty("_Color")) kartRenderer.material.color = originalColor;
         foreach (var p in driftParticles) p.Stop();
         if (boostParticle != null) boostParticle.Stop();
 
@@ -727,7 +737,35 @@ public class KartController : MonoBehaviour
     IEnumerator ShieldRoutine(float duration)
     {
         isShielded = true;
-        if (shieldEffectObj != null) shieldEffectObj.SetActive(true);
+        if (shieldEffectObj != null)
+        {
+            shieldEffectObj.SetActive(true);
+
+            // 쉴드를 반투명하게 설정 (50% 투명도)
+            foreach (Renderer r in shieldEffectObj.GetComponentsInChildren<Renderer>())
+            {
+                foreach (Material m in r.materials)
+                {
+                    // 렌더링 모드를 Transparent로 변경
+                    m.SetFloat("_Mode", 3); // Transparent
+                    m.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                    m.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                    m.SetInt("_ZWrite", 0);
+                    m.DisableKeyword("_ALPHATEST_ON");
+                    m.EnableKeyword("_ALPHABLEND_ON");
+                    m.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                    m.renderQueue = 3000;
+
+                    // 50% 투명도 적용
+                    if (m.HasProperty("_Color"))
+                    {
+                        Color c = m.color;
+                        c.a = 0.5f;
+                        m.color = c;
+                    }
+                }
+            }
+        }
         Debug.Log("방어막 가동!");
 
         yield return new WaitForSeconds(duration); // 지속 시간 (예: 5초)
@@ -848,12 +886,40 @@ public class KartController : MonoBehaviour
 
                 rb.angularVelocity = Vector3.zero; // 회전 멈춤
 
+                // [NEW] AI일 때 벽 충돌 직후 0.5초간 전진 차단
+                // → 바운스가 완료될 시간을 확보하여 즉시 다시 벽으로 돌진하는 것을 방지
+                if (isAI) wallHitCooldown = 0.5f;
+
                 if (!isAI)
                 {
                     KartCamera cam = Camera.main.GetComponent<KartCamera>();
                     if (cam != null) cam.Shake(0.2f, Mathf.Clamp(impactSpeed * 0.02f, 0.2f, 0.8f));
                 }
             }
+        }
+    }
+
+    // [NEW] 벽에 2초 이상 접촉 시 AI를 강제로 벽 반대방향으로 밀어냄
+    void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Wall") && isAI)
+        {
+            wallContactTimer += Time.fixedDeltaTime;
+            if (wallContactTimer > 2.0f)
+            {
+                // 강제로 벽 반대 방향으로 큰 힘
+                Vector3 pushDir = collision.contacts[0].normal;
+                rb.linearVelocity = pushDir * 8f;
+                wallContactTimer = 0f;
+            }
+        }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            wallContactTimer = 0f;
         }
     }
     void OnTriggerEnter(Collider other)
