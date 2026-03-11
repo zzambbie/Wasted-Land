@@ -153,7 +153,7 @@ Material:
     - _NoseBlushStrength: 0
     - _OcclusionStrength: 1
     - _OutlineType: 1
-    - _OutlineWidth: 0.0007
+    - _OutlineWidth: 0.001
     - _Parallax: 0.02
     - _Pattern_Speed: -0.033
     - _ProceduralUVs: 0
@@ -184,7 +184,7 @@ Material:
     - _RimLightIntensity: 1
     - _RimLightThickness: 1
     - _RimLightType: 0
-    - _Scale: 0.01
+    - _Scale: 0.03
     - _ScanColorScaler: 0
     - _ScanDirection_Switch: 0
     - _ScanSpeed: 0.8
