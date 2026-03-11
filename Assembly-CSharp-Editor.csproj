@@ -63,6 +63,8 @@
   <ItemGroup>
     <Compile Include="Assets\TutorialInfo\Scripts\Editor\ReadmeEditor.cs" />
     <Compile Include="Assets\PrimoToon-main\Scripts\Festivity Scripts\Editor\ImportMat.cs" />
+    <Compile Include="Assets\Editor\FixPinkMaterials.cs" />
+    <Compile Include="Assets\Editor\MaterialAutoFixer.cs" />
     <Compile Include="Assets\PrimoToon-main\Scripts\Festivity Scripts\Editor\AverageNormals.cs" />
   </ItemGroup>
   <ItemGroup>
