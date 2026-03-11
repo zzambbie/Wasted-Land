@@ -32,6 +32,13 @@ public class InventoryManager : MonoBehaviour
     void Start()
     {
         kart = GetComponent<KartController>();
+
+        // 아이템 슬롯 이미지가 있지만 스프라이트가 없으면 즉시 투명 처리 (흰색 박스 방지)
+        if (itemSlotImage != null && itemSlotImage.sprite == null)
+        {
+            itemSlotImage.color = Color.clear;
+        }
+
         UpdateUI(null); // 시작할 땐 빈 슬롯
     }
 
@@ -81,29 +88,55 @@ public class InventoryManager : MonoBehaviour
             if (elapsed > duration * 0.7f) switchTime += 0.05f;
         }
 
-        //1등 체크 및 아이템 결정
+        // === 등수 비례 아이템 밸런싱 (마리오 카트 방식) ===
         int finalIndex = 0;
 
         // 매니저에게 등수 물어보기
         GameManager gm = FindFirstObjectByType<GameManager>();
         int myRank = gm != null ? gm.GetRank(kart) : 99;
+        int totalKarts = gm != null ? gm.sortedKarts.Count : 4;
+        if (totalKarts < 2) totalKarts = 4;
 
-        if (myRank == 1)
+        // 등수 비율 계산 (0.0 = 1등, 1.0 = 꼴찌)
+        float rankRatio = (float)(myRank - 1) / (totalKarts - 1);
+
+        // 최대 100회 재추첨 (무한루프 방지)
+        int maxRetries = 100;
+
+        if (rankRatio <= 0.01f)
         {
-            // 1등이면: Bomb이나 None이 아닐 때까지 계속 뽑음 (재추첨)
-            do
-            {
+            // ★ 1등: 공격 아이템 제외 (Banana, FakeBox, Shield만)
+            do {
                 finalIndex = Random.Range(0, itemTypes.Length);
-            }
-            while (itemTypes[finalIndex] == ItemType.Bomb || itemTypes[finalIndex] == ItemType.None);
-
-            // (디버깅용 로그)
-            // Debug.Log(gameObject.name + "는 1등이라서 공격 아이템 제외됨.");
+                maxRetries--;
+            } while (maxRetries > 0 && (
+                itemTypes[finalIndex] == ItemType.None ||
+                itemTypes[finalIndex] == ItemType.Bomb ||
+                itemTypes[finalIndex] == ItemType.Oil ||
+                itemTypes[finalIndex] == ItemType.Mushroom
+            ));
+        }
+        else if (rankRatio >= 0.75f)
+        {
+            // ★ 꼴찌 근처 (하위 25%): 강력한 아이템만 (Mushroom, Bomb, Oil)
+            // Shield는 꼴찌한테 쓸모없으므로 제외!
+            do {
+                finalIndex = Random.Range(0, itemTypes.Length);
+                maxRetries--;
+            } while (maxRetries > 0 && (
+                itemTypes[finalIndex] == ItemType.None ||
+                itemTypes[finalIndex] == ItemType.Shield ||
+                itemTypes[finalIndex] == ItemType.FakeBox ||
+                itemTypes[finalIndex] == ItemType.Banana
+            ));
         }
         else
         {
-            // 1등 아니면: 그냥 랜덤
-            finalIndex = Random.Range(0, itemTypes.Length);
+            // ★ 중간 등수: 모든 아이템 허용 (None만 제외)
+            do {
+                finalIndex = Random.Range(0, itemTypes.Length);
+                maxRetries--;
+            } while (maxRetries > 0 && itemTypes[finalIndex] == ItemType.None);
         }
 
         currentItem = itemTypes[finalIndex];
@@ -242,6 +275,7 @@ public class InventoryManager : MonoBehaviour
         {
             if (sprite == null)
             {
+                // 아이템 없을 때: 기본 아이콘이 있으면 표시, 없으면 완전히 숨김
                 if (defaultIcon != null)
                 {
                     itemSlotImage.sprite = defaultIcon;
@@ -249,7 +283,8 @@ public class InventoryManager : MonoBehaviour
                 }
                 else
                 {
-                    itemSlotImage.color = Color.clear; // 투명
+                    itemSlotImage.sprite = null;
+                    itemSlotImage.color = Color.clear; // 완전 투명 (흰색 박스 방지)
                 }
             }
             else

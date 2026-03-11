@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement; // 재시작을 위해 필수
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
@@ -28,6 +29,10 @@ public class GameManager : MonoBehaviour
     [Header("kartPrefabs")]
     public GameObject[] kartPrefabs; // 플레이어가 누군지 알아야 UI를 띄움
 
+    [Header("아이템 UI (플레이어용)")]
+    public Image itemSlotUI;           // 씬에 있는 아이템 슬롯 이미지
+    public Sprite itemDefaultIcon;     // 아이템 없을 때 기본 아이콘 (비워도 됨)
+
     
     public Checkpoint[] checkpoints; // 체크포인트들의 위치를 알기 위해 저장
     public int totalLaps = 3;           // 총 바퀴 수
@@ -48,42 +53,94 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // Canvas Scaler 자동 설정 (씬에 CanvasScaler가 없거나 잘못 설정된 경우 대비)
+        Canvas[] allCanvases = FindObjectsByType<Canvas>(FindObjectsSortMode.None);
+        foreach (var canvas in allCanvases)
+        {
+            CanvasScaler scaler = canvas.GetComponent<CanvasScaler>();
+            if (scaler == null) scaler = canvas.gameObject.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(800, 600);
+            scaler.matchWidthOrHeight = 0.5f;
+        }
         // 0. 캐릭터 선택 씬에서 골라서 넘어온 카트로 교체
         if (GameData.Instance != null && kartPrefabs != null && kartPrefabs.Length > 0)
         {
             int selectedIndex = GameData.Instance.selectedKartIndex;
             if (selectedIndex >= 0 && selectedIndex < kartPrefabs.Length)
             {
-                // 현재 플레이어 카트 찾기
+                // 기존 플레이어 카트가 있으면 그 자리에, 없으면 빈 슬롯(null)에 새 카트 생성
+                int targetSlot = -1;
+                Vector3 spawnPos = Vector3.zero;
+                Quaternion spawnRot = Quaternion.identity;
+                Transform spawnParent = null;
+
+                // 1) 먼저 기존 플레이어 카트(isAI==false) 찾기
                 for (int i = 0; i < allKarts.Length; i++)
                 {
                     if (allKarts[i] != null && !allKarts[i].isAI)
                     {
-                        // 기존 카트의 위치/회전 기억
-                        Vector3 pos = allKarts[i].transform.position;
-                        Quaternion rot = allKarts[i].transform.rotation;
-                        Transform parent = allKarts[i].transform.parent;
-
-                        // 기존 카트 삭제
+                        targetSlot = i;
+                        spawnPos = allKarts[i].transform.position;
+                        spawnRot = allKarts[i].transform.rotation;
+                        spawnParent = allKarts[i].transform.parent;
                         Destroy(allKarts[i].gameObject);
-
-                        // 새 카트 생성
-                        GameObject newKartObj = Instantiate(kartPrefabs[selectedIndex], pos, rot, parent);
-                        KartController newKart = newKartObj.GetComponent<KartController>();
-                        newKart.isAI = false;
-
-                        // allKarts 배열 갱신
-                        allKarts[i] = newKart;
-                        playerKart = newKart;
-
-                        // 카메라도 새 카트를 따라가도록 갱신
-                        KartCamera kartCam = FindFirstObjectByType<KartCamera>();
-                        if (kartCam != null)
-                        {
-                            kartCam.targetKart = newKart;
-                        }
-
                         break;
+                    }
+                }
+
+                // 2) 기존 플레이어가 없으면 → null인 첫 번째 슬롯 사용
+                if (targetSlot < 0)
+                {
+                    for (int i = 0; i < allKarts.Length; i++)
+                    {
+                        if (allKarts[i] == null)
+                        {
+                            targetSlot = i;
+                            break;
+                        }
+                    }
+                    // 스폰 위치: 첫 번째 AI 카트 옆 (시작 라인 근처)
+                    for (int i = 0; i < allKarts.Length; i++)
+                    {
+                        if (allKarts[i] != null)
+                        {
+                            spawnPos = allKarts[i].transform.position + allKarts[i].transform.right * 3f;
+                            spawnRot = allKarts[i].transform.rotation;
+                            spawnParent = allKarts[i].transform.parent;
+                            break;
+                        }
+                    }
+                }
+
+                // 3) 카트 생성
+                if (targetSlot >= 0)
+                {
+                    GameObject newKartObj = Instantiate(kartPrefabs[selectedIndex], spawnPos, spawnRot, spawnParent);
+                    KartController newKart = newKartObj.GetComponent<KartController>();
+                    newKart.isAI = false;
+
+                    // AI 컨트롤러가 있으면 즉시 제거
+                    AIController aiComp = newKartObj.GetComponent<AIController>();
+                    if (aiComp != null) DestroyImmediate(aiComp);
+
+                    allKarts[targetSlot] = newKart;
+                    playerKart = newKart;
+
+                    // 카메라도 새 카트를 따라가도록 갱신
+                    KartCamera kartCam = FindFirstObjectByType<KartCamera>();
+                    if (kartCam != null)
+                    {
+                        kartCam.targetKart = newKart;
+                    }
+
+                    // 아이템 UI 연결 (프리팹 클론은 씬 UI 참조가 끊어지므로 다시 연결)
+                    InventoryManager inv = newKartObj.GetComponent<InventoryManager>();
+                    if (inv != null)
+                    {
+                        inv.itemSlotImage = itemSlotUI;
+                        inv.defaultIcon = itemDefaultIcon;
+                        inv.UpdateUI(null); // 초기 상태로 설정
                     }
                 }
             }
@@ -116,7 +173,7 @@ public class GameManager : MonoBehaviour
         // 플레이어 찾기 (allKarts 중에서 isAI가 false인 녀석)
         foreach (var kart in allKarts)
         {
-            if (!kart.isAI) playerKart = kart;
+            if (kart != null && !kart.isAI) playerKart = kart;
         }
 
         UpdateLapUI(1); // 1바퀴째로 UI 초기화!
@@ -181,8 +238,9 @@ public class GameManager : MonoBehaviour
     // 등수 계산 함수
     void CalculateRanking()
     {
-        // 1. 리스트 복사
-        List<KartController> rankingList = new List<KartController>(allKarts);
+        // 1. 리스트 복사 (삭제된 카트 = null 제거)
+        List<KartController> rankingList = new List<KartController>();
+        foreach (var k in allKarts) { if (k != null) rankingList.Add(k); }
 
         // 2. 정렬 (점수 높은 순)
         rankingList.Sort((KartController a, KartController b) => {
