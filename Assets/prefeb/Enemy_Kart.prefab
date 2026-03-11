@@ -14818,6 +14818,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13fdc85ee4cbb0849b5dd6d5830cdb5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KartController
+  targetNodeIndex: 1
   isAI: 1
   isControlled: 0
   trackNodes: []
@@ -14864,6 +14865,7 @@ MonoBehaviour:
   isDriftInput: 0
   isItemUseInput: 0
   turnInput: 0
+  debugRaceScore: 0
 --- !u!114 &3181719832703682657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14939,10 +14941,13 @@ MonoBehaviour:
   steeringSensitivity: 5
   laneOffset: 0
   speedFactor: 1
-  driftThreshold: 0.7
-  lookAheadDist: 10
   itemUseDelayMin: 1
   itemUseDelayMax: 4
   sensorLength: 10
-  sensorAngle: 30
+  frontSensorAngle: 15
+  sideSensorAngle: 45
   avoidMultiplier: 2
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  nodes: []
