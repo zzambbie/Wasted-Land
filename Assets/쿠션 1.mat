@@ -8,10 +8,11 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: "\uCFE0\uC158 1"
-  m_Shader: {fileID: 4800000, guid: e7cceac56cd93594da28291002b43c01, type: 3}
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _GLOSSYREFLECTIONS_OFF
   m_InvalidKeywords:
   - _CLIPPLANEWORLD_ON
   - _FALLBACKOUTLINES_ON
@@ -29,7 +30,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
@@ -162,7 +163,7 @@ Material:
     - _FaceMapSoftness: 0.001
     - _FallbackOutlines: 1
     - _GlossMapScale: 0
-    - _Glossiness: 0
+    - _Glossiness: 0.3
     - _GlossyReflections: 0
     - _HitColorFresnelPower: 1.5
     - _HitColorScaler: 6
@@ -180,6 +181,7 @@ Material:
     - _MaxOutlineZOffset: 1
     - _MetalMaterial: 1
     - _Metallic: 0
+    - _Mode: 0
     - _NoseBlushStrength: 0
     - _OcclusionStrength: 1
     - _OutlineType: 1
@@ -255,6 +257,7 @@ Material:
     - _TextureLineUse: 0
     - _ToggleEyeGlow: 1
     - _TogglePulse: 0
+    - _UVSec: 0
     - _UseBackFaceUV2: 1
     - _UseBumpMap: 0
     - _UseClipPlane: 0

@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: "\uC4F0\uB808\uAE30\uBD09\uD22C"
-  m_Shader: {fileID: 4800000, guid: e7cceac56cd93594da28291002b43c01, type: 3}
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 2100000, guid: 5bb7bdcbc275b39489073e52992d4a82, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -42,6 +42,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Glossiness: 0.3
     - _OutlineWidth: 0
     - m_start_outlines: 1
     m_Colors: []
