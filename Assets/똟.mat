@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: "\uCC453"
+  m_Name: "\uB61F"
   m_Shader: {fileID: 4800000, guid: e7cceac56cd93594da28291002b43c01, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -29,7 +29,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -81,7 +81,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: eaf9155222c8fe2418fb16a44e4c905d, type: 3}
+        m_Texture: {fileID: 2800000, guid: ed4fec1072342fb4188d1c150c1deb4d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -131,7 +131,7 @@ Material:
     - _FaceMapSoftness: 0.001
     - _FallbackOutlines: 1
     - _GlossMapScale: 1
-    - _Glossiness: 0.3
+    - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _HitColorFresnelPower: 1.5
     - _HitColorScaler: 6
@@ -153,7 +153,7 @@ Material:
     - _NoseBlushStrength: 0
     - _OcclusionStrength: 1
     - _OutlineType: 1
-    - _OutlineWidth: 0.0025
+    - _OutlineWidth: 0
     - _Parallax: 0.02
     - _Pattern_Speed: -0.033
     - _ProceduralUVs: 0
@@ -282,7 +282,7 @@ Material:
     - m_start_fresnel: 0
     - m_start_lightandshadow: 0
     - m_start_lighting: 0
-    - m_start_main: 1
+    - m_start_main: 0
     - m_start_mainalpha: 0
     - m_start_maindetail: 0
     - m_start_matid: 0

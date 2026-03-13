@@ -48,7 +48,7 @@ MonoBehaviour:
   - version: 2.0.0
     name: Side Object 1
     id: 1769065943.8743398
-    timestamp: 1773379034.2708972
+    timestamp: 1773385748.2083788
     objectType: 0
     gameobjectGUID: 
     textureGUID: 
@@ -85,7 +85,7 @@ MonoBehaviour:
     randomObjects: 0
     forwardStartOffset: 0
     sidewaysOffset: 0
-    density: 0
+    density: 46.70576
     goPath: 
     startPath: 
     endPath: 
