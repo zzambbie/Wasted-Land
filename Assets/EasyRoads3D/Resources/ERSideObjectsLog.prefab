@@ -48,11 +48,11 @@ MonoBehaviour:
   - version: 2.0.0
     name: Side Object 1
     id: 1769065943.8743398
-    timestamp: 1769066994.2459056
+    timestamp: 1773379034.2708972
     objectType: 0
     gameobjectGUID: 
     textureGUID: 
-    m_distance: 10
+    m_distance: 46.70576
     uvx: 0.1
     uvy: 1
     position: 0
@@ -91,8 +91,8 @@ MonoBehaviour:
     endPath: 
     texturePath: 
     terrainTree: 0
-    minScale: 1
-    maxScale: 1
+    minScale: 0.1
+    maxScale: 0.1
     childOrderActive: 1
     childOrder: 0
     meshBoundsAlignment: 0
@@ -132,7 +132,7 @@ MonoBehaviour:
     defaultEndOffset: 0
     segmentOffset: 0
     totalZDistance: 0
-    middleZDistance: 10
+    middleZDistance: 6.88
     startZDistance: 0
     endZDistance: 0
     minStartZ: 10000
@@ -542,11 +542,11 @@ MonoBehaviour:
   - version: 2.0.0
     name: 'Side Object 1 [duplicate]'
     id: 1769067015.5396678
-    timestamp: 1769067031.6943526
+    timestamp: 1773376257.9551566
     objectType: 0
     gameobjectGUID: 
     textureGUID: 
-    m_distance: 10
+    m_distance: 609.2
     uvx: 0.1
     uvy: 1
     position: 0
@@ -585,16 +585,16 @@ MonoBehaviour:
     endPath: 
     texturePath: 
     terrainTree: 0
-    minScale: 1
-    maxScale: 1
+    minScale: 0.08
+    maxScale: 0.08
     childOrderActive: 1
     childOrder: 0
     meshBoundsAlignment: 0
     xPosition: 11.24
     xPosition2: 0
-    relativeTo: 0
+    relativeTo: 1
     yPosition: 0.5
-    yRotation: 90
+    yRotation: 90.7
     oldSidwaysDistance: 0
     sidewaysDistanceUpdate: 0
     uvYRound: 0
@@ -626,7 +626,7 @@ MonoBehaviour:
     defaultEndOffset: 0
     segmentOffset: 0
     totalZDistance: 0
-    middleZDistance: 3.76
+    middleZDistance: 12.9
     startZDistance: 0
     endZDistance: 0
     minStartZ: 10000
@@ -753,7 +753,7 @@ MonoBehaviour:
     buildOtherSideObject2: 0
     defaultOtherSoId2: 0
     buildOtherSideObjects: []
-    averageDistance: 1
+    averageDistance: 0
     randomUVx: 0
     isUsedAsChild: 0
     relativeToCenter: 0

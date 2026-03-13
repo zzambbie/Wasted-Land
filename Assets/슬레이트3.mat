@@ -153,7 +153,7 @@ Material:
     - _NoseBlushStrength: 0
     - _OcclusionStrength: 1
     - _OutlineType: 1
-    - _OutlineWidth: 0.03
+    - _OutlineWidth: 0.008
     - _Parallax: 0.02
     - _Pattern_Speed: -0.033
     - _ProceduralUVs: 0
@@ -289,7 +289,7 @@ Material:
     - m_start_metallics: 0
     - m_start_metallicscolor: 0
     - m_start_normalmap: 0
-    - m_start_outlines: 0
+    - m_start_outlines: 1
     - m_start_outlinescolor: 0
     - m_start_outlinesoffset: 0
     - m_start_reflections: 0
@@ -302,7 +302,7 @@ Material:
     - m_start_specular: 0
     - m_start_weaponscan: 0
     - m_start_weaponshading: 0
-    - shader_is_using_thry_editor: 0
+    - shader_is_using_thry_editor: 69
     - shader_master_label: 0
     - variant_selector: 0
     m_Colors:

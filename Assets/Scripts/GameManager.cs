@@ -176,6 +176,60 @@ public class GameManager : MonoBehaviour
             if (kart != null && !kart.isAI) playerKart = kart;
         }
 
+        // Fallback: 플레이어 카트가 없으면 (캐릭터 선택 씬을 거치지 않았거나 모든 카트가 AI인 경우)
+        // kartPrefabs에서 첫 번째 카트를 빈 슬롯에 생성
+        if (playerKart == null && kartPrefabs != null && kartPrefabs.Length > 0)
+        {
+            // 빈 슬롯 찾기
+            int targetSlot = -1;
+            for (int i = 0; i < allKarts.Length; i++)
+            {
+                if (allKarts[i] == null) { targetSlot = i; break; }
+            }
+
+            if (targetSlot >= 0)
+            {
+                // 스폰 위치: 첫 번째 AI 카트 근처
+                Vector3 spawnPos = Vector3.zero;
+                Quaternion spawnRot = Quaternion.identity;
+                for (int i = 0; i < allKarts.Length; i++)
+                {
+                    if (allKarts[i] != null)
+                    {
+                        spawnPos = allKarts[i].transform.position + allKarts[i].transform.right * 3f;
+                        spawnRot = allKarts[i].transform.rotation;
+                        break;
+                    }
+                }
+
+                GameObject newKartObj = Instantiate(kartPrefabs[0], spawnPos, spawnRot);
+                KartController newKart = newKartObj.GetComponent<KartController>();
+                newKart.isAI = false;
+
+                // AI 컨트롤러가 있으면 제거
+                AIController aiComp = newKartObj.GetComponent<AIController>();
+                if (aiComp != null) DestroyImmediate(aiComp);
+
+                allKarts[targetSlot] = newKart;
+                playerKart = newKart;
+
+                // 카메라 연결
+                KartCamera kartCam = FindFirstObjectByType<KartCamera>();
+                if (kartCam != null) kartCam.targetKart = playerKart;
+
+                // 아이템 UI 연결
+                InventoryManager inv = newKartObj.GetComponent<InventoryManager>();
+                if (inv != null)
+                {
+                    inv.itemSlotImage = itemSlotUI;
+                    inv.defaultIcon = itemDefaultIcon;
+                    inv.UpdateUI(null);
+                }
+
+                Debug.Log("플레이어 카트 자동 생성: " + playerKart.name);
+            }
+        }
+
         UpdateLapUI(1); // 1바퀴째로 UI 초기화!
         if (finishUI != null) finishUI.SetActive(false);
 
