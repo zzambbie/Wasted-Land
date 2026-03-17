@@ -41,6 +41,11 @@ public class KartController : MonoBehaviour
     public float minDriftTime = 0.8f;
     private float jumpCooldown = 0f;  // 점프 연타 방지용 쿨타임
 
+    [Header("스페이스바 점프")]
+    public float spaceJumpForce = 8f;         // 스페이스바 점프 힘
+    public float spaceJumpCooldownTime = 1f;  // 스페이스바 점프 쿨타임 (초)
+    private float spaceJumpCooldown = 0f;     // 현재 남은 쿨타임
+
     [Header("부스터")]
     public float boostForce = 100f;      // 순간 가속 힘
     public float boostMaxSpeed = 40f;    // 부스터 시 허용되는 최고 속도
@@ -157,6 +162,14 @@ public class KartController : MonoBehaviour
             {
                 moveInput = Input.GetAxis("Vertical");
                 turnInput = Input.GetAxis("Horizontal");
+
+                // 스페이스바 점프 입력 처리
+                if (Input.GetKeyDown(KeyCode.Space) && isGrounded && spaceJumpCooldown <= 0f)
+                {
+                    rb.AddForce(Vector3.up * spaceJumpForce, ForceMode.VelocityChange);
+                    spaceJumpCooldown = spaceJumpCooldownTime; // 쿨타임 시작
+                    Debug.Log("점프! (쿨타임 " + spaceJumpCooldownTime + "초)");
+                }
             }
         }
         // 2. 카운트다운 등으로 조작이 잠겨있으면(isControlled == false) 입력 0
@@ -167,7 +180,8 @@ public class KartController : MonoBehaviour
         }
         // 3. AI라면 여기서 아무것도 안 함 (AIController가 넣어줄 값을 기다림)
 
-        if (jumpCooldown > 0) jumpCooldown -= Time.deltaTime; // 쿨타임 감소
+        if (jumpCooldown > 0) jumpCooldown -= Time.deltaTime; // 드리프트 점프 쿨타임 감소
+        if (spaceJumpCooldown > 0) spaceJumpCooldown -= Time.deltaTime; // 스페이스바 점프 쿨타임 감소
 
         CheckGrounded();
         HandleDrift();
@@ -688,6 +702,9 @@ public class KartController : MonoBehaviour
         storedBoostPower = 0f;
         StopCoroutine("BoostRoutine");
         CancelInvoke("CloseBoostWindow");
+
+        // 스페이스바 점프 쿨타임 초기화
+        spaceJumpCooldown = 0f;
 
         // 4. 시각 효과 초기화
         if (kartRenderer != null && kartRenderer.material.HasProperty("_Color")) kartRenderer.material.color = originalColor;
