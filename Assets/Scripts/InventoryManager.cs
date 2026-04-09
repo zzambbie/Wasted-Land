@@ -10,6 +10,9 @@ public class InventoryManager : MonoBehaviour
     public Image itemSlotImage;
     public Sprite defaultIcon;
 
+    [Header("아이템 사용 이펙트 UI")]
+    public GameObject itemUseEffectUI;   // "NOW!!" 이펙트 오브젝트
+
     [Header("아이템 데이터")]
     public ItemType[] itemTypes;
     public Sprite[] itemIcons;
@@ -286,11 +289,14 @@ public class InventoryManager : MonoBehaviour
                     itemSlotImage.sprite = null;
                     itemSlotImage.color = Color.clear; // 완전 투명 (흰색 박스 방지)
                 }
+
+                if (itemUseEffectUI != null) itemUseEffectUI.SetActive(false);
             }
             else
             {
                 itemSlotImage.sprite = sprite;
                 itemSlotImage.color = Color.white; // 불투명
+                if (itemUseEffectUI != null) itemUseEffectUI.SetActive(true);
             }
         }
     }

@@ -64,6 +64,9 @@
     <Compile Include="Assets\Scripts\TrackVisualizer.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
+    <Compile Include="Assets\Scripts\Portfolio_ItemSystem\ItemStrategySO.cs" />
+    <Compile Include="Assets\Scripts\PauseManager.cs" />
+    <Compile Include="Assets\Scripts\PlayModeController.cs" />
     <Compile Include="Assets\Scripts\Obstacle.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\EasyRoads3D\Scripts\runtimeScript.cs" />
@@ -75,6 +78,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
     <Compile Include="Assets\Scripts\InventoryManager.cs" />
     <Compile Include="Assets\SimpleToon\Model\Kawaii Slimes\Cameras\Scripts\AbstractTargetFollower.cs" />
+    <Compile Include="Assets\Scripts\Portfolio_ItemSystem\AdvancedItemCaster.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
@@ -84,6 +88,7 @@
     <Compile Include="Assets\Scripts\KartItemData.cs" />
     <Compile Include="Assets\Scripts\Checkpoint.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
+    <Compile Include="Assets\Scripts\Portfolio_ItemSystem\MissileStrategySO.cs" />
     <Compile Include="Assets\Scripts\FakeItemBox.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\Scripts\ItemBox.cs" />
@@ -119,7 +124,9 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
+    <Compile Include="Assets\Scripts\Portfolio_ItemSystem\MushroomStrategySO.cs" />
     <Compile Include="Assets\Scripts\BananaItem.cs" />
+    <Compile Include="Assets\Scripts\Portfolio_ItemSystem\BananaStrategySO.cs" />
     <Compile Include="Assets\SimpleToon\Model\Kawaii Slimes\Cameras\Scripts\FreeLookCam.cs" />
     <Compile Include="Assets\Scripts\FloatingObject.cs" />
     <Compile Include="Assets\SimpleToon\Model\Kawaii Slimes\Cameras\Scripts\PivotBasedCameraRig.cs" />
@@ -127,37 +134,39 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
+    <None Include="Assets\PrimoToon-main\PrimoToon-main.hlsl" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Roboto-Bold - License.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
     <None Include="Assets\SimpleToon\Shader\ToonLightBase.shader" />
     <None Include="Assets\EasyRoads3D\shaders\ER Road Detail.shader" />
+    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\CREDITS.txt" />
+    <None Include="Assets\PrimoToon-main\PrimoToon-outlines.hlsl" />
     <None Include="Assets\EasyRoads3D\shaders\ER Road.shader" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Unity - OFL.txt" />
     <None Include="Assets\Simple Toon\Shaders\STOutline.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\EasyRoads3D\Resources\custom prefabs\_custom prefabs.txt" />
+    <None Include="Assets\PrimoToon-main\PrimoToon-helpers.hlsl" />
     <None Include="Assets\EasyRoads3D\prefab meshes\_custom prefabs.txt" />
     <None Include="Assets\EasyRoads3D\shaders\ER Road Transparency.shader" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Oswald-Bold - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Roboto-Bold - AFL.txt" />
     <None Include="Assets\EasyRoads3D\SRP Support Packages\_Readme.txt" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Anton OFL.txt" />
-    <None Include="Assets\PrimoToon-main\PrimoToon-helpers.hlsl" />
     <None Include="Assets\NewSurfaceShader.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\EasyRoads3D\Release - Install Notes.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
-    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\CREDITS.txt" />
+    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Examples\ThryPresetsExample.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\EasyRoads3D\lib\EasyRoads3Dv3.dll" />
-    <None Include="Assets\TextMesh Pro\Shaders\SDFFunctions.hlsl" />
-    <None Include="Assets\EasyRoads3D\shaders\ER Surface.shader" />
-    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Examples\Example1.shader" />
     <None Include="Assets\PrimoToon-main\PrimoToon-shadows.hlsl" />
-    <None Include="Assets\PrimoToon-main\PrimoToon.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\SDFFunctions.hlsl" />
+    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Examples\Example1.shader" />
+    <None Include="Assets\EasyRoads3D\shaders\ER Surface.shader" />
+    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Examples\ThryLabelExample.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
-    <None Include="Assets\PrimoToon-main\PrimoToon-main.hlsl" />
     <None Include="Assets\EasyRoads3D\lib\DelaunayER.dll" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\Simple Toon\Shaders\STTransparent.shader" />
@@ -165,28 +174,26 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
-    <None Include="Assets\PrimoToon-main\PrimoToon-outlines.hlsl" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\Simple Toon\Shaders\STCore.cginc" />
     <None Include="Assets\EasyRoads3D\_URP &amp; HDRP Readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\EasyRoads3D\shaders\ER Road Mask Blend.shader" />
-    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Examples\ThryLabelExample.txt" />
     <None Include="Assets\EasyRoads3D\shaders\ER I Connector Blend.shader" />
     <None Include="Assets\Lighting_s.hlsl" />
     <None Include="Assets\EasyRoads3D\_Readme.txt" />
     <None Include="Assets\EasyRoads3D\shaders\ER Road Decal.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\EasyRoads3D\shaders\Legacy\EasyRoads3D - Unity 2018 Standard.shader" />
-    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Examples\ThryPresetsExample.txt" />
     <None Include="Assets\Simple Toon\Shaders\STDefault.shader" />
     <None Include="Assets\DistortUV_float.hlsl" />
     <None Include="Assets\csc.rsp" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\PrimoToon-main\PrimoToon.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\Simple Toon\Shaders\STFunctions.cginc" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Examples\Example2.shader" />
+    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\GerstnerWaves.hlsl" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
@@ -1262,6 +1269,10 @@
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.UI.Analytics">

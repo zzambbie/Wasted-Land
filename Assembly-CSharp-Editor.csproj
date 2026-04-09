@@ -66,6 +66,8 @@
     <Compile Include="Assets\PrimoToon-main\Scripts\Festivity Scripts\Editor\ImportMat.cs" />
     <Compile Include="Assets\Editor\FixPinkMaterials.cs" />
     <Compile Include="Assets\Editor\MaterialAutoFixer.cs" />
+    <Compile Include="Assets\Scripts\Editor\UISetupTool.cs" />
+    <Compile Include="Assets\Scripts\Editor\TitleSceneAutoConfig.cs" />
     <Compile Include="Assets\PrimoToon-main\Scripts\Festivity Scripts\Editor\AverageNormals.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1186,6 +1188,10 @@
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.UI.Analytics">

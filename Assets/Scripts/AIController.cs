@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 
@@ -9,7 +9,7 @@ public class AIController : MonoBehaviour
 
     [Header("AI 주행 설정")]
     public float steeringSensitivity = 5.0f;
-    public float speedFactor = 1.0f;
+    public float speedFactor = 0.82f;  // 기본 속도 비율 (1.0이면 플레이어와 동급, 낮출수록 쉬워짐)
 
     [Header("아이템 사용")]
     public float itemUseDelayMin = 1.0f;
@@ -63,9 +63,9 @@ public class AIController : MonoBehaviour
         personalLanePreference = Mathf.Lerp(-1.0f, 1.0f, (float)myLaneIndex / (totalLanes - 1));
         laneOffset = personalLanePreference;
 
-        // 속도 편차: 각 AI마다 살짝 다른 속도 (0.88~1.08)
-        personalSpeedVariation = 0.88f + (myLaneIndex * 0.1f);
-        personalSpeedVariation = Mathf.Clamp(personalSpeedVariation, 0.85f, 1.1f);
+        // 속도 편차: 각 AI마다 살짝 다른 속도 (0.80~0.95)
+        personalSpeedVariation = 0.80f + (myLaneIndex * 0.05f);
+        personalSpeedVariation = Mathf.Clamp(personalSpeedVariation, 0.80f, 0.95f);
 
         laneChangeTimer = Random.Range(8.0f, 15.0f);
         itemTimer = Random.Range(itemUseDelayMin, itemUseDelayMax);

@@ -1,31 +1,189 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // ¾À ÀÌµ¿À» À§ÇØ ÇÊ¼ö!
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
+using System.Collections;
 
+/// <summary>
+/// íƒ€ì´í‹€ ì”¬ ì „ì²´ ê´€ë¦¬.
+/// Canvas ì•ˆì˜ ìì‹ ì˜¤ë¸Œì íŠ¸ë¥¼ Transform.Find()ë¡œ ìë™ íƒìƒ‰.
+/// Inspector ì—°ê²° ë¶ˆí•„ìš”.
+/// 
+/// êµ¬ì¡°:
+///   Canvas
+///     â”œâ”€ TitleText
+///     â”œâ”€ StoryModeButton
+///     â”œâ”€ MultiplayButton
+///     â”œâ”€ FrenzyButton
+///     â”œâ”€ SettingsButton
+///     â”œâ”€ QuitButton
+///     â”œâ”€ SettingsPanel (ë³¼ë¥¨/ì¹´ë©”ë¼ ì„¤ì •)
+///     â”œâ”€ QuitPanel (ì¢…ë£Œ í™•ì¸)
+///     â””â”€ PreparingPopup
+/// </summary>
 public class TitleController : MonoBehaviour
 {
-    // 1. ½ºÅä¸® ¸ğµå ¹öÆ°
-    public void OnClickStoryMode()
+    GameObject settingsPanel;
+    GameObject quitPanel;
+    GameObject preparingPopup;
+    TextMeshProUGUI preparingText;
+
+    Slider volumeSlider;
+    Slider cameraDistSlider;
+    TextMeshProUGUI volumeValueText;
+    TextMeshProUGUI cameraDistValueText;
+
+    void Start()
     {
-        // ½ºÅä¸® ¸Ê ¾ÀÀ¸·Î ÀÌµ¿
-        // (Build Settings¿¡ ÀÌ ÀÌ¸§ÀÌ µî·ÏµÇ¾î ÀÖ¾î¾ß ÇÔ)
-        SceneManager.LoadScene("StoryMapScene");
+        // â˜… "Canvas"ë¼ëŠ” ì´ë¦„ì˜ ìº”ë²„ìŠ¤ë¥¼ ì •í™•íˆ ì°¾ìŒ
+        // (PauseCanvas ë“± ë‹¤ë¥¸ ìº”ë²„ìŠ¤ê°€ ìˆìœ¼ë©´ FindFirstObjectByTypeì´ ì˜ëª»ëœ ìº”ë²„ìŠ¤ë¥¼ ë°˜í™˜í•  ìˆ˜ ìˆìŒ)
+        Canvas canvas = null;
+        Canvas[] allCanvases = FindObjectsByType<Canvas>(FindObjectsSortMode.None);
+        foreach (var c in allCanvases)
+        {
+            if (c.gameObject.name == "Canvas")
+            {
+                canvas = c;
+                break;
+            }
+        }
+        if (canvas == null)
+        {
+            // fallback: ì•„ë¬´ ìº”ë²„ìŠ¤ë‚˜ ì‚¬ìš©
+            canvas = FindFirstObjectByType<Canvas>();
+        }
+        if (canvas == null) return;
+        Transform root = canvas.transform;
+
+        // íŒ¨ë„ íƒìƒ‰
+        settingsPanel = FindChild(root, "SettingsPanel");
+        quitPanel = FindChild(root, "QuitPanel");
+
+        Transform popT = root.Find("PreparingPopup");
+        if (popT != null)
+        {
+            preparingPopup = popT.gameObject;
+            preparingText = popT.GetComponentInChildren<TextMeshProUGUI>();
+        }
+
+        // ë©”ì¸ ë²„íŠ¼ 5ê°œ (ì „ë¶€ Canvas ì§ì† ìì‹)
+        BindBtn(root, "StoryModeButton", OnClickStoryMode);
+        BindBtn(root, "MultiplayButton", OnClickMultiplay);
+        BindBtn(root, "FrenzyButton", OnClickFrenzy);
+        BindBtn(root, "SettingsButton", ShowSettings);
+        BindBtn(root, "QuitButton", ShowQuitConfirm);
+
+        // í™˜ê²½ì„¤ì • íŒ¨ë„ ë‚´ë¶€
+        if (settingsPanel != null)
+        {
+            Transform sp = settingsPanel.transform;
+            BindBtn(sp, "SettingsBackButton", HideSettings);
+
+            Transform volT = sp.Find("VolumeSlider");
+            if (volT != null)
+            {
+                volumeSlider = volT.GetComponent<Slider>();
+                volumeSlider.value = PlayerPrefs.GetFloat("MasterVolume", 1f);
+                volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
+            }
+            Transform camT = sp.Find("CameraDistSlider");
+            if (camT != null)
+            {
+                cameraDistSlider = camT.GetComponent<Slider>();
+                cameraDistSlider.value = PlayerPrefs.GetFloat("CameraDistance", 0.5f);
+                cameraDistSlider.onValueChanged.AddListener(OnCameraDistChanged);
+            }
+            volumeValueText = FindTMP(sp, "VolumeValue");
+            cameraDistValueText = FindTMP(sp, "CameraDistValue");
+            UpdateVolumeText();
+            UpdateCameraDistText();
+        }
+
+        // ì¢…ë£Œ í™•ì¸ íŒ¨ë„ ë‚´ë¶€
+        if (quitPanel != null)
+        {
+            BindBtn(quitPanel.transform, "QuitYesButton", QuitGame);
+            BindBtn(quitPanel.transform, "QuitNoButton", HideQuitConfirm);
+        }
+
+        // íŒ¨ë„ ìˆ¨ê¸°ê¸° (ë°”ì¸ë”© í›„!)
+        if (settingsPanel != null) settingsPanel.SetActive(false);
+        if (quitPanel != null) quitPanel.SetActive(false);
+        if (preparingPopup != null) preparingPopup.SetActive(false);
     }
-    // 2. ¸ÖÆ¼ ÇÃ·¹ÀÌ ¹öÆ° (ÁØºñ Áß)
-    public void OnClickMultiplay()
+
+    // ============ ìœ í‹¸ ============
+    GameObject FindChild(Transform p, string n)
     {
-        Debug.Log("¸ÖÆ¼ ÇÃ·¹ÀÌ´Â ¾ÆÁ÷ °ø»ç ÁßÀÔ´Ï´Ù!");
-        // ³ªÁß¿¡ ¸ÖÆ¼ ·Îºñ ¾ÀÀ¸·Î ¿¬°áÇÒ ¿¹Á¤
+        Transform t = p.Find(n);
+        return t != null ? t.gameObject : null;
     }
-    // 3. ¿É¼Ç ¹öÆ°
-    public void OnClickOption()
+    void BindBtn(Transform p, string n, UnityEngine.Events.UnityAction a)
     {
-        Debug.Log("¿É¼Ç Ã¢Àº ³ªÁß¿¡ ¸¸µé °Å¿¹¿ä!");
-        // ³ªÁß¿¡ ¿©±â¿¡ optionPanel.SetActive(true); ³ÖÀ¸¸é µÊ
+        Transform t = p.Find(n);
+        if (t != null)
+        {
+            Button btn = t.GetComponent<Button>();
+            if (btn != null) { btn.onClick.RemoveAllListeners(); btn.onClick.AddListener(a); }
+        }
     }
-    // 4. °ÔÀÓ Á¾·á ¹öÆ°
-    public void OnClickQuit()
+    TextMeshProUGUI FindTMP(Transform p, string n)
     {
-        Debug.Log("°ÔÀÓ Á¾·á!");
-        Application.Quit(); // ºôµåµÈ °ÔÀÓ(exe/apk)¿¡¼­¸¸ ²¨Áü. ¿¡µğÅÍ¿¡¼± ¾È ²¨Áü.
+        Transform t = p.Find(n);
+        return t != null ? t.GetComponent<TextMeshProUGUI>() : null;
+    }
+
+    // ============ ë©”ì¸ ë²„íŠ¼ ============
+    void OnClickStoryMode() { SceneManager.LoadScene("StoryMapScene"); }
+    void OnClickMultiplay() { StartCoroutine(ShowPreparing("ë©€í‹°í”Œë ˆì´ëŠ” ì•„ì§ ì¤€ë¹„ë‹¨ê³„ì…ë‹ˆë‹¤!")); }
+    void OnClickFrenzy() { StartCoroutine(ShowPreparing("ê´‘ë€ì˜ ì§ˆì£¼ëŠ” ì•„ì§ ì¤€ë¹„ë‹¨ê³„ì…ë‹ˆë‹¤!")); }
+
+    // ============ í™˜ê²½ì„¤ì • ============
+    public void ShowSettings() { if (settingsPanel != null) settingsPanel.SetActive(true); }
+    public void HideSettings() { if (settingsPanel != null) settingsPanel.SetActive(false); }
+
+    void OnVolumeChanged(float v)
+    {
+        AudioListener.volume = v;
+        PlayerPrefs.SetFloat("MasterVolume", v);
+        UpdateVolumeText();
+    }
+    void OnCameraDistChanged(float v)
+    {
+        PlayerPrefs.SetFloat("CameraDistance", v);
+        UpdateCameraDistText();
+    }
+    void UpdateVolumeText()
+    {
+        if (volumeValueText != null && volumeSlider != null)
+            volumeValueText.text = Mathf.RoundToInt(volumeSlider.value * 100) + "%";
+    }
+    void UpdateCameraDistText()
+    {
+        if (cameraDistValueText != null && cameraDistSlider != null)
+            cameraDistValueText.text = Mathf.RoundToInt(cameraDistSlider.value * 100) + "%";
+    }
+
+    // ============ ì¢…ë£Œ ============
+    public void ShowQuitConfirm() { if (quitPanel != null) quitPanel.SetActive(true); }
+    public void HideQuitConfirm() { if (quitPanel != null) quitPanel.SetActive(false); }
+    void QuitGame()
+    {
+        Application.Quit();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+    }
+
+    // ============ ì¤€ë¹„ë‹¨ê³„ íŒì—… ============
+    IEnumerator ShowPreparing(string msg)
+    {
+        if (preparingPopup != null)
+        {
+            if (preparingText != null) preparingText.text = msg;
+            preparingPopup.SetActive(true);
+            yield return new WaitForSeconds(2f);
+            preparingPopup.SetActive(false);
+        }
     }
 }

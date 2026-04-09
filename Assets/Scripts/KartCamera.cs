@@ -5,29 +5,29 @@ public class KartCamera : MonoBehaviour
 {
     public KartController targetKart;
 
-    [Header("±âº» Ä«¸Ş¶ó ¼³Á¤")]
+    [Header("ê¸°ë³¸ ì¹´ë©”ë¼ ì„¤ì •")]
     public float defaultDistance = 3.5f;
     public float defaultHeight = 1.5f;
     public float defaultFOV = 60f;
 
-    [Header("ºÎ½ºÅÍ Ä«¸Ş¶ó ¼³Á¤")]
+    [Header("ë¶€ìŠ¤í„° ì¹´ë©”ë¼ ì„¤ì •")]
     public float boostDistance = 4.5f;
     public float boostHeight = 1.5f;
     public float boostFOV = 95f;
 
-    [Header("½Ã¼± Ã³¸®")]
+    [Header("ì‹œì„  ì²˜ë¦¬")]
     public float lookAtHeight = 1.0f;
 
-    [Header("¹İÀÀ ¼Óµµ")]
-    public float rotationDamping =5.0f; // È¸Àü µû¶ó°¡´Â ¼Óµµ
-    public float heightDamping = 10.0f;   // ³ôÀÌ µû¶ó°¡´Â ¼Óµµ
-    public float zoomDamping = 5.0f;      // ÁÜ(FOV/°Å¸®) ¹İÀÀ ¼Óµµ
+    [Header("ë°˜ì‘ ì†ë„")]
+    public float rotationDamping =5.0f; // íšŒì „ ë”°ë¼ê°€ëŠ” ì†ë„
+    public float heightDamping = 10.0f;   // ë†’ì´ ë”°ë¼ê°€ëŠ” ì†ë„
+    public float zoomDamping = 5.0f;      // ì¤Œ(FOV/ê±°ë¦¬) ë°˜ì‘ ì†ë„
 
-    // ÁÜ ¼Óµµ ºĞ¸®
-    public float zoomOutSpeed = 5.0f;  // ¸Ö¾îÁú ¶§ (ºÎµå·´°Ô)
-    public float zoomInSpeed = 20.0f;  // µ¹¾Æ¿Ã ¶§ (ºü¸£°Ô!)
+    // ì¤Œ ì†ë„ ë¶„ë¦¬
+    public float zoomOutSpeed = 5.0f;  // ë©€ì–´ì§ˆ ë•Œ (ë¶€ë“œëŸ½ê²Œ)
+    public float zoomInSpeed = 20.0f;  // ëŒì•„ì˜¬ ë•Œ (ë¹ ë¥´ê²Œ!)
 
-    // [ÇÙ½É] Ä«¸Ş¶óÀÇ ÇöÀç »óÅÂ¸¦ ÀúÀåÇÏ´Â º¯¼ö (Transform¿¡¼­ °¡Á®¿ÀÁö ¾ÊÀ½!)
+    // [í•µì‹¬] ì¹´ë©”ë¼ì˜ í˜„ì¬ ìƒíƒœë¥¼ ì €ì¥í•˜ëŠ” ë³€ìˆ˜ (Transformì—ì„œ ê°€ì ¸ì˜¤ì§€ ì•ŠìŒ!)
     private float currentYAngle;
     private float currentHeight;
     private float currentDistance;
@@ -38,17 +38,24 @@ public class KartCamera : MonoBehaviour
     void Start()
     {
         cam = GetComponent<Camera>();
+
+        // í™˜ê²½ì„¤ì •ì—ì„œ ì €ì¥í•œ ì¹´ë©”ë¼ ê±°ë¦¬ ì ìš©
+        if (PlayerPrefs.HasKey("CameraDistance"))
+        {
+            float ratio = PlayerPrefs.GetFloat("CameraDistance", 0.5f);
+            defaultDistance = Mathf.Lerp(2.5f, 6.0f, ratio);
+        }
         if (targetKart == null)
             targetKart = FindFirstObjectByType<KartController>();
 
-        // [Áß¿ä] ½ÃÀÛÇÏÀÚ¸¶ÀÚ Å¸°Ù µÚ·Î ¼ø°£ÀÌµ¿ (¸Ö¸®¼­ ³¯¾Æ¿À´Â °Í ¹æÁö)
+        // [ì¤‘ìš”] ì‹œì‘í•˜ìë§ˆì íƒ€ê²Ÿ ë’¤ë¡œ ìˆœê°„ì´ë™ (ë©€ë¦¬ì„œ ë‚ ì•„ì˜¤ëŠ” ê²ƒ ë°©ì§€)
         if (targetKart != null)
         {
             currentYAngle = targetKart.transform.eulerAngles.y;
             currentHeight = targetKart.transform.position.y + defaultHeight;
             currentDistance = defaultDistance;
 
-            // ÃÊ±â À§Ä¡ °­Á¦ ¼³Á¤
+            // ì´ˆê¸° ìœ„ì¹˜ ê°•ì œ ì„¤ì •
             UpdateCameraPosition(true);
         }
     }
@@ -63,32 +70,32 @@ public class KartCamera : MonoBehaviour
     {
         bool isBoosting = targetKart.IsBoosting;
 
-        // 1. ¸ñÇ¥°ª ¼³Á¤
+        // 1. ëª©í‘œê°’ ì„¤ì •
         float targetDist = isBoosting ? boostDistance : defaultDistance;
         float targetHei = isBoosting ? boostHeight : defaultHeight;
         float targetFOV = isBoosting ? boostFOV : defaultFOV;
 
-        // 2. ½Ã°£(DeltaTime) ¼³Á¤
+        // 2. ì‹œê°„(DeltaTime) ì„¤ì •
         float dt = instant ? 1000f : Time.deltaTime;
 
-        // ºÎ½ºÅÍ Áß(¸Ö¾îÁú ¶§) -> zoomOutSpeed (ÃµÃµÈ÷ 5.0)
-        // ³¡³²(µ¹¾Æ¿Ã ¶§) -> zoomInSpeed (ºü¸£°Ô 20.0)
+        // ë¶€ìŠ¤í„° ì¤‘(ë©€ì–´ì§ˆ ë•Œ) -> zoomOutSpeed (ì²œì²œíˆ 5.0)
+        // ëë‚¨(ëŒì•„ì˜¬ ë•Œ) -> zoomInSpeed (ë¹ ë¥´ê²Œ 20.0)
         float currentZoomSpeed = isBoosting ? zoomOutSpeed : zoomInSpeed;
 
-        // zoomDamping ´ë½Å currentZoomSpeed¸¦ »ç¿ëÇÕ´Ï´Ù.
+        // zoomDamping ëŒ€ì‹  currentZoomSpeedë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.
         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, targetFOV, dt * currentZoomSpeed);
 
-        // °Å¸® °è»ê¿¡µµ ¶È°°ÀÌ Àû¿ë
+        // ê±°ë¦¬ ê³„ì‚°ì—ë„ ë˜‘ê°™ì´ ì ìš©
         currentDistance = Mathf.Lerp(currentDistance, targetDist, dt * currentZoomSpeed);
 
-        // 3. È¸Àü°ú ³ôÀÌ´Â ±âÁ¸ Damping »ç¿ë
+        // 3. íšŒì „ê³¼ ë†’ì´ëŠ” ê¸°ì¡´ Damping ì‚¬ìš©
         float wantedRotationAngle = targetKart.transform.eulerAngles.y;
         float wantedHeight = targetKart.transform.position.y + targetHei;
 
         currentYAngle = Mathf.LerpAngle(currentYAngle, wantedRotationAngle, dt * rotationDamping);
         currentHeight = Mathf.Lerp(currentHeight, wantedHeight, dt * heightDamping);
 
-        // 4. ÃÖÁ¾ À§Ä¡ °è»ê
+        // 4. ìµœì¢… ìœ„ì¹˜ ê³„ì‚°
         Quaternion currentRotation = Quaternion.Euler(0, currentYAngle, 0);
 
         Vector3 finalPosition = targetKart.transform.position;
