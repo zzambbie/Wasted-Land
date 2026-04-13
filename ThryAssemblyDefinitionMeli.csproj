@@ -90,11 +90,11 @@
     <Compile Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\MaterialLinker.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\DecalGizmos.shader" />
     <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ParserTests.txt" />
+    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ThryAssemblyDefinition.asmdef" />
     <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ThryTexturePacker.compute" />
     <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ChannelPreview.shader" />
-    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\DecalGizmos.shader" />
-    <None Include="Assets\PrimoToon-main\Scripts\ThryEditor\Editor\ThryAssemblyDefinition.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
