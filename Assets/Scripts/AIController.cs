@@ -82,6 +82,13 @@ public class AIController : MonoBehaviour
         if (nodes.Count == 0) return;
         if (isRescuing) return;
 
+        // ★ 카운트다운 중(isControlled == false)이면 AI도 정지
+        if (!kart.isControlled)
+        {
+            kart.SetInput(0f, 0f, false, false);
+            return;
+        }
+
         // --- 1. 웨이포인트 추적 ---
         Vector3 nodePos = nodes[currentNode].position;
         int nextIndex = (currentNode + 1) % nodes.Count;

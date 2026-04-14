@@ -133,6 +133,9 @@ public class KartController : MonoBehaviour
 
         currentBoostDecel = driftDecel;
         InitClosestNode();
+
+        // ★ 파티클 머티리얼 자동 교정 (분홍색 네모 방지)
+        FixParticleMaterials();
     } 
     void InitClosestNode()
     {
@@ -152,6 +155,337 @@ public class KartController : MonoBehaviour
         }
         currentNodeIndex = bestIndex;
     }
+
+    /// <summary>
+    /// 파티클 시스템 완전 재구성
+    /// 드리프트: 마리오카트풍 불꽃 스파크 (바닥에서 튀는 불꽃)
+    /// 부스트: 카트 뒤에서 뿜어나오는 화염
+    /// </summary>
+    void FixParticleMaterials()
+    {
+        // 드리프트용: 선명한 텍스철 + Alpha Blend (흐릿하지 않은 단단한 불꽃)
+        Texture2D solidTex = CreateSolidSparkTexture(64);
+        Material driftMat = CreateSolidParticleMaterial(solidTex);
+
+        // 부스트용: Additive 텍스철 (빛나는 스피드 라인)
+        Texture2D glowTex = CreateSparkTexture(64);
+        Material boostMat = CreateSparkMaterial(glowTex);
+
+        for (int i = 0; i < driftParticles.Length; i++)
+        {
+            if (driftParticles[i] == null) continue;
+            SetupDriftSparkParticle(driftParticles[i], driftMat);
+        }
+
+        if (boostParticle != null)
+        {
+            SetupBoostFlameParticle(boostParticle, boostMat);
+        }
+    }
+
+    // ====================================================
+    // 드리프트 파티클: 크고 화려한 불꽃 스파크! 
+    // ====================================================
+    void SetupDriftSparkParticle(ParticleSystem ps, Material mat)
+    {
+        var psRenderer = ps.GetComponent<ParticleSystemRenderer>();
+        if (psRenderer != null)
+        {
+            psRenderer.sharedMaterial = mat;
+            psRenderer.renderMode = ParticleSystemRenderMode.Billboard;
+            psRenderer.sortMode = ParticleSystemSortMode.Distance;
+            psRenderer.minParticleSize = 0.01f;
+            psRenderer.maxParticleSize = 5.0f; // ★ 화면에서 크게 보이도록
+        }
+
+        var main = ps.main;
+        main.loop = true;
+        main.playOnAwake = false;
+        main.startLifetime = new ParticleSystem.MinMaxCurve(0.3f, 0.8f);
+        main.startSpeed = new ParticleSystem.MinMaxCurve(2.0f, 6.0f);     // 빠르게 튀어오름
+        main.startSize = new ParticleSystem.MinMaxCurve(0.5f, 1.5f);      // ★★★ 크게! 5~10배 증가!
+        main.simulationSpace = ParticleSystemSimulationSpace.World;
+        main.maxParticles = 300;
+        main.gravityModifier = 1.2f; // 포물선 그리며 튀어오름
+
+        // 시작 색상: 밝은 흰색~노랑 (금속 불꽃)
+        main.startColor = new ParticleSystem.MinMaxGradient(
+            new Color(1f, 1f, 0.9f, 1f),   // 거의 흰색
+            new Color(1f, 0.8f, 0.2f, 1f)   // 밝은 노랑
+        );
+
+        // 방출: 대량
+        var emission = ps.emission;
+        emission.enabled = true;
+        emission.rateOverTime = 100f;
+
+        // 형태: 반구에서 위로 퍼짐
+        var shape = ps.shape;
+        shape.enabled = true;
+        shape.shapeType = ParticleSystemShapeType.Hemisphere;
+        shape.radius = 0.3f; // 넓은 범위에서 출발
+        shape.rotation = Vector3.zero;
+
+        // Color Over Lifetime: 흰색→노랑→주황→빨강→사라짐 (선명!)
+        var col = ps.colorOverLifetime;
+        col.enabled = true;
+        Gradient sparkGrad = new Gradient();
+        sparkGrad.SetKeys(
+            new GradientColorKey[] {
+                new GradientColorKey(new Color(1f, 1f, 0.95f), 0.0f),
+                new GradientColorKey(new Color(1f, 0.85f, 0.3f), 0.15f),
+                new GradientColorKey(new Color(1f, 0.5f, 0.1f), 0.4f),
+                new GradientColorKey(new Color(0.9f, 0.2f, 0.0f), 0.75f),
+                new GradientColorKey(new Color(0.4f, 0.1f, 0.0f), 1.0f)
+            },
+            new GradientAlphaKey[] {
+                new GradientAlphaKey(1.0f, 0.0f),
+                new GradientAlphaKey(1.0f, 0.15f),
+                new GradientAlphaKey(0.7f, 0.5f),
+                new GradientAlphaKey(0.0f, 1.0f)
+            }
+        );
+        col.color = new ParticleSystem.MinMaxGradient(sparkGrad);
+
+        // Size Over Lifetime: 크게 시작 → 줄어듦
+        var sol = ps.sizeOverLifetime;
+        sol.enabled = true;
+        AnimationCurve sizeCurve = new AnimationCurve(
+            new Keyframe(0f, 1.0f),
+            new Keyframe(0.15f, 0.85f),
+            new Keyframe(0.5f, 0.4f),
+            new Keyframe(1f, 0.0f)
+        );
+        sol.size = new ParticleSystem.MinMaxCurve(1f, sizeCurve);
+
+        // Noise: 불꽃 흔들림
+        var noise = ps.noise;
+        noise.enabled = true;
+        noise.strength = new ParticleSystem.MinMaxCurve(0.5f);
+        noise.frequency = 2.5f;
+        noise.damping = true;
+
+        Debug.Log("★ 드리프트 대형 스파크 설정 완료: " + ps.gameObject.name);
+    }
+
+    // ====================================================
+    // 부스트 파티클: 스피드 라인! (카트를 스쳐지나가는 빛줄기)
+    // ====================================================
+    void SetupBoostFlameParticle(ParticleSystem ps, Material mat)
+    {
+        var psRenderer = ps.GetComponent<ParticleSystemRenderer>();
+        if (psRenderer != null)
+        {
+            psRenderer.sharedMaterial = mat;
+
+            // ★ Stretched Billboard: 빛이 카트를 스쳐지나가는 스피드 라인!
+            psRenderer.renderMode = ParticleSystemRenderMode.Stretch;
+            psRenderer.lengthScale = 3.0f;
+            psRenderer.velocityScale = 0.8f;
+            psRenderer.sortMode = ParticleSystemSortMode.Distance;
+            psRenderer.minParticleSize = 0.01f;
+            psRenderer.maxParticleSize = 3.0f;
+        }
+
+        var main = ps.main;
+        main.loop = true;
+        main.playOnAwake = false;
+        main.startLifetime = new ParticleSystem.MinMaxCurve(0.3f, 0.6f);
+        main.startSpeed = new ParticleSystem.MinMaxCurve(0.1f, 0.5f);    // 느리게 (카트가 지나가면서 라인이 됨)
+        main.startSize = new ParticleSystem.MinMaxCurve(0.15f, 0.4f);
+        main.simulationSpace = ParticleSystemSimulationSpace.World;       // World: 카트가 지나가면 뒤에 남음!
+        main.maxParticles = 500;
+        main.gravityModifier = 0f;
+
+        // 시작 색상: 밝은 시안-흰색 (스피드 라인)
+        main.startColor = new ParticleSystem.MinMaxGradient(
+            new Color(0.5f, 0.85f, 1f, 0.9f),
+            new Color(0.8f, 0.95f, 1f, 1f)
+        );
+
+        // 방출: 대량
+        var emission = ps.emission;
+        emission.enabled = true;
+        emission.rateOverTime = 120f;
+
+        // 형태: Box - 카트 양옆·위아래에서 나오는 라인
+        var shape = ps.shape;
+        shape.enabled = true;
+        shape.shapeType = ParticleSystemShapeType.Box;
+        shape.scale = new Vector3(2.0f, 1.0f, 0.5f);
+        shape.rotation = Vector3.zero;
+
+        // Color Over Lifetime: 안정적인 밝기 (반짝임 없음!)
+        var col = ps.colorOverLifetime;
+        col.enabled = true;
+        Gradient lineGrad = new Gradient();
+        lineGrad.SetKeys(
+            new GradientColorKey[] {
+                new GradientColorKey(new Color(0.7f, 0.9f, 1.0f), 0.0f),
+                new GradientColorKey(new Color(0.9f, 0.95f, 1.0f), 0.3f),
+                new GradientColorKey(new Color(0.6f, 0.85f, 1.0f), 0.7f),
+                new GradientColorKey(new Color(0.4f, 0.7f, 1.0f), 1.0f)
+            },
+            new GradientAlphaKey[] {
+                new GradientAlphaKey(0.9f, 0.0f),
+                new GradientAlphaKey(0.7f, 0.4f),
+                new GradientAlphaKey(0.4f, 0.7f),
+                new GradientAlphaKey(0.0f, 1.0f)
+            }
+        );
+        col.color = new ParticleSystem.MinMaxGradient(lineGrad);
+
+        // Size Over Lifetime: 일정하게 유지하다 사라짐
+        var sol = ps.sizeOverLifetime;
+        sol.enabled = true;
+        AnimationCurve sizeCurve = new AnimationCurve(
+            new Keyframe(0f, 1.0f),
+            new Keyframe(0.6f, 0.8f),
+            new Keyframe(1f, 0.0f)
+        );
+        sol.size = new ParticleSystem.MinMaxCurve(1f, sizeCurve);
+
+        // Noise 비활성화 (깨끗한 라인)
+        var noise = ps.noise;
+        noise.enabled = false;
+
+        // Rotation 비활성화
+        var rotOverLifetime = ps.rotationOverLifetime;
+        rotOverLifetime.enabled = false;
+
+        Debug.Log("★ 부스트 스피드 라인 설정 완료: " + ps.gameObject.name);
+    }
+
+    // ====================================================
+    // 공통 유틸리티
+    // ====================================================
+
+    /// <summary>
+    /// 선명한 Alpha Blend 파티클 머티리얼 (드리프트 불꽃용 - 흐릿하지 않음!)
+    /// </summary>
+    Material CreateSolidParticleMaterial(Texture2D tex)
+    {
+        Shader shader = Shader.Find("Universal Render Pipeline/Particles/Unlit");
+        if (shader == null) shader = Shader.Find("Particles/Standard Unlit");
+        if (shader == null) shader = Shader.Find("Mobile/Particles/Alpha Blended");
+
+        Material mat = new Material(shader);
+        mat.name = "SolidSparkMat";
+        mat.mainTexture = tex;
+
+        // ★ Alpha Blend: 선명하고 단단한 색상! (Additive는 흐릿해짐)
+        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        mat.SetInt("_ZWrite", 0);
+        mat.renderQueue = 3000;
+
+        Color baseColor = new Color(1f, 1f, 1f, 1f);
+        mat.SetColor("_BaseColor", baseColor);
+        if (mat.HasProperty("_Color"))
+            mat.SetColor("_Color", baseColor);
+
+        mat.EnableKeyword("_ALPHABLEND_ON");
+        mat.DisableKeyword("_ALPHATEST_ON");
+
+        return mat;
+    }
+
+    /// <summary>
+    /// Additive 블렌딩 파티클 머티리얼 (부스트 빛나는 스피드 라인용)
+    /// </summary>
+    Material CreateSparkMaterial(Texture2D tex)
+    {
+        Shader shader = Shader.Find("Universal Render Pipeline/Particles/Unlit");
+        if (shader == null) shader = Shader.Find("Particles/Standard Unlit");
+        if (shader == null) shader = Shader.Find("Mobile/Particles/Additive");
+
+        Material mat = new Material(shader);
+        mat.name = "GlowParticleMat";
+        mat.mainTexture = tex;
+
+        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+        mat.SetInt("_ZWrite", 0);
+        mat.renderQueue = 3000;
+
+        Color baseColor = new Color(1f, 1f, 1f, 1f);
+        mat.SetColor("_BaseColor", baseColor);
+        if (mat.HasProperty("_Color"))
+            mat.SetColor("_Color", baseColor);
+
+        mat.EnableKeyword("_ALPHABLEND_ON");
+        mat.DisableKeyword("_ALPHATEST_ON");
+
+        return mat;
+    }
+
+    /// <summary>
+    /// 선명한 불꽃 텍스처 (중심이 단단하고 밝게, Alpha Blend용)
+    /// </summary>
+    Texture2D CreateSolidSparkTexture(int size)
+    {
+        Texture2D tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
+        tex.wrapMode = TextureWrapMode.Clamp;
+        tex.filterMode = FilterMode.Bilinear;
+        float center = size * 0.5f;
+
+        for (int y = 0; y < size; y++)
+        {
+            for (int x = 0; x < size; x++)
+            {
+                float dist = Vector2.Distance(new Vector2(x + 0.5f, y + 0.5f), new Vector2(center, center)) / center;
+
+                float alpha;
+                if (dist >= 1.0f)
+                    alpha = 0f;
+                else if (dist < 0.5f)
+                    alpha = 1.0f;  // ★ 중심 50%는 완전 불투명! (선명한 코어)
+                else
+                {
+                    float t = 1f - (dist - 0.5f) * 2f; // 0.5~1.0 구간에서 페이드
+                    alpha = t * t; // 가장자리만 부드럽게
+                }
+
+                tex.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
+            }
+        }
+        tex.Apply();
+        return tex;
+    }
+
+    /// <summary>
+    /// 부드러운 글로우 텍스처 (Additive 블렌딩용)
+    /// </summary>
+    Texture2D CreateSparkTexture(int size)
+    {
+        Texture2D tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
+        tex.wrapMode = TextureWrapMode.Clamp;
+        tex.filterMode = FilterMode.Bilinear;
+        float center = size * 0.5f;
+
+        for (int y = 0; y < size; y++)
+        {
+            for (int x = 0; x < size; x++)
+            {
+                float dist = Vector2.Distance(new Vector2(x + 0.5f, y + 0.5f), new Vector2(center, center)) / center;
+
+                float alpha;
+                if (dist >= 1.0f)
+                    alpha = 0f;
+                else
+                {
+                    float t = 1f - dist;
+                    alpha = t * t * t;
+                }
+
+                tex.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
+            }
+        }
+        tex.Apply();
+        return tex;
+    }
+
+
 
     void Update()
     {
@@ -368,8 +702,9 @@ public class KartController : MonoBehaviour
     void UpdateEffects()
     {
         // 1. 드리프트 파티클 제어
-        // 땅에 붙어있고 + 드리프트 중이고 + 속도가 좀 있을 때만 연기 남
-        if (isGrounded && isDrifting && rb.linearVelocity.magnitude > 5f)
+        // ★ 착지 후 실제 차징 중일 때만! (점프 중에는 X)
+        // isGrounded: 착지 상태, isDrifting: 드리프트 상태, driftTimer > 0: 차징 시작됨
+        if (isGrounded && isDrifting && driftTimer > 0f && rb.linearVelocity.magnitude > 3f)
         {
             foreach (var p in driftParticles)
             {

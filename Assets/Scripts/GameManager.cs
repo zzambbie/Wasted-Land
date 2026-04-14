@@ -71,6 +71,9 @@ public class GameManager : MonoBehaviour
 
         // ResultPanel 레이아웃을 코드에서 올바르게 배치
         SetupResultPanelLayout();
+
+        // ★ 아이템 화살표 위치 보정 (살짝 왼쪽으로)
+        AdjustItemArrowPosition();
     }
 
     void Start()
@@ -751,5 +754,24 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log("ResultPanel 레이아웃 재배치 완료!");
+    }
+
+    /// <summary>
+    /// 아이템 사용 화살표(NOW!! 이펙트)의 위치를 약간 왼쪽으로 이동
+    /// </summary>
+    void AdjustItemArrowPosition()
+    {
+        if (itemUseEffectUI != null)
+        {
+            RectTransform rt = itemUseEffectUI.GetComponent<RectTransform>();
+            if (rt != null)
+            {
+                // 현재 위치에서 X를 왼쪽으로 약간 이동
+                Vector2 pos = rt.anchoredPosition;
+                pos.x -= 40f; // 40px 왼쪽으로
+                rt.anchoredPosition = pos;
+                Debug.Log("아이템 화살표 위치 보정: " + rt.anchoredPosition);
+            }
+        }
     }
 }
